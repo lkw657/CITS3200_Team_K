@@ -1,0 +1,19 @@
+version: "3.2"
+
+services:
+    db:
+        image: mongo
+        ports:
+            - "27017:27017"
+    web:
+        build: web
+        ports:
+            - "80:80"
+        links:
+            - db
+        depends_on:
+            - db
+        restart: on-failure
+        volumes:
+            - ./web:/www
+        command: "$DEBUG"
