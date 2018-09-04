@@ -5,7 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./app_server/routes/index');
-var usersRouter = require('./app_server/routes/users');
+var dbRouter = require('./app_server/routes/db');
+var mailRouter = require('./app_server/routes/mail');
 
 // Don't really need this, but I want to test the connection
 require('./app_server/models/db')
@@ -19,6 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/db', dbRouter);
+app.use('/mail', mailRouter);
 
 module.exports = app;

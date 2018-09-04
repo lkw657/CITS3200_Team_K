@@ -15,3 +15,24 @@ mongoose.connection.on('disconnected', function() {
 });
 
 mongoose.connect(dbURI);
+
+gracefulShutdown = function (msg, callback) {
+    mongoose.connection.close(function () {
+        console.log('Mongoose disconnected through ' + msg);
+        callback();
+    });
+};
+  
+// For nodemon restarts
+process.once('SIGUSR2', function () {
+    gracefulShutdown('nodemon restart', function () {
+        process.kill(process.pid, 'SIGUSR2');
+    });
+});
+
+// For app termination
+process.on('SIGINT', function() {
+    gracefulShutdown('app termination', function () {
+        process.exit(0);
+    });
+});
