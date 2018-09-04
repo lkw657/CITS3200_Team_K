@@ -1,3 +1,63 @@
-<p>
-  Navbar will have...Dashboard, user name, and New Submission
-</p>
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
+
+
+  <!-- Always visible -->
+  <div class="container">
+    <a class="navbar-brand" [routerLink]="['/dashboard']">EMS Research Priorities Fund Requests</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <ul class="navbar-nav">
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        
+        <li [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Development</a>
+            <div class="dropdown-menu">
+              <a [routerLink]="['/']" class="dropdown-item">Login</a>
+              <a [routerLink]="['/register']" class="dropdown-item">Register</a>
+            </div>
+          </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto">
+
+        <!-- visible only when not logged in -->
+        <!-- *ngIf="!authService.loggedIn()" -->
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/dashboard']" class="nav-link">USERNAME</a>
+        </li>
+        <!-- *ngIf="!authService.loggedIn()" -->
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
+        </li>
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/review']" class="nav-link">Review Submission</a>
+        </li>
+
+        <!-- visible only when logged in -->
+        <!-- <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">{{authService.getCurrentUserName()}}</a>
+        </li>
+
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
+        </li>
+        
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/review']" class="nav-link">Review Submission</a>
+        </li>
+
+        <li *ngIf="authService.loggedIn()" class="nav-item">
+          <a (click)="onLogoutClick()" href="#" class="nav-link">Logout</a>
+        </li> -->
+
+      </ul>
+    </div>
+  </div>
+</nav>
