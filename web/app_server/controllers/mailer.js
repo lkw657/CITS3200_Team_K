@@ -73,11 +73,16 @@ module.exports.verifyFormAccess = (req, res, next) => {
                 console.log(err);
             }
             else {
-                if (mail.secret == req.body.secret) {
+                if (mail.secret == req.body.secret && mail.type == 'form-access') {
                     // give userID access to mail.formID
                     console.log("user has been given access");
                     sendJsonResponse(res, 200, {
 
+                    });
+                }
+                else{
+                    sendJsonResponse(res, 403, {
+                        error: "forbidden"
                     });
                 }
             }
