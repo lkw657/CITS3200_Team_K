@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var crypto = require('crypto');
 
 /*****************************************************/
 /*******************MAIL******************************/
@@ -11,21 +12,14 @@ var mailSchema = new mongoose.Schema(
     }
 );
 
-// hash is AES encrypted formID+randomString(length 10) with a random password
-mailSchema.methods.generateSecret = function(){
-    this.secret = generateRandomString();
-    console.log(this.secret)
-    console.log(generateRandomString());
+mailSchema.methods.generateSecret = function(callback){
+    crypto.randomBytes(32, function(err, buffer) {
+        console.log(buffer);
+        this.secret = buffer.toString('hex');
+        console.log(this.secret);
+        callback(this.secret);
+      });
 };
 
-
-function generateRandomString() {
-    var str = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 20; i++)
-        str += possible.charAt(Math.floor(Math.random() * possible.length));
-    return str;
-}
 
 module.exports.mailSchema = mongoose.model('Mail', mailSchema);

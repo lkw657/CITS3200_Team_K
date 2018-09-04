@@ -37,19 +37,21 @@ module.exports.sendFormAccessEmail = (to, formID) => {
     var mail = new Mail();
     mail.type = "form-access";
     mail.formID = formID;
-    mail.generateSecret();
-
-    mail.save((err, mail) => {
-        if (err) {
-            // something
-            console.log(err);
-        }
-        else {
-            var subject = "Access for Form";
-            var html = `Here is your access link: http://localhost/formAccess/${mail._id}/${mail.secret}`;
-            module.exports.sendEmail(to, subject, html);
-        } 
+    mail.generateSecret((secret)=>{
+        mail.save((err, mail) => {
+            if (err) {
+                // something
+                console.log(err);
+            }
+            else {
+                var subject = "Access for Form";
+                var html = `Here is your access link: http://localhost/formAccess/${mail._id}/${secret}`;
+                module.exports.sendEmail(to, subject, html);
+            } 
+        });
     });
+
+    
 };
 
 // ***************
