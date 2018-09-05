@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/db', dbRouter);
 app.use('/mail', mailRouter);
+app.use('/', indexRouter);
 
 module.exports = app;
