@@ -4,11 +4,10 @@ var userSchema = new mongoose.Schema(
     {
         role : { type: String, required: true },
         name: { type: String, required: true },
-        euser: { type: String, required: true },
-        number: { type: String, required: true },
+        email: { type: String, required: true, unique: true },
+        number: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        activeForms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
-        archivedForms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }]
+        forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }]
     }
 );
 
