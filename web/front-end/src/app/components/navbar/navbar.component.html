@@ -15,14 +15,15 @@
         <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
           <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
         </li>
-        
+
         <li [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Development</a>
-            <div class="dropdown-menu">
-              <a [routerLink]="['/']" class="dropdown-item">Login</a>
-              <a [routerLink]="['/register']" class="dropdown-item">Register</a>
-            </div>
-          </li>
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Development</a>
+          <div class="dropdown-menu">
+            <a [routerLink]="['/']" class="dropdown-item">Login</a>
+            <a [routerLink]="['/register']" class="dropdown-item">Register</a>
+            <a (click)="onLogoutClick()" href="#" class="dropdown-item">Logout</a>
+          </div>
+        </li>
       </ul>
 
       <ul class="navbar-nav ml-auto">
