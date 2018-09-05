@@ -1,6 +1,12 @@
 var mongoose = require('mongoose')
 
-var dbURI = 'mongodb://db:27017/website'
+var dbURI;
+if (process.env.DB_URI === undefined) {
+    dbURI = 'mongodb://db:27017/website';
+}
+else {
+    dbURI = process.env.DB_URI;
+}
 
 mongoose.connection.on('conected', function() {
     console.log('Mongoose connected to ' + dbURI);
