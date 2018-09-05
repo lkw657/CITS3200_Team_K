@@ -38,6 +38,7 @@ module.exports.sendFormAccessEmail = (to, formID) => {
     mail.type = "form-access";
     mail.formID = formID;
     mail.generateSecret((secret)=>{
+        mail.secret = secret;
         mail.save((err, mail) => {
             if (err) {
                 // something
@@ -63,29 +64,29 @@ module.exports.sendFormAccessEmail = (to, formID) => {
 module.exports.verifyFormAccess = (req, res, next) => {
     if (req.body.mailID && req.body.secret && req.body.userID) {
         Mail.findById(req.body.mailID, (err, mail) => {
-            if (!mail) {
-                sendJsonResponse(res, 403, {
-                    error: "forbidden"
-                });
-            }
-            else if (err) {
+
+            if (err) {
                 sendJsonResponse(res, 404, {
                     error: "forbidden"
                 });
                 console.log(err);
             }
+            else if (!mail) {
+                sendJsonResponse(res, 403, {
+                    error: "forbidden"
+                });
+            }
             else {
                 if (mail.secret == req.body.secret && mail.type == 'form-access') {
                     // give userID access to mail.formID
-                    require('./users').addFormToUser(req.body.userID, req.body.formID);
-
+                    require('./users').addFormToUser(req.body.userID, mail.formID);
                     sendJsonResponse(res, 200, {
 
                     });
                 }
                 else{
                     sendJsonResponse(res, 403, {
-                        error: "forbidden"
+                        error: "forbidden - 2"
                     });
                 }
             }

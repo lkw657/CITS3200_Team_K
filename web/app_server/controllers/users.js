@@ -2,7 +2,7 @@ var userModel = require('../models/users');
 var User = userModel.userSchema;
 
 var formModel = require('../models/forms');
-var Form = formModel.userSchema;
+var Form = formModel.formSchema;
 
 /**
 req.body.role
@@ -70,7 +70,7 @@ module.exports.addFormToUser=(userID, formID)=>{
     if(err){
       console.log(err);
     }
-    else if(!user){
+    else if(!usr){
       console.log("no user found");
     }
     else{
@@ -90,15 +90,25 @@ module.exports.addFormToUser=(userID, formID)=>{
 
           if(form.allocatedStaff != userID){
             form.allocatedStaff = userID;
+            form.save((err, form)=>{
+              if(err){
+                console.log(err)
+              }
+            });
           }
 
           // Update User to include form if needed
           if(!usr.forms.includes(formID)){
             usr.forms.push(formID);
+            usr.save((err, usr)=>{
+              if(err){
+                console.log(err)
+              }
+          });
           }
         }
       })
-      
+
 
     }
   })
