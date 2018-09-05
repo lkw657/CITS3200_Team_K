@@ -77,7 +77,8 @@ module.exports.verifyFormAccess = (req, res, next) => {
             else {
                 if (mail.secret == req.body.secret && mail.type == 'form-access') {
                     // give userID access to mail.formID
-                    console.log("user has been given access");
+                    require('./users').addFormToUser(req.body.userID, req.body.formID);
+
                     sendJsonResponse(res, 200, {
 
                     });

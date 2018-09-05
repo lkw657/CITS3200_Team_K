@@ -1,7 +1,7 @@
 var userModel = require('../models/users');
 var User = userModel.userSchema;
 
-var formModel = require('../models/form');
+var formModel = require('../models/forms');
 var Form = formModel.userSchema;
 
 /**

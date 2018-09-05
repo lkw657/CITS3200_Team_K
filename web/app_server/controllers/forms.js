@@ -1,5 +1,5 @@
 var formModel = require('../models/forms');
-var Form = formModel.userSchema;
+var Form = formModel.formSchema;
 
 
 /**
@@ -53,4 +53,9 @@ module.exports.listAll = (req, res, next) => {
             sendJsonResponse(res, 200, forms);
         }
     })
+}
+
+var sendJsonResponse = (res, status, content) => {
+    res.status(status);
+    res.json(content);
 }

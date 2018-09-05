@@ -1,5 +1,5 @@
 var questionSetModel = require('../models/questionSets');
-var QuestionSet = questionSetModel.userSchema;
+var QuestionSet = questionSetModel.questionSetSchema;
 
 
 /**
@@ -50,4 +50,9 @@ module.exports.listAll = (req, res, next) => {
             sendJsonResponse(res, 200, qsets);
         }
     })
+}
+
+var sendJsonResponse = (res, status, content) => {
+    res.status(status);
+    res.json(content);
 }
