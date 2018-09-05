@@ -3,6 +3,7 @@ mongoose = require('mongoose')
 var formSchema = new mongoose.Schema(
     {
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    creationDate: {type: Date, required: true},
 	questionSet: {type: mongoose.Schema.Types.ObjectId, ref:'QuestionSet', required: true},
         answers: [{ type: String, required: true }],
 	allocatedStaff: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
