@@ -61,6 +61,7 @@ module.exports.listAll = (req, res, next)=>{
   });
 }
 
+// Return whether successful or failure
 module.exports.addFormToUser=(userID, formID)=>{
   if(!userID || ! formID){
     console.log(`missing userID or formID`);
