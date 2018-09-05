@@ -8,7 +8,8 @@ var mailSchema = new mongoose.Schema(
     {
         type : { type: String, required: true },
         secret: { type: String },
-        formID: { type: mongoose.Schema.Types.ObjectId, ref: 'Form' }
+        formID: { type: mongoose.Schema.Types.ObjectId, ref: 'Form' },
+        status: String
     }
 );
 

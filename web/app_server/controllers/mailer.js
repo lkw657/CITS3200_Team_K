@@ -64,7 +64,6 @@ module.exports.sendFormAccessEmail = (to, formID) => {
 module.exports.verifyFormAccess = (req, res, next) => {
     if (req.body.mailID && req.body.secret && req.body.userID) {
         Mail.findById(req.body.mailID, (err, mail) => {
-
             if (err) {
                 sendJsonResponse(res, 404, {
                     error: "forbidden"
@@ -77,11 +76,24 @@ module.exports.verifyFormAccess = (req, res, next) => {
                 });
             }
             else {
-                if (mail.secret == req.body.secret && mail.type == 'form-access') {
+                if(mail.status== "done")
+                {
+                    sendJsonResponse(res, 403, {
+                        error: "Link already used"
+                    });
+                }
+                else if (mail.secret == req.body.secret && mail.type == 'form-access') {
                     // give userID access to mail.formID
                     require('./users').addFormToUser(req.body.userID, mail.formID);
-                    sendJsonResponse(res, 200, {
 
+                    //Deactivate email
+                    mail.status = "done";
+                    mail.save((err, mail)=>{
+                        console.log(err)
+                    })
+
+                    sendJsonResponse(res, 200, {
+                        status: "success"
                     });
                 }
                 else{
