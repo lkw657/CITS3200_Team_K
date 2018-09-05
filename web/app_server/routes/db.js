@@ -1,19 +1,37 @@
 var express = require('express');
 var router = express.Router();
-var ctrlUsers = require('../controllers/users.js')
+var ctrlUsers = require('../controllers/users.js');
+var ctrlForm = require('../controllers/forms.js');
+var ctrlQuestionSet = require('../controllers/questionSets.js');
 
 
-/* GET users listing. */
-router.get('/user', ctrlUsers.respond);
+// User API
+/* Requires:
+role
+name
+email
+number
+password
+*/
 
-// User routes
 router.post('/user/create', ctrlUsers.addUser);
 router.get('/user/list', ctrlUsers.listAll);
 
-router.get('/user/:userid', function(req, res, next) {
-    res.status('200');
-    res.json({'username': 'lala'});
-});
+//Form API
+/* Requires:
+owner
+questionSet (ref)
+*/
+router.post('/form/create', ctrlForm.addForm);
+router.get('/form/list', ctrlForm.listAll);
+
+//Question Set API
+/* Requires:
+questionList
+*/
+router.post('/questionSet/create', ctrlQuestionSet.addQuestionSet);
+router.get('/questionSet/list', ctrlQuestionSet.listAll);
+
 
 //BELOW ARE DAVE'S NEEDS, CAN BE CHANGED TO WHATEVER SEMANTICS YOU NEED
 
