@@ -4,7 +4,7 @@ var formSchema = new mongoose.Schema(
     {
 	owner: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
 	questionSet: {type: mongoose.Schema.Types.ObjectId, ref:'QuestionSet', required: true},
-        answers: [{ type: String, required: true }],
+    answers: [{ type: String, required: true }],
 	allocatedStaff: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 	status: {type: String, required: true},
 	history: {type: mongoose.Schema.Types.ObjectId, ref:'Form'},
