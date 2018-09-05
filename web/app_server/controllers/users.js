@@ -1,10 +1,8 @@
-
-module.exports.respond = function(req, res, next) {
-  res.send('respond with a resource');
-}
-
 var userModel = require('../models/users');
 var User = userModel.userSchema;
+
+var formModel = require('../models/form');
+var Form = formModel.userSchema;
 
 /**
 req.body.role
@@ -61,6 +59,49 @@ module.exports.listAll = (req, res, next)=>{
       sendJsonResponse(res, 200, users);
     }
   });
+}
+
+module.exports.addFormToUser=(userID, formID)=>{
+  if(!userID || ! formID){
+    console.log(`missing userID or formID`);
+    return;
+  }
+  User.findById(userID, (err, usr)=>{
+    if(err){
+      console.log(err);
+    }
+    else if(!user){
+      console.log("no user found");
+    }
+    else{
+      //Check if form exists
+
+      Form.findById(formID, (err, form)=>{
+
+        if(err){
+          console.log(err);
+        }
+        else if(!form){
+          console.log('no such form');
+        }
+        else{
+
+          //Check if form need to be updated
+
+          if(form.allocatedStaff != userID){
+            form.allocatedStaff = userID;
+          }
+
+          // Update User to include form if needed
+          if(!usr.forms.includes(formID)){
+            usr.forms.push(formID);
+          }
+        }
+      })
+      
+
+    }
+  })
 }
 
 //*****************************************

@@ -98,23 +98,23 @@ module.exports.verifyFormAccess = (req, res, next) => {
 }
 
 module.exports.listAllMail = (req, res, next) => {
-        Mail.find({}, '', (err, mails) => {
-            if (!mails) {
-                sendJsonResponse(res, 403, {
-                    error: "forbidden"
-                });
-            }
-            else if (err) {
-                sendJsonResponse(res, 404, {
-                    error: "forbidden"
-                });
-                console.log(err);
-            }
-            else {
-                sendJsonResponse(res, 200, mails);
-            }
-        })
-    }
+    Mail.find({}, '', (err, mails) => {
+        if (!mails) {
+            sendJsonResponse(res, 403, {
+                error: "forbidden"
+            });
+        }
+        else if (err) {
+            sendJsonResponse(res, 404, {
+                error: "forbidden"
+            });
+            console.log(err);
+        }
+        else {
+            sendJsonResponse(res, 200, mails);
+        }
+    })
+}
 
 var sendJsonResponse = (res, status, content) => {
     res.status(status);
