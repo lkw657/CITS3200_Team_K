@@ -2,13 +2,20 @@ var express = require('express');
 var router = express.Router();
 var ctrlUsers = require('../controllers/users.js')
 
-router.get('/user/:userid', function (req, res, next) {
-  res.status('200');
-  res.json({ 'username': 'lala' });
-});
 
 /* GET users listing. */
 router.get('/user', ctrlUsers.respond);
+
+// User routes
+router.post('/user/create', ctrlUsers.addUser);
+router.get('/user/list', ctrlUsers.listAll);
+
+router.get('/user/:userid', function(req, res, next) {
+    res.status('200');
+    res.json({'username': 'lala'});
+});
+
+//BELOW ARE DAVE'S NEEDS, CAN BE CHANGED TO WHATEVER SEMANTICS YOU NEED
 
 //User Register Route placeholder
 //This will receive an object containining the below - 
@@ -27,8 +34,6 @@ router.post('/register', function (req, res, next) {
   //If failed
   res.json({ success: false, msg: 'Failed to Register User' });
 });
-
-
 
 //User Authenticate Route
 //This will receive an object containining the below - 

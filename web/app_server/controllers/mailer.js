@@ -47,11 +47,11 @@ module.exports.sendFormAccessEmail = (to, formID) => {
                 var subject = "Access for Form";
                 var html = `Here is your access link: http://localhost/formAccess/${mail._id}/${secret}`;
                 module.exports.sendEmail(to, subject, html);
-            } 
+            }
         });
     });
 
-    
+
 };
 
 // ***************
@@ -98,7 +98,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
 }
 
 module.exports.listAllMail = (req, res, next) => {
-        Mail.find({}, '*', (err, mails) => {
+        Mail.find({}, '', (err, mails) => {
             if (!mails) {
                 sendJsonResponse(res, 403, {
                     error: "forbidden"

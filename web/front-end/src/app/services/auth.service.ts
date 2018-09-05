@@ -23,7 +23,7 @@ export class AuthService {
       .pipe(map(res => res.json()));
   }
 
-  //Checks username and password on login
+  //Connects to back end to check username and password on login
   authenticateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -37,12 +37,6 @@ export class AuthService {
     localStorage.setItem('user', JSON.stringify(user));
     this.authToken = token;
     this.user = user;
-  }
-
-  //get token 
-  loadToken() {
-    const token = localStorage.getItem('id_token');
-    this.authToken = token;
   }
 
   loggedIn() {
