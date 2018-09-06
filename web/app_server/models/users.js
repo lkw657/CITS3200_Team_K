@@ -6,8 +6,9 @@ var uniqueValidator = require('mongoose-unique-validator');
 function splitEmail(email) {
     var split = email.indexOf('@');
     if (split == -1) return {};
-    return {name: v.substring(0, split),
-        host:v.substring(split+1, v.length)
+    return {
+        name: email.substring(0, split),
+        host:email.substring(split+1, email.length)
     };
 }
 
@@ -19,8 +20,9 @@ var userSchema = new mongoose.Schema(
         email: {type: String,
                 validate: {
                    validator: (v) => {
-                        var email = splitEmail()
-                        switch (host) {
+                        var email = splitEmail(v)
+                        console.log(email)
+                        switch (email.host) {
                             // TODO any others?
                             case "uwa.edu.au":
                                 // TODO check this
@@ -35,21 +37,21 @@ var userSchema = new mongoose.Schema(
                     },
                     message: "Please enter a valid UWA email address"
                 },
-               required: [true, "Please enter a username"],
+               required: [true, "Please enter a valid UWA email address"],
                unique: true
         },
         number: {type: String, unique: true,
                  match:[/^\d{8,}$/, "Please enter a valid studen number"]},
-        password: {type: String, required: true},
         forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }]
     }
 );
 
-userSchema.methods.create = (name, email, number) => {
+userSchema.statics.create = (name, email, number) => {
     // Don't save model, passport will do that
     // TODO put case in splitEmail
     var role;
-    switch (host) {
+    var emailPieces = splitEmail(email);
+    switch (emailPieces.host) {
         case "uwa.edu.au":
             role = 'staff'
         break;
@@ -57,15 +59,15 @@ userSchema.methods.create = (name, email, number) => {
             role = 'researcher'
         break;
     }
-    return new User({
-        name: req.body.name,
-        email: req.body.email,
-        number: req.body.phone,
+    return new module.exports.User({
+        name: name,
+        email: email,
+        number: number,
         role: role,
         forms: []
-    })
+    });
 }
 
 userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose, {usernameField:'email'});
 module.exports.User = mongoose.model('User', userSchema);
