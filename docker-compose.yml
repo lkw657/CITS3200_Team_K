@@ -13,7 +13,5 @@ services:
             - db
         depends_on:
             - db
+        command: ""
         restart: on-failure
-        volumes:
-            - ./web:/www
-        command: "$DEBUG"

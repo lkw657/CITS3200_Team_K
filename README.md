@@ -15,10 +15,10 @@ If DB\_URI is omitted a database started from docker will be used
 ## Running
 To start the server use
 ```
-docker-compose up --build
+docker-compose -f docker-compose.yml up --build
 ```
 
 To start the server with nodemon for development use
 ```
-DEBUG=true docker-compose up --build
+docker-compose up --build
 ```
