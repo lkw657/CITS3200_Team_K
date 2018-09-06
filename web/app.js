@@ -4,6 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var passport = require('passport');
+var User = require('./app_server/models/users').User;
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 var indexRouter = require('./app_server/routes/index');
 var dbRouter = require('./app_server/routes/db');
 var mailRouter = require('./app_server/routes/mail');

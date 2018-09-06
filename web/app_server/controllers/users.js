@@ -1,46 +1,7 @@
-var userModel = require('../models/users');
-var User = userModel.userSchema;
+var userModel = require('../models/users').User;
 
 var formModel = require('../models/forms');
 var Form = formModel.formSchema;
-
-/**
-req.body.role
-req.body.name
-req.body.email
-req.body.number
-req.body.password
-
-**/
-module.exports.addUser = (req, res, next)=>{
-  if(req.body.role && req.body.name && req.body.email && req.body.number && req.body.password)
-  {
-    var usr = new User();
-
-    usr.role=req.body.role
-    usr.name=req.body.name
-    usr.email=req.body.email
-    usr.number=req.body.number
-    usr.password=req.body.password
-
-    usr.save((err,usr)=>{
-      if(err){
-        sendJsonResponse(res, 400, {
-            error: err
-        });
-      }
-      else{
-        sendJsonResponse(res, 201, usr);
-      }
-    })
-  }
-  else
-  {
-    sendJsonResponse(res, 400, {
-        error: "missing data"
-    });
-  }
-}
 
 module.exports.listAll = (req, res, next)=>{
   User.find({}, '', (err, users) => {
@@ -62,7 +23,7 @@ module.exports.listAll = (req, res, next)=>{
 }
 
 // Return whether successful or failure
-module.exports.addFormToUser=(userID, formID)=>{
+module.exports.addFormToUser = (userID, formID)=>{
   if(!userID || ! formID){
     console.log(`missing userID or formID`);
     return;
