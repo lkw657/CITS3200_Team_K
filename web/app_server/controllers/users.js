@@ -1,9 +1,13 @@
-var userModel = require('../models/users').User;
+var User = require('../models/users').User;
 
-var formModel = require('../models/forms');
-var Form = formModel.formSchema;
+var Form = require('../models/forms').Form;
 
-module.exports.listAll = (req, res, next)=>{
+module.exports.listAll = (req, res, next) => {
+  console.log(req.user)
+  if (req.user == undefined || req.user.role != 'staff')
+    return sendJsonResponse(res, 403, {
+        msg: "forbidden"
+    });
   User.find({}, '', (err, users) => {
     if (!users) {
       sendJsonResponse(res, 403, {

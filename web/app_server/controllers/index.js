@@ -3,30 +3,26 @@ var passport = require('passport')
 
 //This will receive an object containining the below -
 // role: req.body.role,
-// email: req.body.email,
-// username: req.body.username,
+// first name: req.body.fname
+// last name: req.body.lname
+// number: req.body.number,
 // password: req.body.password
-//
-//The controller needs to ensure the username and email are not already in db then add to db if all good then return as below
-
 module.exports.register = (req, res) => {
     // passport-local-mongoose wants the username in a field called username, not email
-    req.body.username = req.body.email
+    //req.body.username = req.body.email
 	// TODO better password checks?
 	if (req.body.password.length < 8) {
-		return req.json({success:false, meg: 'Passwords must be at least 8 characters long'});
+		return res.status(400).json({success:false, msg: 'Passwords must be at least 8 characters long'});
 	}
-	// TODO If staff signs up with fname.lname@uwa.edu.au we dont't have number
-	// Do we need it??
-	User.register(User.create(req.body.name, req.body.email, req.body.number),
+	User.register(User.create(req.body.fname, req.body.lname, req.body.number),
 		req.body.password,
 		(err, user) => {
 			if (err) {
 				// Find why the model didn't validate
 				if (err.errors) // multiple errors, get first
-					return res.json({success:false, msg: err.errors[Object.keys(err.errors)[0]].message})
+					return res.status(400).json({success:false, msg: err.errors[Object.keys(err.errors)[0]].message})
 				else
-					return res.json({success: false, msg: err.message})
+					return res.status(400).json({success: false, msg: err.message})
 			}
 			return res.json({success: true, msg: 'User Registered'});
 		}
@@ -36,31 +32,35 @@ module.exports.register = (req, res) => {
 
 //User Authenticate Route
 //This will receive an object containining the below -
-// username: req.body.username,
+// number: req.body.number,
 // password: req.body.password
-//Controller will need to make sure username in db then compare password then return as below
 module.exports.authenticate = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) { return next(err); }
         if (!user)
-            return res.json({success: false, msg: 'User or password wrong'});
+            return res.status(400).json({success: false, msg: 'User or password wrong'});
         req.login(user, function(err) {
             if (err) { return next(err); }
             return res.json({
                 success: true,
                 msg: 'You are successfully logged in',
                 user: {
-                    username: user.email
+                    fname: user.fname,
+                    lname: user.lname,
+                    number: user.number,
+                    role: user.role
                 }
             });
         });
     })(req, res, next);
 };
 
+// This isn't actually called since I told the express generator not to use templates
+// I'm not entirely sure why it generated this funciton
 module.exports.index = function(req, res, next) {
-    // login test
+    console.log(req.user)
     if (req.user) {
-        return res.render('index', { title: 'Express - Hello '+req.email });
+        return res.render('index', { title: 'Express - Hello '+req.user.fname});
     }
     return res.render('index', { title: 'Express' });
 }

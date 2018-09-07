@@ -3,65 +3,35 @@ var passportLocalMongoose = require('passport-local-mongoose')
 // Mongoose doesn't actually validate uniqueness
 var uniqueValidator = require('mongoose-unique-validator');
 
-function splitEmail(email) {
-    var split = email.indexOf('@');
-    if (split == -1) return {};
-    return {
-        name: email.substring(0, split),
-        host:email.substring(split+1, email.length)
-    };
-}
-
+/* NOTE: need to make sure that if role ends up not being defined/matching an enum or whatever
+   the error that caused that is sent to the used instead of something about a role which they don't know what to do with */
 var userSchema = new mongoose.Schema(
     {
-        role : {type: String, required: true},
-        name : {type: String, required: true, 
-                match:[/^[a-zA-z'-_ ]*$/, "Names can only contain letters, dashes, apostrophes, underscores and spaces"]},
-        email: {type: String,
-                validate: {
-                   validator: (v) => {
-                        var email = splitEmail(v)
-                        console.log(email)
-                        switch (email.host) {
-                            // TODO any others?
-                            case "uwa.edu.au":
-                                // TODO check this
-                                return /^\d{8,}$/.test(email.name) || /\w*\.\w*$/.test(email.name) 
-                            break;
-                            case "student.uwa.edu.au":
-                                return /^\d{8,}$/.test(email.name)
-                            break;
-                            default:
-                                return false
-                        }
-                    },
-                    message: "Please enter a valid UWA email address"
-                },
-               required: [true, "Please enter a valid UWA email address"],
-               unique: true
-        },
-        number: {type: String, unique: true,
-                 match:[/^\d{8,}$/, "Please enter a valid studen number"]},
+        role: {type: String, required: true},
+        fname: {type: String, required: [true, "Please enter your first name"],
+                match:[/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]},
+        lname: {type: String, required: [true, "Please enter your last name"],
+                match:[/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]},
+        number: {type: String, unique: true, required: [true, "Please enter a valid UWA staff/student number"],
+                 match:[/^\d{8,}$/, "Please enter a valid UWA staff/student number"]},
         forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }]
     }
 );
 
-userSchema.statics.create = (name, email, number) => {
+userSchema.statics.create = (fname, lname, number) => {
     // Don't save model, passport will do that
     // TODO put case in splitEmail
-    var role;
-    var emailPieces = splitEmail(email);
-    switch (emailPieces.host) {
-        case "uwa.edu.au":
+    var role = '';
+    // if it's undefined the model validation should catch the error
+    if (number != undefined) {
+        if (number.charAt(0) == '0')
             role = 'staff'
-        break;
-        case "student.uwa.edu.au":
+        else
             role = 'researcher'
-        break;
     }
     return new module.exports.User({
-        name: name,
-        email: email,
+        fname: fname,
+        lname: lname,
         number: number,
         role: role,
         forms: []
@@ -69,5 +39,5 @@ userSchema.statics.create = (name, email, number) => {
 }
 
 userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
-userSchema.plugin(passportLocalMongoose, {usernameField:'email'});
+userSchema.plugin(passportLocalMongoose, {usernameField:'number'});
 module.exports.User = mongoose.model('User', userSchema);
