@@ -62,19 +62,22 @@ module.exports.listAll = (req, res, next) => {
         {
             _id: "5b964db01e7bd3273c8f66c4",
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s Strategic Vision.",
-            questionType: "ALIGNMENT WITH FACULTY STRATEGIC VISION",
+            title: "ALIGNMENT WITH FACULTY STRATEGIC VISION",
+            type: "textarea",
             formName: "Faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c3",
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s strategic research priorities (Engineering for Remote Operations, Science of Discovery or Technologies for Better Health) or an emerging strategic research priority.",
-            questionType: "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
+            title: "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
+            type: "textarea",
             formName: "Faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c2",
             text: "Please provide a brief statement as to how this investment will return value to the Faculty.",
-            questionType: "RETURN ON INVESTMENT",
+            title: "RETURN ON INVESTMENT",
+            type: "textarea",
             formName: "Faculty"
         }
     ],
@@ -150,7 +153,7 @@ module.exports.questionSetId = (req, res, next) => {
             _id: "5b964db01e7bd3273c8f66c2",
             text: "Please provide a brief statement as to how this investment will return value to the Faculty.",
             title: "RETURN ON INVESTMENT",
-            type: "textarea"
+            type: "textarea",
             formName: "Faculty"
         }
     ],
