@@ -13,7 +13,7 @@ var questionSetSchema = new mongoose.Schema(
     {
         version: {type: Number, required: true},
         questionList: [{type: questionSchema, required: true}],
-		latest: {type: Boolean, required: true}
+	latest: {type: Boolean, required: true}
     }
 );
 
