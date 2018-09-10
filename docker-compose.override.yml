@@ -2,6 +2,6 @@ version: "3.2"
 
 services:
     web:
-        command: "true"
+        command: "debug"
         volumes:
             - ./web:/www

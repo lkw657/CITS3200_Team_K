@@ -1,0 +1,23 @@
+version: "3.2"
+
+services:
+    web:
+        command: ""
+        restart: "no"
+        volumes:
+            - ./web:/www
+
+    mocha:
+        build:
+            context: ./web
+            dockerfile: ./Dockerfile.test
+        tty: true
+        command: "test"
+        volumes:
+            - ./web:/www
+        depends_on:
+            - web
+            - db
+        links:
+            - web
+            - db
