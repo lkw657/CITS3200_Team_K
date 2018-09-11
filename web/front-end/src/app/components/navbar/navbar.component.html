@@ -1,0 +1,54 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
+
+
+  <!-- Always visible -->
+  <div class="container">
+    <a *ngIf="!authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/']">EMS Research Priorities Fund Requests</a>
+    <a *ngIf="authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/dashboard']">Welcome {{authService.getProfile().fname}} {{authService.getProfile().lname}}!</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <!-- Comment out this block for client presentations -->
+      <ul class="navbar-nav">
+        <li [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Development</a>
+          <div class="dropdown-menu">
+            <a [routerLink]="['/']" class="dropdown-item">Login</a>
+            <a [routerLink]="['/register']" class="dropdown-item">Register</a>
+            <a [routerLink]="['/dashboard']" class="dropdown-item">Dashboard</a>
+            <a [routerLink]="['/submission']" class="dropdown-item">New Submission</a>
+            <a [routerLink]="['/review']" class="dropdown-item">Review Submission</a>
+            <a (click)="onLogoutClick()" href="#" class="dropdown-item">Logout</a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- visible only when logged in -->
+      <ul *ngIf="authService.getProfile().loggedIn" class="navbar-nav ml-auto">
+        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+            <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
+        </li>
+        <li *ngIf="authService.getProfile().role=='researcher'" [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
+        </li>
+        <li class="nav-item">
+            <a (click)="onLogoutClick()" href="#" class="nav-link">Logout</a>
+        </li>
+      </ul>
+
+      <!-- visible only when not logged in -->
+      <ul *ngIf="!authService.getProfile().loggedIn" class="navbar-nav ml-auto">
+          <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+              <a class="nav-link" [routerLink]="['/']">Login</a>
+          </li>
+          <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+            <a [routerLink]="['/register']" class="nav-link">Register</a>
+          </li>
+        </ul>
+    </div>
+  </div>
+</nav>

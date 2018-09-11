@@ -1,0 +1,10 @@
+<div class="w-100" [formGroup]="form" > 
+  <label [attr.for]="question.key">{{question.label}}</label>
+
+  <div class="w-100" [ngSwitch]="question.controlType">
+    <textarea class="w-100" rows="10" *ngSwitchCase="'textbox'" [formControlName]="question.key" [id]="question.key" ></textarea>
+    <input type="text" class="form-control" *ngSwitchCase="'money'" placeholder="$" [formControlName]="question.key" [id]="question.key" >
+    <input type="date" class="form-control" *ngSwitchCase="'date'" [formControlName]="question.key" [id]="question.key" >
+    <input type="text" class="form-control" *ngSwitchCase="'text'" [formControlName]="question.key" [id]="question.key" >
+  </div>
+</div>
