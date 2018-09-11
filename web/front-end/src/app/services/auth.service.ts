@@ -16,39 +16,24 @@ export class AuthService {
   registerUser(user) { 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/db/register', user, { headers: headers })
+    return this.http.post('http://localhost:3000/register', user, { headers: headers })
       .pipe(map(res => res.json()));
   }
 
-  //Connects to back end to check username and password on login - SHOULD THIS BE A GET?
+  //Connects to back end to check username and password on login
   authenticateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/db/authenticate', user, { headers: headers })
+    return this.http.post('http://localhost:3000/authenticate', user, { headers: headers })
       .pipe(map(res => res.json()));
   }
 
   getProfile(){
-    const user = {
-      //These will be stored in localStorage on login and accessed by navbar
-      fname:'David',
-      lname:'Weight',
-      role:'staff'
+    var user = JSON.parse(localStorage.getItem('user'));
+    if(user==null){
+      user = {loggedIn:false};
     }
     return user;
-
-    //This function can retrieve text from local storage
-    // if (localStorage.getItem('user')){
-    //   return JSON.parse(localStorage.getItem('user')).username;
-    // }
-    // else{
-    //   return "";
-    // }
-  }
-  
-  //Stores username in local storage for display - STORE OTHER DETAILS AS WELL!
-  storeUserData(user) {
-    localStorage.setItem('user', JSON.stringify(user));
   }
 }
 

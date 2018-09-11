@@ -14,6 +14,10 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false}));
 
+//TODO allow particular domain instead of all
+const cors = require('cors'); //Allows request to API from diff domain
+app.use(cors());
+
 var passport = require('passport');
 var User = require('./app_server/models/users').User;
 app.use(passport.initialize());

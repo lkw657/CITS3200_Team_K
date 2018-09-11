@@ -33,11 +33,13 @@ export class LoginComponent implements OnInit {
 
       //Renders dashboard if login is ok
       if(data.success){
+        console.log(data);
         this.flashMessage.show(data.msg, 
           {cssClass: 'alert-success', 
           timeout:3000});
-          //SHOULD WE RECEIVE USER IN DATA AND STORE IN LOCAL STORAGE HERE? 
-          this.router.navigate(['/dashboard']);
+          data.user.loggedIn=true;
+          localStorage.setItem('user', JSON.stringify(data.user));
+          this.router.navigate(['/submission']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
