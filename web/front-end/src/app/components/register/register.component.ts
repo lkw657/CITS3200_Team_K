@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidateService } from "../../services/validate.service";
+import { AuthService } from "../../services/auth.service";
 import { FlashMessagesService } from "angular2-flash-messages";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,6 +19,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private validateService: ValidateService,
+    private authService: AuthService,
+    private router: Router,
     private flashMessage: FlashMessagesService
   ) { }
 
@@ -54,6 +58,17 @@ export class RegisterComponent implements OnInit {
       this.flashMessage.show('Passwords do not match', { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       return false;
     }
-  }
 
+    //Register User
+    this.authService.registerUser(user).subscribe(data => {
+      if (data.success) {
+        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.router.navigate(['/login']);
+      }
+      else {
+        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 3000 });
+        this.router.navigate(['/register']);
+      }
+    });
+  }
 }
