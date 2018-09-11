@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
           }
 
           localStorage.setItem('user', JSON.stringify(data.user));
-          this.router.navigate(['/submission']);
+          this.router.navigate(['/dashboard']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
