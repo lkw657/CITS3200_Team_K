@@ -33,18 +33,33 @@ export class LoginComponent implements OnInit {
 
       //Renders dashboard if login is ok
       if(data.success){
-        this.flashMessage.show(data.msg, 
-          {cssClass: 'alert-success', 
+        console.log(data);
+        this.flashMessage.show(data.msg,
+          {cssClass: 'alert-success',
           timeout:3000});
           data.user.loggedIn=true;
+          if( data.user.role == "researcher" ){
+            data.user.forms = [
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+            ];
+          } else if ( data.user.role == "staff" ){
+            data.user.forms = [
+              {created_date: "01/08/2018", owner: "Approved" },
+              {created_date: "01/08/2018", owner: "Approved" },
+              {created_date: "01/08/2018", owner: "Approved" },
+            ];
+          }
+
           localStorage.setItem('user', JSON.stringify(data.user));
           this.router.navigate(['/submission']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
       else{
-        this.flashMessage.show(data.msg, 
-          {cssClass: 'alert-danger', 
+        this.flashMessage.show(data.msg,
+          {cssClass: 'alert-danger',
           timeout:3000});
           this.router.navigate(['/']);
       }
