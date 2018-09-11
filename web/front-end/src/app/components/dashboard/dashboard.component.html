@@ -1,4 +1,4 @@
-<div *ngIf="user.role=='student'">
+<div *ngIf="user.role=='researcher'">
   <div class="row">
     <div class="col-sm">
         <h1>Student Dashboard</h1>
@@ -7,7 +7,7 @@
         <a [routerLink]="['/submission']" class="btn btn-primary float-right mb-2">New Request</a>
     </div>
   </div>
-  
+
   <div *ngIf="user.forms.length > 0" class="table-responsive">
     <table class="table">
       <thead>
@@ -34,7 +34,7 @@
         <h1>Staff Dashboard</h1>
     </div>
   </div>
-  
+
   <div *ngIf="user.forms.length > 0" class="table-responsive">
     <table class="table">
       <thead>
