@@ -1,0 +1,15 @@
+<div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" >
+    <div *ngFor="let question of questions" class="form-row">
+      <app-question class="w-100" [question]="question" [form]="form"></app-question>
+    </div>
+
+    <div class="form-row">
+      <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid">Submit</button>
+    </div>
+
+    <div *ngIf="payload" class="form-row">
+      <strong>Saved the following values</strong><br>{{payload}}
+    </div>
+  </form>
+</div>
