@@ -31,5 +31,8 @@ questionList
 */
 router.post('/questionSet', ctrlQuestionSet.addQuestionSet);
 router.get('/questionSet', ctrlQuestionSet.listAll);
+router.get('/questionSet/latest', ctrlQuestionSet.latestQuestionSet);
+router.get('/questionSet/:id', ctrlQuestionSet.questionSetId);
+
 
 module.exports = router

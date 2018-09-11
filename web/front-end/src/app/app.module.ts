@@ -26,10 +26,10 @@ import { ValidateService } from './services/validate.service';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent/*, canActivate:[AuthGuard]*/ },
-  { path: 'submission', component: SubmissionComponent/*, canActivate:[AuthGuard]*/},
-  { path: 'review', component: ReviewComponent/*, canActivate:[AuthGuard]*/ },
-  { path: '**', component: NotFoundComponent }
+  { path: 'dashboard', component: DashboardComponent},
+  { path: 'submission', component: SubmissionComponent},
+  { path: 'review', component: ReviewComponent},
+  { path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({

@@ -9,18 +9,12 @@ export class ValidateService {
 
     //Ensure all required user fields are present
     validateRegister(user) {
-      if (user.username == undefined || user.role == undefined || user.email == undefined || user.password == undefined) {
+      if (user.fname == undefined || user.lname == undefined || user.number == undefined || user.password == undefined) {
         return false;
       }
       else {
         return true;
       }
-    }
-
-   //Ensure email is valid
-    validateEmail(email) {
-      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test((email).toLowerCase());
     }
 
     //Ensure passwords match
@@ -34,9 +28,9 @@ export class ValidateService {
     }
     
     //Ensure password is more than 8 characters, has a capital and a number
-    passwordComplex(email) {
+    passwordComplex(password) {
       const complex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-      return complex.test((email));
+      return complex.test((password));
     }
 
 }

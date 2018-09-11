@@ -1,29 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { map } from "rxjs/operators";
-import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  authToken: any;
   user: any;
 
   constructor(
-    private http: Http,
-    private jwtHelperService: JwtHelperService
+    private http: Http
   ) { }
 
   //Connects to back end to add new user to db
-  registerUser(user) {
+  registerUser(user) { 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post('http://localhost:3000/db/register', user, { headers: headers })
       .pipe(map(res => res.json()));
   }
 
-  //Connects to back end to check username and password on login
+  //Connects to back end to check username and password on login - SHOULD THIS BE A GET?
   authenticateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -31,30 +28,27 @@ export class AuthService {
       .pipe(map(res => res.json()));
   }
 
-  //Stores username and token (1 hour limit)
-  storeUserData(token, user) {
-    localStorage.setItem('id_token', token);
-    localStorage.setItem('user', JSON.stringify(user));
-    this.authToken = token;
-    this.user = user;
-  }
-
-  loggedIn() {
-    const token: string = this.jwtHelperService.tokenGetter()
-
-    if (!token) {
-      return false
+  getProfile(){
+    const user = {
+      //These will be stored in localStorage on login and accessed by navbar
+      fname:'David',
+      lname:'Weight',
+      role:'staff'
     }
+    return user;
 
-    const tokenExpired: boolean = this.jwtHelperService.isTokenExpired(token)
-
-    return !tokenExpired
+    //This function can retrieve text from local storage
+    // if (localStorage.getItem('user')){
+    //   return JSON.parse(localStorage.getItem('user')).username;
+    // }
+    // else{
+    //   return "";
+    // }
   }
-
-  logout() {
-    this.authToken = null;
-    this.user = null;
-    localStorage.clear();
+  
+  //Stores username in local storage for display - STORE OTHER DETAILS AS WELL!
+  storeUserData(user) {
+    localStorage.setItem('user', JSON.stringify(user));
   }
 }
 
