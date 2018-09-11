@@ -23,17 +23,16 @@ export class LoginComponent implements OnInit {
 
   //Submit button sends user info to backend for authentication
   onLoginSubmit() {
-    const user = {
+    const login = {
       number: this.number,
       password: this.password
     }
 
     //Authenticate user in backend
-    this.authService.authenticateUser(user).subscribe(data => {
+    this.authService.authenticateUser(login).subscribe(data => {
 
       //Renders dashboard if login is ok
       if(data.success){
-        console.log(data);
         this.flashMessage.show(data.msg, 
           {cssClass: 'alert-success', 
           timeout:3000});

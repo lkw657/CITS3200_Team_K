@@ -11,7 +11,6 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-
       <!-- Comment out this block for client presentations -->
       <ul class="navbar-nav">
         <li [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
@@ -31,9 +30,6 @@
       <ul *ngIf="authService.getProfile().loggedIn" class="navbar-nav ml-auto">
         <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
             <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
-        </li>
-        <li *ngIf="authService.getProfile().role=='researcher'" [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
         </li>
         <li class="nav-item">
             <a (click)="onLogoutClick()" href="#" class="nav-link">Logout</a>
