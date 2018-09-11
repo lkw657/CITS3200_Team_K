@@ -3,8 +3,8 @@
 
   <!-- Always visible -->
   <div class="container">
-    <a *ngIf="!loggedIn" class="navbar-brand" [routerLink]="['/dashboard']">EMS Research Priorities Fund Requests</a>
-    <a *ngIf="loggedIn" class="navbar-brand" [routerLink]="['/dashboard']">Welcome {{authService.getProfile().fname}} {{authService.getProfile().lname}}!</a>
+    <a *ngIf="!authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/']">EMS Research Priorities Fund Requests</a>
+    <a *ngIf="authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/dashboard']">Welcome {{authService.getProfile().fname}} {{authService.getProfile().lname}}!</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,7 @@
       </ul>
 
       <!-- visible only when logged in -->
-      <ul *ngIf="loggedIn" class="navbar-nav ml-auto">
+      <ul *ngIf="authService.getProfile().loggedIn" class="navbar-nav ml-auto">
         <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
             <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
         </li>
@@ -41,7 +41,7 @@
       </ul>
 
       <!-- visible only when not logged in -->
-      <ul *ngIf="!loggedIn" class="navbar-nav ml-auto">
+      <ul *ngIf="!authService.getProfile().loggedIn" class="navbar-nav ml-auto">
           <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
               <a class="nav-link" [routerLink]="['/']">Login</a>
           </li>

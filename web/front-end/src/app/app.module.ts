@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
-import { JwtModule } from '@auth0/angular-jwt';
 
 //Components
 import { AppComponent } from './app.component';
@@ -53,14 +52,6 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: () => {
-          return localStorage.getItem('id_token');
-        },
-        whitelistedDomains: ['/']
-      }
-    })
   ],
   providers: [ValidateService],
   bootstrap: [AppComponent]

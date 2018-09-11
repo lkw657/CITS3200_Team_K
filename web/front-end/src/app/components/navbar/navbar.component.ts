@@ -9,12 +9,6 @@ import { FlashMessagesService } from 'angular2-flash-messages';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit { 
-  
-  //These will be stored in localStorage on login and accessed by navbar
-  // fname: string = 'David';
-  // lname: string = 'Weight';
-  // role: string = 'staff';
-  loggedIn: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -27,7 +21,6 @@ export class NavbarComponent implements OnInit {
 
   onLogoutClick() {
     localStorage.clear();
-    this.loggedIn=!this.loggedIn;
 
     this.flashMessage.show('You are logged out', {
       cssClass: 'alert-success',
