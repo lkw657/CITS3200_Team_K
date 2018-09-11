@@ -1,10 +1,10 @@
 <div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form" >
-    <div *ngFor="let question of questions" class="form-row">
+    <div *ngFor="let question of questions" class="form-row mt-3">
       <app-question class="w-100" [question]="question" [form]="form"></app-question>
     </div>
 
-    <div class="form-row">
+    <div class="form-row mt-3">
       <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid">Submit</button>
     </div>
 
