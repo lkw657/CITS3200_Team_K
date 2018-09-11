@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { FlashMessagesModule } from 'angular2-flash-messages';
 
@@ -13,6 +13,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SubmissionComponent } from './components/submission/submission.component';
 import { ReviewComponent } from './components/review/review.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { DynamicFormQuestionComponent } from './components/dynamic-form-question/dynamic-form-question.component';
+import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
+
 
 //Services
 import { ValidateService } from './services/validate.service';
@@ -35,13 +38,16 @@ const routes: Routes = [
     DashboardComponent,
     SubmissionComponent,
     ReviewComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    DynamicFormQuestionComponent,
+    DynamicFormComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     RouterModule.forRoot(routes),
     FlashMessagesModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers: [ValidateService],
   bootstrap: [AppComponent]
