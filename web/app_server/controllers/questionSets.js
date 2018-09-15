@@ -205,6 +205,20 @@ res.json(
             title: "RETURN ON INVESTMENT",
             type: "textarea",
             formName: "Faculty"
+        },
+        {
+            _id: "5b964db01e7bd3273c8f66c5",
+            text: "Please use this space to provide pertinent information that cannot fit elsewhere.",
+            title: "ADDITIONAL INFORMATION",
+            type: "textarea",
+            formName: "Faculty"
+        },
+        {
+            _id: "5b964db01e7bd3273c8f66c6",
+            text: "",
+            title: "Purpose of Funding",
+            type: "textarea",
+            formName: "Central"
         }
     ],
     version: 1,

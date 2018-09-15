@@ -108,6 +108,12 @@ module.exports.listAll = (req, res, next) => {
     })
 }
 
+module.exports.formid = (req, res, next) => {
+    QuestionSet.findOne({_id:req.params.id}).then(function(form){
+            res.send(form);
+        })
+}
+
 var sendJsonResponse = (res, status, content) => {
     res.status(status);
     res.json(content);

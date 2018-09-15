@@ -24,6 +24,7 @@ questionSet (ref)
 */
 router.post('/form', ctrlForm.addForm);
 router.get('/form', ctrlForm.listAll);
+router.get('/form/:id', ctrlForm.formid);
 
 //Question Set API
 /* Requires:
