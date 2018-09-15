@@ -11,7 +11,7 @@ var questionSchema = new mongoose.Schema(
 
 var questionSetSchema = new mongoose.Schema(
     {
-        version: {type: Number, required: true},	//
+        version: {type: Number, required: true},	//Used for archiving purposes.
         questionList: [{type: questionSchema, required: true}],	//All the questions that are part of the set
         latest: {type: Boolean, required: true}	//Marks if this is the most recent version of the questions.
     }

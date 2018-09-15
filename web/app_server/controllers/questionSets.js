@@ -12,6 +12,7 @@ module.exports.addQuestionSet = (req, res, next)=>{
       var questionSet = new QuestionSet();
   
       questionSet.version=1;
+	  //TODO: Increment versions
       questionSet.latest=true;
       //TODO: Set latest on all other question sets to false
       questionSet.questionList=req.body.questionList;
@@ -171,7 +172,7 @@ module.exports.questionSetId = (req, res, next) => {
     //END OF TESTING
     /*
         //Actual code. 
-        //TODO: Seems to work. Check if this is right.
+        //TODO: Seems to work. Check if this is right. Try findById
         QuestionSet.findOne({_id:req.params.id}).then(function(qset){
             res.send(qset);
         })
@@ -215,7 +216,7 @@ res.json(
         },
         {
             _id: "5b964db01e7bd3273c8f66c6",
-            text: "",
+            text: "Please use this space to provide pertinent information that cannot fit elsewhere.",
             title: "Purpose of Funding",
             type: "textarea",
             formName: "Central"

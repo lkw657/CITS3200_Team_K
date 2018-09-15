@@ -51,7 +51,10 @@ module.exports.addForm = (req, res, next)=>{
                         form.owner=req.body.owner;
                         form.questionSet=req.body.questionSet;
                         form.answers=req.body.answers;
+						form.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
+						//form.dates = [new Date()];
                         form.status='created';
+						form.school= req.body.school;
 
                         form.save((err,form)=>{
                             if(err){
@@ -109,7 +112,7 @@ module.exports.listAll = (req, res, next) => {
 }
 
 module.exports.formid = (req, res, next) => {
-    QuestionSet.findOne({_id:req.params.id}).then(function(form){
+    Form.findById({_id:req.params.id}).then(function(form){
             res.send(form);
         })
 }
