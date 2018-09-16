@@ -14,7 +14,7 @@ req.body.answers
 Assign status
 **/
 module.exports.addForm = (req, res, next)=>{
-    if(req.body.owner && req.body.questionSet && req.body.answers)
+    if(req.body.owner && req.body.questionSet && req.body.answers && req.body.school)
     {
         QuestionSet.findById(req.body.questionSet, (err, set)=>{
             if(err){

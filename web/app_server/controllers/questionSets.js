@@ -9,14 +9,13 @@ req.body.questionList
 module.exports.addQuestionSet = (req, res, next)=>{
     if(req.body.questionList)
     {
+	QuestionSet.findOne({latest:true}).then(function(qset){
       var questionSet = new QuestionSet();
-  
-      questionSet.version=1;
+      questionSet.version=qset.version+1;	//TODO: Untested, potential error condition if this is the first questionSet.
 	  //TODO: Increment versions
       questionSet.latest=true;
       //TODO: Set latest on all other question sets to false
       questionSet.questionList=req.body.questionList;
-  
       questionSet.save((err,questionSet)=>{
         if(err){
           sendJsonResponse(res, 400, {
@@ -24,10 +23,12 @@ module.exports.addQuestionSet = (req, res, next)=>{
           });
         }
         else{
-          sendJsonResponse(res, 201, questionSet);
+		questionSet.update({_id:qset._id},{$set:{latest:false}})	//If saved successfully then update the old latest set to no longer being the latest.
+		  sendJsonResponse(res, 201, questionSet);
         }
       })
-    }
+    });
+	}
     else
     {
       sendJsonResponse(res, 400, {
