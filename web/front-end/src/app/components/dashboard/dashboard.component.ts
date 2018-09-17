@@ -7,12 +7,29 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  user : Object;
+  user: Object;
+  select = true;
+  submissions = false;
+  approvals = false;
+
   constructor(
     private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.user = this.authService.getProfile();
+  }
+
+  //View selecting functions
+  showSubmissions() {
+    this.approvals = false;
+    this.select = false;
+    this.submissions = true;
+  }
+
+  showApprovals() {
+    this.approvals = true;
+    this.select = false;
+    this.submissions = false;
   }
 }

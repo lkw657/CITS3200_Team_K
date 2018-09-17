@@ -1,5 +1,18 @@
 <div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form" >
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div class="form-row">
+      <span class="mr-2 top-text">I am filling this form in as a:</span>
+      <div *ngIf=!form.value.submitter>
+        <input type="button" class="btn btn-w btn-lg btn-warning mb-2 mr-2" value="Head of School" (click)="selectHos()">
+        <input type="button" class="btn btn-w btn-lg btn-primary mb-2" value="Researcher" (click)="selectResearcher()">
+      </div>
+
+      <div *ngIf=form.value.submitter>
+        <input type="button" class="btn btn-w btn-lg btn-success mb-2 mr-2" value={{display}} (click)="selectHos()">
+        <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="changeRole()">
+      </div>
+    </div>
+
     <div *ngFor="let question of questions" class="form-row mt-3">
       <app-question class="w-100" [question]="question" [form]="form"></app-question>
     </div>
@@ -9,7 +22,8 @@
     </div>
 
     <div *ngIf="payload" class="form-row">
-      <strong>Saved the following values</strong><br>{{payload}}
+      <strong>Saved the following values</strong>
+      <br>{{payload}}
     </div>
   </form>
 </div>

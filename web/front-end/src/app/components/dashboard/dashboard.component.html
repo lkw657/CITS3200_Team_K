@@ -1,10 +1,18 @@
-<div *ngIf="user.role=='researcher'">
+<div *ngIf="select">
+  <div class="mb-5">
+    <input type="button" class="btn btn-block btn-primary mt-3 p-4" value="My Submissions" (click)="showSubmissions()">
+    <input type="button" class="btn btn-block btn-warning float-right mt-3 p-4" value="Approvals" (click)="showApprovals()">
+  </div>
+</div>
+
+<div *ngIf="submissions">
   <div class="row">
     <div class="col-sm">
-        <h1>Student Dashboard</h1>
+        <h1>Submissions Dashboard</h1>
     </div>
     <div class="col-sm">
-        <a [routerLink]="['/submission']" class="btn btn-primary float-right mb-2">New Request</a>
+        <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
+        <input type="button" class="btn btn-w btn-lg btn-warning float-right mb-2 mr-2" value="Approvals" (click)="showApprovals()">
     </div>
   </div>
 
@@ -28,10 +36,13 @@
   </div>
 </div>
 
-<div *ngIf="user.role=='staff'">
+<div *ngIf="approvals">
   <div class="row">
     <div class="col-sm">
-        <h1>Staff Dashboard</h1>
+        <h1>Approvals Dashboard</h1>
+    </div>
+    <div class="col-sm">
+        <input type="button" class="btn btn-w btn-lg btn-primary float-right mb-2" value="My Submissions" (click)="showSubmissions()">
     </div>
   </div>
 
