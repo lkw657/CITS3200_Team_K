@@ -47,7 +47,6 @@ export class DynamicFormComponent implements OnInit {
 
   changeSchool() {
     this.form.value.school=undefined;
-    this.form.value.submitter=undefined;
   }
 
   onSubmit() {
