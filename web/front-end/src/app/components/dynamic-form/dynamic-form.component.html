@@ -1,14 +1,27 @@
 <div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    <div class="form-row">
-      <span class="mr-2 top-text">I am filling this form in as a:</span>
+
+    <div class="form-row" *ngIf=!form.value.school>
+      <span class="mr-2 top-text">I am from the:</span>
+      <div *ngIf="!form.value.submitter">
+        <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('eng', 'Engineering')">
+        <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('pmc', 'Physics, Mathematics and Computing')">
+        <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('ogs', 'Ocean Graduate School')">
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf=form.value.school>
+      <span *ngIf="!form.value.submitter && form.value.school" class="mr-2 top-text">I am filling this form in as a:</span>
       <div *ngIf=!form.value.submitter>
-        <input type="button" class="btn btn-w btn-lg btn-warning mb-2 mr-2" value="Head of School" (click)="selectHos()">
-        <input type="button" class="btn btn-w btn-lg btn-primary mb-2" value="Researcher" (click)="selectResearcher()">
+        <input type="button" class="btn btn-lg btn-success mb-2 mr-2" value={{school}}>
+        <input type="button" class="btn btn-w btn-lg btn-warning mb-2 mr-2" value="Head of School" (click)="selectRole('headOfSchool', 'Head of School')">
+        <input type="button" class="btn btn-w btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('researcher', 'Researcher')">
       </div>
 
       <div *ngIf=form.value.submitter>
-        <input type="button" class="btn btn-w btn-lg btn-success mb-2 mr-2" value={{display}} (click)="selectHos()">
+        <input type="button" class="btn btn-lg btn-success mb-2 mr-2" value={{school}}>
+        <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="changeSchool()">
+        <input type="button" class="btn btn-w btn-lg btn-success mb-2 mr-2" value={{role}}>
         <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="changeRole()">
       </div>
     </div>
