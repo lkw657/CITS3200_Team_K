@@ -23,13 +23,18 @@
       <div class="col-sm">
         <h1>Submissions Dashboard</h1>
       </div>
+
       <div class="col-sm">
         <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
         <input type="button" class="btn btn-w btn-lg btn-warning float-right mb-2 mr-2" value="Approvals" (click)="showApprovals()">
       </div>
     </div>
 
-    <div *ngIf="user.forms.length > 0" class="table-responsive">
+    <div *ngIf="!user.forms">
+        <h2>You have no submissions</h2>
+    </div>
+
+    <div *ngIf="user.forms" class="table-responsive">
       <table class="table">
         <thead>
           <tr>
@@ -59,7 +64,11 @@
       </div>
     </div>
 
-    <div *ngIf="user.forms.length > 0" class="table-responsive">
+    <div *ngIf="!user.forms">
+      <h2>You have no forms awaiting approval</h2>
+    </div>
+
+    <div *ngIf="user.forms" class="table-responsive">
       <table class="table">
         <thead>
           <tr>
