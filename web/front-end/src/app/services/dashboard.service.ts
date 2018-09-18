@@ -5,18 +5,52 @@ import { map } from "rxjs/operators";
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardServices {
+export class DashboardService {
   user: any;
 
   constructor(
     private http: Http
   ) { }
 
-  getProfile(){
+  getProfile() {
     var user = JSON.parse(localStorage.getItem('user'));
-    if(user==null){
-      user = {loggedIn:false};
+    if (user == null) {
+      user = { loggedIn: false };
     }
     return user;
   }
+
+  //Get ALL users for IT to view
+  getAllUsers() {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:3000/db/users', { headers: headers })
+      .pipe(map(res => res.json()));
+  }
+
+  //Update User in database
+  updateUser(user) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:3000/db/updateUser', user, { headers: headers })
+      .pipe(map(res => res.json()));
+  }
+
+  //Remove User in database
+  removeUser(user) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:3000/db/removeUser', user, { headers: headers })
+      .pipe(map(res => res.json()));
+  }
+
+  //Update Questions in database
+  updateQuestionSet(questionSet) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/db/questionSet', questionSet, { headers: headers })
+      .pipe(map(res => res.json()));
+  }
+
+
 }

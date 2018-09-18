@@ -48,7 +48,7 @@ module.exports.authenticate = (req, res, next) => {
                     fname: user.fname,
                     lname: user.lname,
                     number: user.number,
-                    role: user.role
+                    isIT: user.isIT
                 }
             });
         });
