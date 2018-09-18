@@ -7,14 +7,21 @@ var uniqueValidator = require('mongoose-unique-validator');
    the error that caused that is sent to the used instead of something about a role which they don't know what to do with */
 var userSchema = new mongoose.Schema(
     {
-        role: {type: String, required: true},
-        fname: {type: String, required: [true, "Please enter your first name"],
-                match:[/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]},
-        lname: {type: String, required: [true, "Please enter your last name"],
-                match:[/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]},
-        number: {type: String, unique: true, required: [true, "Please enter a valid UWA staff/student number"],
-                 match:[/^\d{8,}$/, "Please enter a valid UWA staff/student number"]},
-        forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }]
+        role: { type: String, required: true },
+        fname: {
+            type: String, required: [true, "Please enter your first name"],
+            match: [/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]
+        },
+        lname: {
+            type: String, required: [true, "Please enter your last name"],
+            match: [/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]
+        },
+        number: {
+            type: String, unique: true, required: [true, "Please enter a valid UWA staff/student number"],
+            match: [/^\d{8,}$/, "Please enter a valid UWA staff/student number"]
+        },
+        forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
+        isIT: Boolean
     }
 );
 
@@ -34,10 +41,12 @@ userSchema.statics.create = (fname, lname, number) => {
         lname: lname,
         number: number,
         role: role,
-        forms: []
+        forms: [],
+        isIT: 'false'
     });
 }
 
-userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
-userSchema.plugin(passportLocalMongoose, {usernameField:'number'});
+userSchema.plugin(uniqueValidator, { message: "{PATH} already exists" });
+userSchema.plugin(passportLocalMongoose, { usernameField: 'number' });
 module.exports.User = mongoose.model('User', userSchema);
+

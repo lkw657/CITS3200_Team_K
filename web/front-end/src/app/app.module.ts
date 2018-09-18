@@ -17,10 +17,14 @@ import { ReviewComponent } from './components/review/review.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { DynamicFormQuestionComponent } from './components/dynamic-form-question/dynamic-form-question.component';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
-
+import { EditUsersComponent } from './components/edit-users/edit-users.component';
+import { EditQuestionsComponent } from './components/edit-questions/edit-questions.component';
 
 //Services
 import { ValidateService } from './services/validate.service';
+import { DashboardService } from './services/dashboard.service';
+import { AuthService } from './services/auth.service';
+
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -28,6 +32,7 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent},
   { path: 'submission', component: SubmissionComponent},
   { path: 'review', component: ReviewComponent},
+  { path: 'editUsers', component: EditUsersComponent},
   { path: '**', component: NotFoundComponent}
 ];
 
@@ -42,7 +47,9 @@ const routes: Routes = [
     ReviewComponent,
     NotFoundComponent,
     DynamicFormQuestionComponent,
-    DynamicFormComponent
+    DynamicFormComponent,
+    EditUsersComponent,
+    EditQuestionsComponent
   ],
   imports: [
     BrowserModule,

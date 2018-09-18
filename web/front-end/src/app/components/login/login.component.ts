@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
 
       //Renders dashboard if login is ok
       if(data.success){
-        console.log(data);
         this.flashMessage.show(data.msg,
           {cssClass: 'alert-success',
           timeout:3000});
@@ -51,7 +50,6 @@ export class LoginComponent implements OnInit {
               {created_date: "01/08/2018", owner: "Approved" },
             ];
           }
-
           localStorage.setItem('user', JSON.stringify(data.user));
           this.router.navigate(['/dashboard']);
       }

@@ -7,7 +7,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  user: Object;
+  user: any;
   select = true;
   submissions = false;
   approvals = false;
@@ -31,5 +31,10 @@ export class DashboardComponent implements OnInit {
     this.approvals = true;
     this.select = false;
     this.submissions = false;
+  }
+
+  //DEVELOPMENT ONLY - REMOVE
+  changeIT(){
+    this.user.isIT = !this.user.isIT;
   }
 }
