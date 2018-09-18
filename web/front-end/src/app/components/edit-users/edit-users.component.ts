@@ -19,7 +19,7 @@ export class EditUsersComponent implements OnInit {
   allUsers: Object;
   currentUser: Object;
 
-  //What to display?
+  //What should be displayed
   displayAll: boolean = true;
   displayEdit: boolean = false;
 
@@ -34,7 +34,7 @@ export class EditUsersComponent implements OnInit {
       });
   }
 
-  //This will hide all content besides the edit form.
+  //This will hide all content besides the edit form
   showEdit(user) {
     this.currentUser = user;
     this.displayAll = false;
@@ -42,7 +42,7 @@ export class EditUsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  //This will hide all content besides the edit form.
+  //This will show all users
   showAll() {
     this.displayAll = true;
     this.displayEdit = false;

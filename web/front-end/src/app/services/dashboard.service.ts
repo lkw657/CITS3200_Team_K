@@ -44,13 +44,19 @@ export class DashboardService {
       .pipe(map(res => res.json()));
   }
 
-  //Update Questions in database
-  updateQuestionSet(questionSet) {
+  //Get ALL questions for IT to view
+  getAllQuestions() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/db/questionSet', questionSet, { headers: headers })
+    return this.http.get('http://localhost:3000/db/questionSet/latest', { headers: headers })
       .pipe(map(res => res.json()));
   }
 
-
+  //Update Questions in database
+  updateQuestionSet(questionList) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/db/questionSet', questionList, { headers: headers })
+      .pipe(map(res => res.json()));
+  }
 }
