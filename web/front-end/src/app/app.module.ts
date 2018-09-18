@@ -33,6 +33,7 @@ const routes: Routes = [
   { path: 'submission', component: SubmissionComponent},
   { path: 'review', component: ReviewComponent},
   { path: 'editUsers', component: EditUsersComponent},
+  { path: 'editQuestions', component: EditQuestionsComponent},
   { path: '**', component: NotFoundComponent}
 ];
 
