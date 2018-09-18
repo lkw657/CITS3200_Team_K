@@ -14,11 +14,16 @@ export class DynamicFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
   school: String;
-  role: String;
+  submitter: String;
   form: FormGroup;
   payload = '';
 
   constructor(private qcs: QuestionControlService) { }
+
+  //What should be displayed
+  displayQuestions: boolean = false;
+  displayRole: boolean = false;
+  displaySchool: boolean = true;
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
@@ -26,32 +31,42 @@ export class DynamicFormComponent implements OnInit {
 
   selectRole(role, display) {
     this.form.value.submitter = role;
-    this.role = display;
+    this.submitter = display;
+
+    this.displayRole = false;
+    this.displayQuestions = true;
   }
 
   selectSchool(school, display) {
     this.form.value.school = school;
     this.school = display;
+    this.displaySchool = false;
+    if (this.form.value.submitter) {
+      this.displayRole = false;
+    }
+    else {
+      this.displayRole = true;
+    }
   }
 
   changeRole() {
     if (this.form.value.submitter == "researcher") {
       this.form.value.submitter = "headOfSchool";
-      this.role = "Head of School";
+      this.submitter = "Head of School";
     }
     else {
       this.form.value.submitter = "researcher";
-      this.role = "Researcher";
+      this.submitter = "Researcher";
     }
   }
 
   changeSchool() {
-    this.form.value.school=undefined;
+    this.displayQuestions = false;
+    this.displayRole = false;
+    this.displaySchool = true;
   }
 
   onSubmit() {
     this.payload = JSON.stringify(this.form.value);
   }
-
-
 }

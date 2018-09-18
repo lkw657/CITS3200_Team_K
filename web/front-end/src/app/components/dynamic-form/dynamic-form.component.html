@@ -1,8 +1,8 @@
 <div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
-    <div class="form-row" *ngIf=!form.value.school>
-      <div>
+    <div class="form-row">
+      <div *ngIf=displaySchool>
         <p class="mr-2 top-text">I am from the:</p>
         <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('eng', 'School of Engineering')">
         <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('pmc', 'School of Physics, Mathematics and Computing')">
@@ -10,8 +10,8 @@
       </div>
     </div>
 
-    <div class="form-row" *ngIf=form.value.school>
-      <div *ngIf=!form.value.submitter>
+    <div class="form-row">
+      <div *ngIf=displayRole>
         <p class="mr-2 top-text">I am filling this form in as a:</p>
         <p class="btn btn-lg btn-secondary disabled mb-2 mr-2">{{school}}</p>
         <span class="mr-2">:</span>
@@ -19,27 +19,28 @@
         <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('researcher', 'Researcher')">
       </div>
 
-      <div *ngIf=form.value.submitter>
+
+      <div *ngIf=displayQuestions>
         <div>
           <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{school}}</p>
           <span class="mr-2">:</span>
           <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="changeSchool()">
         </div>
         <div>
-          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{role}}</p>
+          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter}}</p>
           <span class="mr-2">:</span>
           <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="changeRole()">
         </div>
       </div>
     </div>
 
-    <div *ngIf="form.value.submitter && form.value.school">
+    <div>
       <div *ngFor="let question of questions" class="form-row mt-3">
         <app-question class="w-100" [question]="question" [form]="form"></app-question>
       </div>
 
       <div class="form-row mt-3">
-        <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid">Submit</button>
+        <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !form.value.school || !form.value.submitter">Submit</button>
       </div>
     </div>
 
