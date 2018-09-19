@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit {
           {cssClass: 'alert-success',
           timeout:3000});
           data.user.loggedIn=true;
+
+          // DEVELOPMENT ONLY - REMOVE
           if( data.user.role == "researcher" ){
             data.user.forms = [
               {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
@@ -50,6 +52,7 @@ export class LoginComponent implements OnInit {
               {created_date: "01/08/2018", owner: "Approved" },
             ];
           }
+
           localStorage.setItem('user', JSON.stringify(data.user));
           this.router.navigate(['/dashboard']);
       }
