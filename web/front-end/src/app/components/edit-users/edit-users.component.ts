@@ -22,6 +22,7 @@ export class EditUsersComponent implements OnInit {
   // What should be displayed
   displayAll: boolean = true;
   displayEdit: boolean = false;
+  displayDelete: boolean = false;
 
   ngOnInit() {
     // Get users to show admin
@@ -42,10 +43,18 @@ export class EditUsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
+  showDelete(user) {
+    this.currentUser = user;
+    this.displayAll = false;
+    this.displayDelete = true;
+    window.scrollTo(0, 0);
+  }
+
   // This will show all users
   showAll() {
     this.displayAll = true;
     this.displayEdit = false;
+    this.displayDelete = false;
     window.scrollTo(0, 0);
   }
 
@@ -67,13 +76,16 @@ export class EditUsersComponent implements OnInit {
   }
 
   // Delete user from database
-  deleteUser(user) {
+  deleteUser() {
     window.scrollTo(0, 0);
-    this.dashboardService.removeUser(user).subscribe(data => {
+    this.dashboardService.removeUser(this.currentUser).subscribe(data => {
       if (data.success) {
         // Get users to show admin
         this.dashboardService.getAllUsers().subscribe(allUsers => {
           this.allUsers = allUsers;
+          this.displayAll = true;
+          this.displayDelete = false;
+          window.scrollTo(0, 0);
         },
           err => {
             console.log(err);

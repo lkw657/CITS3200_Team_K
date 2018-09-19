@@ -10,7 +10,7 @@
         <button class="btn btn-success mb-2 mr-2" (click)="showEdit(user)" title="Edit">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="btn btn-danger mb-2" (click)="deleteUser(user)" title="Delete">
+        <button class="btn btn-danger mb-2" (click)="showDelete(user)" title="Delete">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -53,3 +53,30 @@
     </div>
   </div>
 </div>
+
+<!-- Display the delete user form -->
+<div *ngIf="displayDelete">
+    <div class="card">
+      <div class="card-body">
+  
+        <div class="form-group">
+          First Name: {{currentUser.fname}}
+        </div>
+  
+        <div class="form-group">
+          Last Name: {{currentUser.lname}}
+        </div>
+  
+        <div class="form-group">
+          Number: {{currentUser.number}}
+        </div>
+  
+        <div class="form-group">
+          User is member of IT: {{currentUser.isIT}}
+        </div>
+  
+        <button type="button" (click)="deleteUser()" class="btn btn-success btn-block">Confirm Deletion</button>
+        <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel Deletion</button>
+      </div>
+    </div>
+  </div>
