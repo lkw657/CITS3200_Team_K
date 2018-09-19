@@ -16,15 +16,16 @@ export class EditQuestionsComponent implements OnInit {
     private dashboardService: DashboardService
   ) { }
 
-  questionList: Object;
+  questionList: any;
   currentQuestion: Object;
 
-  //What should be displayed
+  // What should be displayed
   displayAll: boolean = true;
   displayEdit: boolean = false;
+  displayDelete: boolean = false;
 
   ngOnInit() {
-    //Get users to show admin
+    // Get question to show admin
     this.dashboardService.getAllQuestions().subscribe(questionSet => {
       this.questionList = questionSet.questionList;
     },
@@ -34,27 +35,48 @@ export class EditQuestionsComponent implements OnInit {
       });
   }
 
-  //This will hide all content besides the edit form.
+  // This will hide all content besides the edit form.
   showEdit(question) {
+
     this.currentQuestion = question;
     this.displayAll = false;
     this.displayEdit = true;
     window.scrollTo(0, 0);
   }
 
-  //This will show all questions
+  // This will hide all content besides the delete screen.
+  showDelete(question) {
+
+    this.currentQuestion = question;
+    this.displayAll = false;
+    this.displayDelete = true;
+    window.scrollTo(0, 0);
+  }
+
+  // This will delete queation from current question set
+  deleteQuestion() {
+
+    this.questionList.splice(this.questionList.indexOf(this.currentQuestion), 1);
+
+    this.displayAll = true;
+    this.displayDelete = false;
+    window.scrollTo(0, 0);
+  }
+
+  // This will show all questions
   showAll() {
     this.displayAll = true;
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
 
+  // Updates question in question list for submission
   onQuestionEdit(question) {
     this.displayAll = true;
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
-  //Update Question set database through the backend
+  // Update Question set database through the backend
   saveNewQuestionSet() {
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {

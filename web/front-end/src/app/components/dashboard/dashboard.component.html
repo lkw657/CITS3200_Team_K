@@ -4,6 +4,7 @@
     <div class="mb-5">
       <a [routerLink]="['/editUsers']" class="btn btn-block btn-primary mt-3 p-4">Edit Users</a>
       <a [routerLink]="['/editQuestions']" class="btn btn-block btn-warning float-right mt-3 mb-3 p-4">Edit Questions</a>
+      <!-- DEVELOPMENT ONLY - REMOVE BELOW LINE -->
       <input type="button" class="btn btn-block btn-danger p-4" value="Change to non IT (Development Only)" (click)="changeIT()">
     </div>
   </div>
@@ -18,6 +19,7 @@
     </div>
   </div>
 
+  <!-- Dashboard display for all user's submitted forms -->
   <div *ngIf="submissions">
     <div class="row">
       <div class="col-sm">
@@ -54,6 +56,7 @@
     </div>
   </div>
 
+  <!-- Dashboard display for all user's forms awaiting their approval -->
   <div *ngIf="approvals">
     <div class="row">
       <div class="col-sm">

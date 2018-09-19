@@ -19,12 +19,12 @@ export class EditUsersComponent implements OnInit {
   allUsers: Object;
   currentUser: Object;
 
-  //What should be displayed
+  // What should be displayed
   displayAll: boolean = true;
   displayEdit: boolean = false;
 
   ngOnInit() {
-    //Get users to show admin
+    // Get users to show admin
     this.dashboardService.getAllUsers().subscribe(allUsers => {
       this.allUsers = allUsers;
     },
@@ -34,7 +34,7 @@ export class EditUsersComponent implements OnInit {
       });
   }
 
-  //This will hide all content besides the edit form
+  // This will hide all content besides the edit form
   showEdit(user) {
     this.currentUser = user;
     this.displayAll = false;
@@ -42,14 +42,14 @@ export class EditUsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  //This will show all users
+  // This will show all users
   showAll() {
     this.displayAll = true;
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
 
-  //Update User database through the backend
+  // Update User database through the backend
   onUserEdit() {
     this.dashboardService.updateUser(this.currentUser).subscribe(data => {
       if (data.success) {
@@ -66,11 +66,12 @@ export class EditUsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
+  // Delete user from database
   deleteUser(user) {
     window.scrollTo(0, 0);
     this.dashboardService.removeUser(user).subscribe(data => {
       if (data.success) {
-        //Get users to show admin
+        // Get users to show admin
         this.dashboardService.getAllUsers().subscribe(allUsers => {
           this.allUsers = allUsers;
         },

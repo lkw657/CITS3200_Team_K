@@ -17,10 +17,11 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Gets current user profile on page render
     this.user = this.authService.getProfile();
   }
 
-  //View selecting functions
+  // View selecting functions
   showSubmissions() {
     this.approvals = false;
     this.select = false;
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
     this.submissions = false;
   }
 
-  //DEVELOPMENT ONLY - REMOVE
+  // DEVELOPMENT ONLY - REMOVE
   changeIT(){
     this.user.isIT = !this.user.isIT;
   }

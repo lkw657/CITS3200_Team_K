@@ -1,6 +1,7 @@
 <div>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
+    <!-- School selector -->
     <div class="form-row">
       <div *ngIf=displaySchool>
         <p class="mr-2 top-text">I am from the:</p>
@@ -10,6 +11,7 @@
       </div>
     </div>
 
+    <!-- Role selector -->
     <div class="form-row">
       <div *ngIf=displayRole>
         <p class="mr-2 top-text">I am filling this form in as a:</p>
@@ -19,7 +21,7 @@
         <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('researcher', 'Researcher')">
       </div>
 
-
+      <!-- School/Role display -->
       <div *ngIf=displayQuestions>
         <div>
           <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{school}}</p>
@@ -34,6 +36,7 @@
       </div>
     </div>
 
+    <!-- Displays all question and relevant answer fields -->
     <div>
       <div *ngFor="let question of questions" class="form-row mt-3">
         <app-question class="w-100" [question]="question" [form]="form"></app-question>
@@ -44,7 +47,7 @@
       </div>
     </div>
 
-    <!-- can be deleted later - testing only -->
+    <!-- DEVELOPMENT ONLY - REMOVE BELOW DIV -->
     <div *ngIf="payload" class="form-row">
       <strong>Saved the following values</strong>
       <br>{{payload}}

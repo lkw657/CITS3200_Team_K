@@ -12,13 +12,16 @@ import { QuestionBase } from '../../classes/question-base';
 })
 export class DynamicFormComponent implements OnInit {
 
-  @Input() questions: QuestionBase<any>[] = [];
+  @Input() 
+  questions: QuestionBase<any>[] = [];
   school: String;
   submitter: String;
   form: FormGroup;
   payload = '';
 
-  constructor(private qcs: QuestionControlService) { }
+  constructor(
+    private qcs: QuestionControlService
+  ) { }
 
   //What should be displayed
   displayQuestions: boolean = false;
@@ -29,6 +32,7 @@ export class DynamicFormComponent implements OnInit {
     this.form = this.qcs.toFormGroup(this.questions);
   }
 
+  // Saves role into form and changes view
   selectRole(role, display) {
     this.form.value.submitter = role;
     this.submitter = display;
@@ -37,6 +41,7 @@ export class DynamicFormComponent implements OnInit {
     this.displayQuestions = true;
   }
 
+  // Saves school into form and changes view
   selectSchool(school, display) {
     this.form.value.school = school;
     this.school = display;
@@ -49,6 +54,7 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+  // Changes role from current to alternate option - no view change
   changeRole() {
     if (this.form.value.submitter == "researcher") {
       this.form.value.submitter = "headOfSchool";
@@ -60,12 +66,14 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+  // Changes view so school can be alternated between 3 options
   changeSchool() {
     this.displayQuestions = false;
     this.displayRole = false;
     this.displaySchool = true;
   }
 
+  // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
   onSubmit() {
     this.payload = JSON.stringify(this.form.value);
   }

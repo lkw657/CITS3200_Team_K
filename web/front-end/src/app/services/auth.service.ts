@@ -28,6 +28,7 @@ export class AuthService {
       .pipe(map(res => res.json()));
   }
 
+  // Gets user details from local storage
   getProfile(){
     var user = JSON.parse(localStorage.getItem('user'));
     if(user==null){
