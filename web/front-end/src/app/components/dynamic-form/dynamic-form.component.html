@@ -37,7 +37,7 @@
     </div>
 
     <!-- Displays all question and relevant answer fields -->
-    <div>
+    <div *ngIf=displayQuestions>
       <div *ngFor="let question of questions" class="form-row mt-3">
         <app-question class="w-100" [question]="question" [form]="form"></app-question>
       </div>

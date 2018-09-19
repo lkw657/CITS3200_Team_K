@@ -12,10 +12,11 @@ import { QuestionBase } from '../../classes/question-base';
 })
 export class DynamicFormComponent implements OnInit {
 
-  @Input() 
+  @Input()
   questions: QuestionBase<any>[] = [];
   school: String;
   submitter: String;
+  researcher: Boolean;
   form: FormGroup;
   payload = '';
 
@@ -34,6 +35,13 @@ export class DynamicFormComponent implements OnInit {
 
   // Saves role into form and changes view
   selectRole(role, display) {
+    if (role == "researcher") {
+      this.researcher = true;
+    }
+    else {
+      this.researcher = false;
+    }
+
     this.form.value.submitter = role;
     this.submitter = display;
 
@@ -48,6 +56,7 @@ export class DynamicFormComponent implements OnInit {
     this.displaySchool = false;
     if (this.form.value.submitter) {
       this.displayRole = false;
+      this.displayQuestions = true;
     }
     else {
       this.displayRole = true;
@@ -56,13 +65,15 @@ export class DynamicFormComponent implements OnInit {
 
   // Changes role from current to alternate option - no view change
   changeRole() {
-    if (this.form.value.submitter == "researcher") {
+    if (this.researcher) {
       this.form.value.submitter = "headOfSchool";
       this.submitter = "Head of School";
+      this.researcher = false;
     }
     else {
       this.form.value.submitter = "researcher";
       this.submitter = "Researcher";
+      this.researcher = true;
     }
   }
 
