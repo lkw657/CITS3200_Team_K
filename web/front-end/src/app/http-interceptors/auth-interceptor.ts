@@ -15,7 +15,6 @@ export class AuthInterceptor implements HttpInterceptor {
 	intercept(req: HttpRequest<any>, next: HttpHandler) {
         // Modify the request to send the cookie
         const newReq = req.clone({withCredentials: true})
-        let ok: string;
         // Check the response
         return next.handle(newReq).pipe(tap((event: HttpEvent<any>) => {
         }, (err: any) => {
@@ -40,30 +39,3 @@ export class AuthInterceptor implements HttpInterceptor {
         }));
     }
 }
-            /*.pipe(
-                tap(
-                    event => ok = event instanceof HttpResponse ? 'succeeded' : '',
-                    error => ok = 'failed'
-                ),
-                finalize(() => {
-                    if (ok != 'succeeded')
-                        return;
-                    if ((<HttpResponse> event).status == 401) {
-                        // Cookie was bad, or other reason why backend doesn't like user's login
-                        this.flashMessage.show('Please log in',
-                            {cssClass: 'alert-danger',
-                            timeout:3000});
-                        this.router.navigate(['/login']);
-                    }
-                    else if ((<HttpResponse> event).status == 403) {
-                        // User does not have permission
-                        this.flashMessage.show('You do not have permission',
-                            {cssClass: 'alert-danger',
-                            timeout:3000});
-                        // TODO, where should this go?
-                        this.router.navigate(['/']);
-
-                    }
-                })
-            );
-*/
