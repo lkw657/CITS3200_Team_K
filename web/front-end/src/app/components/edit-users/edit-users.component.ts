@@ -52,6 +52,7 @@ export class EditUsersComponent implements OnInit {
   // Update User database through the backend
   onUserEdit() {
     this.dashboardService.updateUser(this.currentUser).subscribe(data => {
+      console.log(data);
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/editUsers']);
