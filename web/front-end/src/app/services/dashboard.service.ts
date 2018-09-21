@@ -25,7 +25,7 @@ export class DashboardService {
   getAllUsers() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:3000/db/users', { headers: headers })
+    return this.http.get('http://localhost:3000/db/users', { headers: headers, withCredentials: true})
       .pipe(map(res => res.json()));
   }
 
@@ -33,7 +33,7 @@ export class DashboardService {
   updateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.put('http://localhost:3000/db/updateUser', user, { headers: headers })
+    return this.http.put('http://localhost:3000/db/updateUser', user, { headers: headers, withCredentials: true })
       .pipe(map(res => res.json()));
   }
 
@@ -41,7 +41,7 @@ export class DashboardService {
   removeUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.put('http://localhost:3000/db/removeUser', user, { headers: headers })
+    return this.http.put('http://localhost:3000/db/removeUser', user, { headers: headers, withCredentials: true })
       .pipe(map(res => res.json()));
   }
 
@@ -49,7 +49,7 @@ export class DashboardService {
   getAllQuestions() {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:3000/db/questionSet/latest', { headers: headers })
+    return this.http.get('http://localhost:3000/db/questionSet/latest', { headers: headers, withCredentials: true })
       .pipe(map(res => res.json()));
   }
 
@@ -57,7 +57,7 @@ export class DashboardService {
   updateQuestionSet(questionList) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/db/questionSet', questionList, { headers: headers })
+    return this.http.post('http://localhost:3000/db/questionSet', questionList, { headers: headers, withCredentials: true })
       .pipe(map(res => res.json()));
   }
 }
