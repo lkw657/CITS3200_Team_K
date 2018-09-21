@@ -22,12 +22,13 @@ module.exports.listAll = (req, res, next) => {
 
 //Updates user information in database
 module.exports.updateUser = (req, res, next) => {
-  if (req.user == undefined || !req.user.isIT)
+  if (req.user == undefined || !req.user.isIT) {
     stat = req.user == undefined ? 401 : 403
-  return sendJsonResponse(res, stat, {
-    success: false,
-    msg: "forbidden"
-  });
+    return sendJsonResponse(res, stat, {
+      success: false,
+      msg: "forbidden"
+    });
+  }
 
   User.findById(req.body._id, function (err, user) {
     if (err) {
