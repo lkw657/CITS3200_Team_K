@@ -13,12 +13,12 @@ export class AuthService {
 
   //Connects to back end to add new user to db
   registerUser(user) { 
-    return this.http.post('http://localhost:3000/register', user);
+    return this.http.post<any>('http://localhost:3000/register', user);
   }
 
   //Connects to back end to check username and password on login
   authenticateUser(user) {
-    return this.http.post('http://localhost:3000/authenticate', user);
+    return this.http.post<any>('http://localhost:3000/authenticate', user);
   }
 
   // Gets user details from local storage
