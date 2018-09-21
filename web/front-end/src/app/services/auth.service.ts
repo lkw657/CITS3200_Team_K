@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { baseURI } from '../config';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,12 @@ export class AuthService {
 
   //Connects to back end to add new user to db
   registerUser(user) { 
-    return this.http.post<any>('http://localhost:3000/register', user);
+    return this.http.post<any>(baseURI+'/register', user);
   }
 
   //Connects to back end to check username and password on login
   authenticateUser(user) {
-    return this.http.post<any>('http://localhost:3000/authenticate', user);
+    return this.http.post<any>(baseURI+'/authenticate', user);
   }
 
   // Gets user details from local storage
