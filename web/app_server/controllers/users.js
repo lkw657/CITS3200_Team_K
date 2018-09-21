@@ -3,29 +3,31 @@ var User = require('../models/users').User;
 var Form = require('../models/forms').Form;
 
 module.exports.listAll = (req, res, next) => {
-    if (req.user == undefined || ! req.user.isIT)
-        stat = req.user == undefined ? 401 : 403
-        return sendJsonResponse(res, stat, {
-            success: false,
-            msg: "forbidden"
-        });
-    User.find({}, '', (err, users) => {
-        if (err)
-            return sendJsonResponse(res, 400, {
-                error: err
-            });
-        return sendJsonResponse(res, 200, users);
+  if (req.user == undefined || !req.user.isIT) {
+    var stat = req.user == undefined ? 401 : 403
+    return sendJsonResponse(res, stat, {
+      success: false,
+      msg: "forbidden"
     });
+  }
+  User.find({}, '', (err, users) => {
+    if (err)
+      return sendJsonResponse(res, 400, {
+        error: err
+      });
+
+    return sendJsonResponse(res, 200, users);
+  });
 }
 
 //Updates user information in database
 module.exports.updateUser = (req, res, next) => {
-    if (req.user == undefined || ! req.user.isIT)
-        stat = req.user == undefined ? 401 : 403
-        return sendJsonResponse(res, stat, {
-            success: false,
-            msg: "forbidden"
-        });
+  if (req.user == undefined || !req.user.isIT)
+    stat = req.user == undefined ? 401 : 403
+  return sendJsonResponse(res, stat, {
+    success: false,
+    msg: "forbidden"
+  });
 
   User.findById(req.body._id, function (err, user) {
     if (err) {
@@ -48,12 +50,12 @@ module.exports.updateUser = (req, res, next) => {
 
 //Delete User from database
 module.exports.removeUser = (req, res, next) => {
-    if (req.user == undefined || ! req.user.isIT)
-        stat = req.user == undefined ? 401 : 403
-        return sendJsonResponse(res, stat, {
-            success: false,
-            msg: "forbidden"
-        });
+  if (req.user == undefined || !req.user.isIT)
+    stat = req.user == undefined ? 401 : 403
+  return sendJsonResponse(res, stat, {
+    success: false,
+    msg: "forbidden"
+  });
   User.findById(req.body._id, function (err, user) {
 
     if (err) {
