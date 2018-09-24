@@ -14,6 +14,8 @@ mongoose.connection.on('conected', function() {
 
 mongoose.connection.on('error', function(err) {
     console.log('Mongoose connection error: ' + err);
+    console.log('retrying...');
+    mongoose.connect(dbURI);
 });
 
 mongoose.connection.on('disconnected', function() {

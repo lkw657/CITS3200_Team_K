@@ -1,6 +1,10 @@
 FROM node
 
+COPY . /www
 WORKDIR /www
+
+RUN npm install
+RUN npm install -g mocha
 
 ENV PORT 80
 ENV IP "web"

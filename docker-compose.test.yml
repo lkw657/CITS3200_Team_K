@@ -2,10 +2,8 @@ version: "3.2"
 
 services:
     web:
-        command: "debug"
-        restart: "no"
-        volumes:
-            - ./web:/www
+        command: ""
+        restart: on-failure
 
     mocha:
         build:
@@ -13,8 +11,6 @@ services:
             dockerfile: ./Dockerfile.test
         tty: true
         command: "test"
-        volumes:
-            - ./web:/www
         depends_on:
             - web
             - db
