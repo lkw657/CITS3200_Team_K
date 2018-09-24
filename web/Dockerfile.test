@@ -2,9 +2,6 @@ FROM node
 
 WORKDIR /www
 
-RUN npm install
-RUN npm install -g mocha
-
 ENV PORT 80
 ENV IP "web"
 ENTRYPOINT ["./entrypoint.sh"]

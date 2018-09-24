@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
     web:
-        command: ""
+        command: "debug"
         restart: "no"
         volumes:
             - ./web:/www
