@@ -25,6 +25,9 @@ import { ValidateService } from './services/validate.service';
 import { DashboardService } from './services/dashboard.service';
 import { AuthService } from './services/auth.service';
 
+//Http interceptors
+import { httpInterceptorProviders } from './http-interceptors/index';
+
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -61,7 +64,10 @@ const routes: Routes = [
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
   ],
-  providers: [ValidateService],
+  providers: [
+    ValidateService,
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
