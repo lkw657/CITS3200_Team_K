@@ -16,7 +16,8 @@ export class DynamicFormComponent implements OnInit {
   questions: QuestionBase<any>[] = [];
   school: String;
   submitter: String;
-  researcher: Boolean;
+  school_display: String;
+  submitter_display: String;
   form: FormGroup;
   payload = '';
 
@@ -24,68 +25,26 @@ export class DynamicFormComponent implements OnInit {
     private qcs: QuestionControlService
   ) { }
 
-  //What should be displayed
-  displayQuestions: boolean = false;
-  displayRole: boolean = false;
-  displaySchool: boolean = true;
-
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
   }
 
   // Saves role into form and changes view
   selectRole(role, display) {
-    if (role == "researcher") {
-      this.researcher = true;
-    }
-    else {
-      this.researcher = false;
-    }
-
-    this.form.value.submitter = role;
-    this.submitter = display;
-
-    this.displayRole = false;
-    this.displayQuestions = true;
+    this.submitter = role;
+    this.submitter_display = display;
   }
 
   // Saves school into form and changes view
   selectSchool(school, display) {
-    this.form.value.school = school;
-    this.school = display;
-    this.displaySchool = false;
-    if (this.form.value.submitter) {
-      this.displayRole = false;
-      this.displayQuestions = true;
-    }
-    else {
-      this.displayRole = true;
-    }
-  }
-
-  // Changes role from current to alternate option - no view change
-  changeRole() {
-    if (this.researcher) {
-      this.form.value.submitter = "headOfSchool";
-      this.submitter = "Head of School";
-      this.researcher = false;
-    }
-    else {
-      this.form.value.submitter = "researcher";
-      this.submitter = "Researcher";
-      this.researcher = true;
-    }
-  }
-
-  // Changes view so school can be alternated between 3 options
-  changeSchool() {
-    this.displayQuestions = false;
-    this.displayRole = false;
-    this.displaySchool = true;
+    this.school = school;
+    this.school_display = display;
   }
 
   // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
   onSubmit() {
+    this.form.value.school = this.school;
+    this.form.value.submitter = this.submitter;
     this.payload = JSON.stringify(this.form.value);
   }
 }
