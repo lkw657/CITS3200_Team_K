@@ -42,23 +42,24 @@
         <div class="form-group">
           <label>Type of Form:</label>
           <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.formName">
-            <option>Faculty</option>
-            <option>Central</option>
+            <option>faculty</option>
+            <option>central</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>Type of input:</label>
-          <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.type">
+          <select class="form-control" name="type" required [(ngModel)]="currentQuestion.type">
             <option>textarea</option>
             <option>text</option>
             <option>date</option>
-            <option>money</option>
+            <option>money_single</option>
+            <option>money_array</option>
             <option>number</option>
           </select>
         </div>
 
-        <button type="submit" class="btn btn-success btn-block">Submit edits</button>
+        <button type="submit" class="btn btn-success btn-block">Save edits</button>
         <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
       </form>
     </div>
