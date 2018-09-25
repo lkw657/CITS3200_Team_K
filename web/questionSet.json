@@ -17,7 +17,7 @@
         {
             "title": "RETURN ON INVESTMENT",
             "text": "Please provide a brief statement as to how this investment will return value to the Faculty",
-            "type": "textarea:",
+            "type": "textarea",
             "formName": "faculty"
         },
         {
