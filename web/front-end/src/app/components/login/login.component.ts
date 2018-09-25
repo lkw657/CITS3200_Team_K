@@ -33,11 +33,12 @@ export class LoginComponent implements OnInit {
 
       //Renders dashboard if login is ok
       if(data.success){
-        console.log(data);
         this.flashMessage.show(data.msg,
           {cssClass: 'alert-success',
           timeout:3000});
           data.user.loggedIn=true;
+
+          // DEVELOPMENT ONLY - REMOVE
           if( data.user.role == "researcher" ){
             data.user.forms = [
               {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},

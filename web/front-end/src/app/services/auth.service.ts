@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import { map } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { baseURI } from '../config';
 
 @Injectable({
   providedIn: 'root'
@@ -9,25 +9,20 @@ export class AuthService {
   user: any;
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) { }
 
   //Connects to back end to add new user to db
   registerUser(user) { 
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/register', user, { headers: headers })
-      .pipe(map(res => res.json()));
+    return this.http.post<any>(baseURI+'/register', user);
   }
 
   //Connects to back end to check username and password on login
   authenticateUser(user) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/authenticate', user, { headers: headers })
-      .pipe(map(res => res.json()));
+    return this.http.post<any>(baseURI+'/authenticate', user);
   }
 
+  // Gets user details from local storage
   getProfile(){
     var user = JSON.parse(localStorage.getItem('user'));
     if(user==null){

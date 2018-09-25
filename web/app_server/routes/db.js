@@ -16,6 +16,8 @@ password
 
 // Adding a user is register in index.js
 router.get('/users', ctrlUsers.listAll);
+router.put('/updateUser', ctrlUsers.updateUser);
+router.put('/removeUser', ctrlUsers.removeUser);
 
 //Form API
 /* Requires:

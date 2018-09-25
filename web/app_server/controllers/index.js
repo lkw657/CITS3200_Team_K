@@ -46,7 +46,8 @@ module.exports.authenticate = (req, res, next) => {
                 user: {
                     fname: user.fname,
                     lname: user.lname,
-                    number: user.number
+                    number: user.number,
+                    isIT: user.isIT
                 }
             });
         });
