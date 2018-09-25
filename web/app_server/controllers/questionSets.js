@@ -1,21 +1,24 @@
 var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
+_ = require('underscore');
+
 module.exports.addQuestionSet = (req, res, next) => {
-    if (req.body.questionList)	//Check if a questionlist is included.
+    if (req.body)	//Check if a questionlist is included.
     {
         QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset) {	//Find the question set with the highest version.
             var questionSet = new QuestionSet();	//The question set to be saved.
             //If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
             if (qset) {
-                if (isEqual(qset.questionList, req.body.questionList))
-                    return res.json({ success: false, msg: 'Same Question List' });	//If the latest question list is identical to the new question list then abort.
+                if (isEqual(qset.questionList, req.body))
+                    return res.json({ success: false, msg: 'No Questions have been changed, please check and resubmit' });	//If the latest question list is identical to the new question list then abort.
                 questionSet.version = qset.version + 1;
             }
             else {
                 questionSet.version = 1;
             }
-            questionSet.questionList = req.body.questionList;
+
+            questionSet.questionList = req.body;
             questionSet.save((err, questionSet) => {
                 if (err) {
                     return res.json({ success: false, msg: 'Could not update Question Set' });
@@ -201,7 +204,7 @@ module.exports.questionSetId = (req, res, next) => {
 //Returns the latest 
 module.exports.latestQuestionSet = (req, res, next) => {
     //Find the question set with the highest version.
-    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset, err) {
+    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
         if (err)
             return sendJsonResponse(res, 400, {
                 error: err
