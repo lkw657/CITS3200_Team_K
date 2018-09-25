@@ -33,9 +33,7 @@ module.exports.addQuestionSet = (req, res, next)=>{
 		}
     else
     {
-      sendJsonResponse(res, 400, {
-          error: "missing data"
-      });
+      return res.json({ success: false, msg: 'Missing Data' });
     }
 }
 
@@ -92,7 +90,7 @@ module.exports.listAll = (req, res, next) => {
         {
             _id: "5b964db01e7bd3273c8f66c4",
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s Strategic Vision.",
-            title: "ALIGNMENT WITH FACULTY STRATEGIC VISION",
+            title: "ALIGNMENT WITH faculty STRATEGIC VISION",
             type: "textarea",
             formName: "Faculty"
         },
@@ -101,7 +99,7 @@ module.exports.listAll = (req, res, next) => {
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s strategic research priorities (Engineering for Remote Operations, Science of Discovery or Technologies for Better Health) or an emerging strategic research priority.",
             title: "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c2",
@@ -170,21 +168,21 @@ module.exports.questionSetId = (req, res, next) => {
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s Strategic Vision.",
             type: "ALIGNMENT WITH FACULTY STRATEGIC VISION",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c3",
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s strategic research priorities (Engineering for Remote Operations, Science of Discovery or Technologies for Better Health) or an emerging strategic research priority.",
             title: "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c2",
             text: "Please provide a brief statement as to how this investment will return value to the Faculty.",
             title: "RETURN ON INVESTMENT",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         }
     ],
     version: 1,
@@ -220,28 +218,28 @@ res.json(
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s Strategic Vision.",
             title: "ALIGNMENT WITH FACULTY STRATEGIC VISION",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c3",
             text: "Provide a brief statement outlining how your proposal aligns with the Faculty’s strategic research priorities (Engineering for Remote Operations, Science of Discovery or Technologies for Better Health) or an emerging strategic research priority.",
             title: "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c2",
             text: "Please provide a brief statement as to how this investment will return value to the Faculty.",
             title: "RETURN ON INVESTMENT",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c5",
             text: "Please use this space to provide pertinent information that cannot fit elsewhere.",
             title: "ADDITIONAL INFORMATION",
             type: "textarea",
-            formName: "Faculty"
+            formName: "faculty"
         },
         {
             _id: "5b964db01e7bd3273c8f66c6",
