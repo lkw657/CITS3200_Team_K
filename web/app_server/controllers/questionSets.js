@@ -7,28 +7,30 @@ req.body.questionList
 
 **/
 module.exports.addQuestionSet = (req, res, next)=>{
-    if(req.body.questionList)
+    if(req.body.questionList)	//Check if a questionlist is included.
     {
-	QuestionSet.findOne({latest:true}).then(function(qset){
-      var questionSet = new QuestionSet();
-      questionSet.version=qset.version+1;	//TODO: Untested, potential error condition if this is the first questionSet.
-	  //TODO: Increment versions
-      questionSet.latest=true;
-      //TODO: Set latest on all other question sets to false
-      questionSet.questionList=req.body.questionList;
-      questionSet.save((err,questionSet)=>{
-        if(err){
-          sendJsonResponse(res, 400, {
-              error: err
-          });
-        }
-        else{
-		questionSet.update({_id:qset._id},{$set:{latest:false}})	//If saved successfully then update the old latest set to no longer being the latest.
-		  sendJsonResponse(res, 201, questionSet);
-        }
-      })
-    });
-	}
+		QuestionSet.findOne({},{_id: 0,'questionList._id':0}).sort({version:-1}).then(function(qset){	//Find the question set with the highest version.
+			var questionSet = new QuestionSet();	//The question set to be saved.
+			//If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
+			if (qset)	{	
+				if(isEqual(qset.questionList,req.body.questionList))
+					return res.json({ success: false, msg: 'Same Question List' });	//If the latest question list is identical to the new question list then abort.
+				questionSet.version = qset.version+1;
+			}
+			else {
+				questionSet.version = 1;
+			}
+			questionSet.questionList=req.body.questionList;
+			questionSet.save((err, questionSet) => {
+				if (err) {
+					return res.json({ success: false, msg: 'Could not update Question Set' });
+				}
+				else {
+					return res.json({ success: true, msg: 'Question Set updated!' });
+				}
+			})
+		});
+		}
     else
     {
       sendJsonResponse(res, 400, {
@@ -36,6 +38,32 @@ module.exports.addQuestionSet = (req, res, next)=>{
       });
     }
 }
+
+//Checks if the two given questionList arrays are the same, regardless of order.
+var isEqual = function (first, second) {
+	if(first.length!=second.length)	//Check if the arrays are of the same length.
+		return false;
+	first.sort(	//sort based on question title.
+		function(a, b){
+		var x = a.title.toLowerCase();
+		var y = b.title.toLowerCase();
+		if (x < y) {return -1;}
+		if (x > y) {return 1;}
+		return 0;
+	});
+	second.sort(	//sort based on question title.
+		function(a, b){
+		var x = a.title.toLowerCase();
+		var y = b.title.toLowerCase();
+		if (x < y) {return -1;}
+		if (x > y) {return 1;}
+		return 0;
+	});
+	if(JSON.stringify(first)!=JSON.stringify(second))	//Check if sorted arrays are the same.
+		return false;
+	return true;	// If nothing failed, return true
+
+};
 
 module.exports.listAll = (req, res, next) => {
     /*QuestionSet.find({}, '', (err, qsets) => {
@@ -232,7 +260,7 @@ res.json(
     /*
         //Actual code. 
         //TODO: Seems to work. Check if this is right.
-        QuestionSet.findOne({latest:true}).then(function(qset){
+        QuestionSet.findOne().sort({version:-1}).then(function(qset){
             res.send(qset);
         })
     */
