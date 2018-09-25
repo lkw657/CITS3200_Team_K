@@ -2,7 +2,7 @@ mongoose = require('mongoose')
 
 var questionSchema = new mongoose.Schema(
     {
-        title: {type: String, required: true},
+        title: {type: String},
         text: {type: String, required: true},
         // types like textarea, text, date, money, number
         type: {type: String, required: true},
