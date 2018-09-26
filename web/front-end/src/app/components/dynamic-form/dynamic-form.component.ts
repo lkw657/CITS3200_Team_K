@@ -12,20 +12,21 @@ import { QuestionBase } from '../../classes/question-base';
 })
 export class DynamicFormComponent implements OnInit {
 
-  @Input()
-  questions: QuestionBase<any>[] = [];
+  @Input() questions: QuestionBase<any>[] = [];
+  form: FormGroup;
   school: String;
   submitter: String;
   school_display: String;
   submitter_display: String;
-  form: FormGroup;
   payload = '';
 
-  constructor(
-    private qcs: QuestionControlService
-  ) { }
+  constructor( private qcs: QuestionControlService ) { }
 
   ngOnInit() {
+    this.initForm()
+  }
+
+  initForm(){
     this.form = this.qcs.toFormGroup(this.questions);
   }
 
