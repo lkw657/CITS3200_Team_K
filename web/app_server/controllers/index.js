@@ -89,7 +89,7 @@ module.exports.approvals = (req, res, next) => {
             });
         res.json({
             success: true,
-            submissions: req.user.approvals
+            approvals: req.user.approvals
         });
     });
 }
