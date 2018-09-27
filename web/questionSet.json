@@ -65,13 +65,13 @@
         {
             "title": "",
             "text": "Amount of Research Priorities Funding requested",
-            "type": "money_array",
+            "type": "money_array_8",
             "formName": "central"
         },
         {
             "title": "",
             "text": "Return on Investment (External funds to UWA)",
-            "type": "money_array",
+            "type": "money_array_8",
             "formName": "central"
         }
     ]
