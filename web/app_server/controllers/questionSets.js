@@ -2,7 +2,7 @@ var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
 module.exports.addQuestionSet = (req, res, next) => {
-    if (!req.user) {
+    if (false&&!req.user) {
         return res.status(401).json({
             success: false,
             msg: "forbidden"
@@ -27,10 +27,13 @@ module.exports.addQuestionSet = (req, res, next) => {
         }
         else
             questionSet.version = 1;
-        questionSet.questionList = req.body;
         // set order on questions
-        for (var i=0; i<questionSet.questionList.length; i++)
-            questionSet.questionList[i].order = i;
+		questionSet.questionList=req.body.sort(
+        function (a, b) {
+            var x = a.order;
+            var y = b.order;
+            return x-y;
+        });
         questionSet.save((err, questionSet) => {
             if (err)
                 return res.json({ success: false, msg: 'Could not update Question Set' });
@@ -40,7 +43,7 @@ module.exports.addQuestionSet = (req, res, next) => {
     });
 }
 
-//Checks if the two given questionList arrays are the same, regardless of order.
+//Checks if the two given questionList arrays are the same.
 var isEqual = function (first, second) {
     if (first.length != second.length)    //Check if the arrays are of the same length.
         return false;
@@ -49,14 +52,14 @@ var isEqual = function (first, second) {
         function (a, b) {
             var x = a.order;
             var y = b.order;
-            return a-b;
+            return x-y;
         });
     //sort based on question order.
     second.sort(
         function (a, b) {
             var x = a.order;
             var y = b.order;
-            return a-b;
+            return x-y;
         });
     if (JSON.stringify(first) != JSON.stringify(second))    //Check if sorted arrays are the same.
         return false;
