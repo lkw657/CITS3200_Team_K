@@ -3,21 +3,27 @@
   <button class="btn btn-block btn-success mt-3 p-4" (click)="saveNewQuestionSet()">Submit Edited Question Set</button>
   <a [routerLink]="['/dashboard']" class="btn btn-block btn-danger mt-3 p-4 mb-3">Cancel</a>
 
+  <div class="border-top border-primary pt-3 pb-3">
+    <h1>Click and drag to reorder questions</h1>
+  </div>
   <!-- Displays a list of questions in the current question set -->
-  <div *ngFor="let question of questionList">
-    <div class="card mb-2">
-      <div class="card-body">
-        <p>Question: {{question.text}}</p>
+  <div class="border-top border-primary pt-3" dragula="QL" [(dragulaModel)]="questionList">
+    <div *ngFor="let question of questionList">
+      <div class="card mb-2">
+        <div class="card-body">
+          <p>Question number: {{questionList.indexOf(question)+1}}</p>
+          <p>Question: {{question.text}}</p>
 
-        <!-- Edit selected question in question set -->
-        <button class="btn btn-success mb-2 mr-2" (click)="showEdit(question)" title="Edit">
-          <i class="fas fa-pencil-alt"></i>
-        </button>
+          <!-- Edit selected question in question set -->
+          <button class="btn btn-success mb-2 mr-2" (click)="showEdit(question)" title="Edit">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
 
-        <!-- Remove question from question set -->
-        <button class="btn btn-danger mb-2" (click)="showDelete(question)" title="Delete">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+          <!-- Remove question from question set -->
+          <button class="btn btn-danger mb-2" (click)="showDelete(question)" title="Delete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +34,11 @@
   <div class="card">
     <div class="card-body">
       <form (submit)="onQuestionEdit()">
+
+        <div class="form-group">
+          <label>Question Number:</label>
+          <input type="number" class="form-control" name="order" required [(ngModel)]="currentQuestion.order">
+        </div>
 
         <div class="form-group">
           <label>Title:</label>
@@ -92,3 +103,9 @@
     </div>
   </div>
 </div>
+
+<!-- <ul dragula="QL" [(dragulaModel)]="questionList">
+    <li *ngFor="let question of questionList">
+      {{ question.title }}
+    </li>
+  </ul> -->

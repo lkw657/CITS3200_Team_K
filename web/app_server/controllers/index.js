@@ -60,13 +60,13 @@ module.exports.submissions = (req, res, next) => {
     if(!req.user)
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     req.user.populate(['submissions', 'submissions.questionSet'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
-                msg: "error"
+                msg: "Error getting submissions"
             });
         res.json({
             success: true,
@@ -79,13 +79,13 @@ module.exports.approvals = (req, res, next) => {
     if(!req.user)
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     req.user.populate(['approvals', 'approvals.questionSet'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
-                msg: "error"
+                msg: "Error getting approvals"
             });
         res.json({
             success: true,
