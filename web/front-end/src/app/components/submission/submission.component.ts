@@ -1,8 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+
+import { QuestionService } from '../../services/question.service';
 
 import { QuestionBase } from '../../classes/question-base';
-import { QuestionService } from '../../services/question.service';
+import { TextboxQuestion } from '../../classes/question-textbox';
+import { TextQuestion } from '../../classes/question-text';
+import { MoneyQuestion } from '../../classes/question-money';
+
 
 @Component({
   selector: 'app-submission',
@@ -12,11 +16,57 @@ import { QuestionService } from '../../services/question.service';
 })
 export class SubmissionComponent implements OnInit {
 
-  questions: any[];
-  constructor( service: QuestionService ) { 
-    this.questions = service.getQuestions();
-  }
+  questions: any[] = [];
+  qset_id: string = '';
+  qs : QuestionService;
+
+  constructor( service: QuestionService ) { this.qs = service; }
+  questionList : any;
+  isLoaded : boolean;
 
   ngOnInit() {
+    let qObjs : QuestionBase<any> [] = [];
+    this.qs.getData().subscribe(res => {
+      this.questionList = res['questionSet']['questionList'];
+
+      let qObjs : QuestionBase<any> [] = [];
+
+      for(let i = 0 ; i < this.questionList.length ; i++ ){
+          let q = this.questionList[i];
+          let field : any;
+          if(q['type'] == 'textarea'){
+            qObjs.push(
+                new TextboxQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : q.order
+                })
+            );
+          } else if (q['type'] == 'text'){
+            qObjs.push(
+                new TextQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : q.order
+                })
+            );
+          } else if (q['type'] == 'money_single'){
+            qObjs.push(
+                new MoneyQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : q.order
+                })
+            );
+          }
+      }
+
+      this.isLoaded = true;
+      this.questions = qObjs.sort((a,b) => a.order - b.order);
+      this.qset_id = res['questionSet']['_id'];
+    })
   }
 }

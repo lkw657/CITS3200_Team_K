@@ -26,7 +26,8 @@ export class EditQuestionsComponent implements OnInit {
 
   ngOnInit() {
     // Get question to show admin
-    this.dashboardService.getAllQuestions().subscribe(questionSet => {
+    this.dashboardService.getAllQuestions().subscribe(res => {
+      var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
     },
       err => {
@@ -78,6 +79,7 @@ export class EditQuestionsComponent implements OnInit {
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
+  
   // Update Question set database through the backend
   saveNewQuestionSet() {
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
