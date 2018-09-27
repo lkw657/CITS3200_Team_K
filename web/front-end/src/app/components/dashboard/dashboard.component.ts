@@ -19,6 +19,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // Gets current user profile on page render
     this.user = this.authService.getProfile();
+
+    //GET SUBMISSIONS AND APPROVALS THAT ARE ALLOCATED TO USER
   }
 
   // View selecting functions

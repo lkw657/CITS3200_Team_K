@@ -19,6 +19,7 @@ import { DynamicFormQuestionComponent } from './components/dynamic-form-question
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { EditUsersComponent } from './components/edit-users/edit-users.component';
 import { EditQuestionsComponent } from './components/edit-questions/edit-questions.component';
+import { VerifyComponent } from './components/verify/verify.component';
 
 //Services
 import { ValidateService } from './services/validate.service';
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'review', component: ReviewComponent},
   { path: 'editUsers', component: EditUsersComponent},
   { path: 'editQuestions', component: EditQuestionsComponent},
+  { path: 'verify', component: VerifyComponent},
   { path: '**', component: NotFoundComponent}
 ];
 
@@ -53,7 +55,8 @@ const routes: Routes = [
     DynamicFormQuestionComponent,
     DynamicFormComponent,
     EditUsersComponent,
-    EditQuestionsComponent
+    EditQuestionsComponent,
+    VerifyComponent
   ],
   imports: [
     BrowserModule,
