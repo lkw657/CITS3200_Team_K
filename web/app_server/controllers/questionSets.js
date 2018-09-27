@@ -37,21 +37,17 @@ module.exports.addQuestionSet = (req, res, next) => {
 var isEqual = function (first, second) {
     if (first.length != second.length)	//Check if the arrays are of the same length.
         return false;
-    first.sort(	//sort based on question title.
+    first.sort(	//sort based on question order.
         function (a, b) {
-            var x = a.title.toLowerCase();
-            var y = b.title.toLowerCase();
-            if (x < y) { return -1; }
-            if (x > y) { return 1; }
-            return 0;
+            var x = a.order;
+            var y = b.order;
+            return a-b;
         });
-    second.sort(	//sort based on question title.
+    second.sort(	//sort based on question order.
         function (a, b) {
-            var x = a.title.toLowerCase();
-            var y = b.title.toLowerCase();
-            if (x < y) { return -1; }
-            if (x > y) { return 1; }
-            return 0;
+            var x = a.order;
+            var y = b.order;
+            return a-b;
         });
     if (JSON.stringify(first) != JSON.stringify(second))	//Check if sorted arrays are the same.
         return false;

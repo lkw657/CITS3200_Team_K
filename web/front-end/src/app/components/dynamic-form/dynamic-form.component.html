@@ -17,9 +17,9 @@
         <p class="mr-2 top-text">I am filling this form in as a:</p>
         <p class="btn btn-lg btn-secondary disabled mb-2 mr-2">{{school_display}}</p>
         <span class="mr-2">:</span>
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('adr', 'AD(R)')">
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="Head of School" (click)="selectRole('headOfSchool', 'Head of School')">
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('researcher', 'Researcher')">
+        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
+        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="Head of School" (click)="selectRole('Head of School')">
+        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
       </div>
 
       <!-- School/Role display -->
@@ -30,7 +30,7 @@
           <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="school=undefined">
         </div>
         <div>
-          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter_display}}</p>
+          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter}}</p>
           <span class="mr-2">:</span>
           <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submitter=undefined">
         </div>
@@ -46,12 +46,6 @@
       <div class="form-row mt-3">
         <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !school || !submitter">Submit</button>
       </div>
-    </div>
-
-    <!-- DEVELOPMENT ONLY - REMOVE BELOW DIV -->
-    <div *ngIf="payload" class="form-row">
-      <strong>Saved the following values</strong>
-      <br>{{payload}}
     </div>
 
   </form>

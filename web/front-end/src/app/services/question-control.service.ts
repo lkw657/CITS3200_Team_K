@@ -5,16 +5,15 @@ import { QuestionBase } from '../classes/question-base';
 
 @Injectable()
 export class QuestionControlService {
-    constructor() { }
+  constructor() { }
 
-    toFormGroup( questions : QuestionBase<any>[] ){
-        let group : any = {};
+  toFormGroup(questions: QuestionBase<any>[] ) {
+    let group: any = {};
 
-        questions.forEach( question => {
-            group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                                    : new FormControl(question.value || '');
-        });
-
-        return new FormGroup(group);
-    }
+    questions.forEach(question => {
+      group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
+                                              : new FormControl(question.value || '');
+    });
+    return new FormGroup(group);
+  }
 }
