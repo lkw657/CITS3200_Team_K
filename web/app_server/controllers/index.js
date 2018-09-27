@@ -13,10 +13,6 @@ module.exports.register = (req, res) => {
 	if (req.body.password.length < 8) {
 		return res.json({success:false, msg: 'Passwords must be at least 8 characters long'});
 	}
-	var digits = Math.floor(Math.log(req.body.number) / Math.LN10 + 1);
-	if (digits != 8) {
-		return res.json({success:false, msg: 'Passwords must be at least 8 characters long'});
-	}
 	User.register(User.create(req.body.fname, req.body.lname, req.body.number),
 		req.body.password,
 		(err, user) => {
@@ -61,12 +57,12 @@ module.exports.authenticate = (req, res, next) => {
 };
 
 module.exports.submissions = (req, res, next) => {
-    if(!res.user)
+    if(!req.user)
         return res.status(401).json({
             success: false,
             msg: "forbidden"
         });
-    user.populate(['submissions', 'submissions.questionSet'], (err) => {
+    req.user.populate(['submissions', 'submissions.questionSet'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
@@ -74,18 +70,18 @@ module.exports.submissions = (req, res, next) => {
             });
         res.json({
             success: true,
-            submissions: user.submissions
+            submissions: req.user.submissions
         });
     });
 }
 
 module.exports.approvals = (req, res, next) => {
-    if(!res.user)
+    if(!req.user)
         return res.status(401).json({
             success: false,
             msg: "forbidden"
         });
-    user.populate(['approvals', 'approvals.questionSet'], (err) => {
+    req.user.populate(['approvals', 'approvals.questionSet'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
@@ -93,7 +89,7 @@ module.exports.approvals = (req, res, next) => {
             });
         res.json({
             success: true,
-            submissions: user.approvals
+            submissions: req.user.approvals
         });
     });
 }
