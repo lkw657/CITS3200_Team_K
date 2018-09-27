@@ -2,7 +2,7 @@ var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
 module.exports.addQuestionSet = (req, res, next) => {
-    if (false&&!req.user) {
+    if (!req.user) {
         return res.status(401).json({
             success: false,
             msg: "forbidden"
