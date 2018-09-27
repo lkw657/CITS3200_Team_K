@@ -29,19 +29,22 @@ module.exports.addForm = (req, res, next)=>{
             console.log(set);
             if(err){
                 sendJsonResponse(res, 400, {
-                    error: err
+                    success: false,
+                    msg: err
                 });
             }
             
             else if(!set){
                 
                 sendJsonResponse(res, 400, {
-                    error: "question set not found"
+                    success: false,
+                    msg: "question set not found"
                 });
             }
             else if(set.questionList.length != req.body.answers.length){
                 sendJsonResponse(res, 400, {
-                    error: "num of answers doesn't match num of questions"
+                    success: false,
+                    msg: "num of answers doesn't match num of questions"
                 });
             }
             else{
@@ -49,12 +52,14 @@ module.exports.addForm = (req, res, next)=>{
 
                     if(err){
                         sendJsonResponse(res, 400, {
-                            error: err
+                            success:false,
+                            msg: err
                         });
                     }
                     else if(!owner){
                         sendJsonResponse(res, 400, {
-                            error: "user not found"
+                            success:false,
+                            msg: "user not found"
                         });
                     }
                     else{
@@ -80,7 +85,8 @@ module.exports.addForm = (req, res, next)=>{
                         form.save((err,form)=>{
                             if(err){
                                 sendJsonResponse(res, 400, {
-                                    error: err
+                                    success:false,
+                                    msg: err
                                 });
                             }
                             else{
@@ -88,7 +94,9 @@ module.exports.addForm = (req, res, next)=>{
                                 owner.save((err, owner)=>{
                                     if(err){
                                         sendJsonResponse(res, 400, {
-                                            error: err
+                                            success:false,
+                                            msg: err
+
                                         });
                                     }
                                     else{
@@ -121,7 +129,10 @@ module.exports.addForm = (req, res, next)=>{
     
                                         }
 
-                                        sendJsonResponse(res, 201, form);
+                                        sendJsonResponse(res, 201, {
+                                            success: true,
+                                            msg: "Successfully submitted"
+                                        });
                                     }
                                 })
                             }
