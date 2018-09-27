@@ -16,8 +16,9 @@ import { MoneyQuestion } from '../../classes/question-money';
 export class SubmissionComponent implements OnInit {
 
   questions: any[] = [];
+  version: string = '';
   qs : QuestionService;
-  version: string;
+
   constructor( service: QuestionService ) { this.qs = service; }
   questionList : any;
   isLoaded : boolean;
@@ -42,6 +43,7 @@ export class SubmissionComponent implements OnInit {
       }
       this.isLoaded = true;
       this.questions = qObjs.sort((a,b) => a.order - b.order);
+      this.version = questionSet['version'];
     })
   }
 }

@@ -3,7 +3,7 @@
   <h5 class="mt-3">Please answer the questions below. All questions are required to be completed before form can be submitted.</h5>
   <div class="w-100 border-top border-primary pt-2">
     <div *ngIf=isLoaded >
-      <app-dynamic-form class="w-100" [questions]="questions"></app-dynamic-form>
+      <app-dynamic-form class="w-100" [version]="version" [questions]="questions"></app-dynamic-form>
     </div>
   </div>
 </div>

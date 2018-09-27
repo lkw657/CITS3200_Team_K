@@ -13,6 +13,7 @@ import { QuestionBase } from '../../classes/question-base';
 export class DynamicFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
+  @Input() version : string = '';
   form: FormGroup;
   school: String;
   submitter: String;
@@ -37,13 +38,14 @@ export class DynamicFormComponent implements OnInit {
   selectSchool(school, display) {
     this.school = school;
     this.school_display = display;
-    console.log(this.form);
+    console.log(this.version);
   }
 
   // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
   onSubmit() {
     this.form.value.school = this.school;
     this.form.value.submitter = this.submitter;
+    this.form.value.version = this.version;
     this.payload = JSON.stringify(this.form.value);
   }
 }
