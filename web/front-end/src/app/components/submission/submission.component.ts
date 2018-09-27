@@ -26,8 +26,8 @@ export class SubmissionComponent implements OnInit {
 
   ngOnInit() {
     let qObjs : QuestionBase<any> [] = [];
-    this.qs.getData().subscribe(questionSet => {
-      this.questionList = questionSet['questionList'];
+    this.qs.getData().subscribe(res => {
+      this.questionList = res['questionSet']['questionList'];
 
       let qObjs : QuestionBase<any> [] = [];
 
@@ -66,7 +66,7 @@ export class SubmissionComponent implements OnInit {
 
       this.isLoaded = true;
       this.questions = qObjs.sort((a,b) => a.order - b.order);
-      this.qset_id = questionSet['_id'];
+      this.qset_id = res['questionSet']['_id'];
     })
   }
 }
