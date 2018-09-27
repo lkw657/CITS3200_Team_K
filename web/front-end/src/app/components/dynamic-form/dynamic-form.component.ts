@@ -17,13 +17,13 @@ import { Router } from '@angular/router';
 export class DynamicFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
-  @Input() version : string = '';
+  @Input() qset_id : string = '';
   form: FormGroup;
   school: String;
   submitter: String;
   school_display: String;
   submitter_display: String;
-  answers: any[];
+  submission: any = {};
   payload = '';
 
   constructor( 
@@ -49,11 +49,14 @@ export class DynamicFormComponent implements OnInit {
 
   // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
   onSubmit() {
-    this.form.value.school = this.school;
-    this.form.value.submitter = this.submitter;
-    this.form.value.version = this.version;
+    this.submission.answers = Object.values(this.form.value);
+    this.submission.school = this.school;
+    this.submission.submitter = this.submitter;
+    this.submission.qset_id = this.qset_id;
 
-    this.questionService.newSubmission(this.form.value).subscribe(data => {
+    console.log(this.submission);
+
+    this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/dashboard']);
