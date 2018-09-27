@@ -25,7 +25,7 @@ export class EditQuestionsComponent implements OnInit {
   displayDelete: boolean = false;
 
   ngOnInit() {
-    // Get question to show admin
+    // Get questions to show admin
     this.dashboardService.getAllQuestions().subscribe(res => {
       var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
