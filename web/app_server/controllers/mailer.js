@@ -32,7 +32,7 @@ module.exports.sendEmail = (to, subject, html) => {
 
 };
 
-module.exports.sendFormAccessEmail = (to, formID) => {
+module.exports.sendFormAccessEmail = (text, to, formID) => {
 
     var mail = new Mail();
     mail.type = "form-access";
@@ -46,7 +46,8 @@ module.exports.sendFormAccessEmail = (to, formID) => {
             }
             else {
                 var subject = "Access for Form";
-                var html = `Here is your access link: http://localhost/formAccess/${mail._id}/${secret}`;
+                var html = text;
+                html += `Here is your access link: http://localhost/formAccess/${mail._id}/${secret}`;
                 module.exports.sendEmail(to, subject, html);
             }
         });

@@ -1,30 +1,40 @@
 var formModel = require('../models/forms');
-var Form = formModel.formSchema;
+var Form = formModel.Form;
 
 var userModel = require('../models/users');
-var User = userModel.userSchema;
+var User = userModel.User;
 
 var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
+var mailer = require('./mailer');
+
 /**
 req.user._id
+
 req.body.questionSet
 req.body.answers
 req.body.submitter
+req.body.school
 
 Assign status
 **/
 module.exports.addForm = (req, res, next)=>{
-    if(req.user._id && req.body.questionSet && req.body.answers && req.body.school)
+    console.log(req.user);
+    console.log(req.body.questionSet);
+    if(req.user && req.body.questionSet && req.body.answers && req.body.school)
     {
         QuestionSet.findById(req.body.questionSet, (err, set)=>{
+            console.log("SET");
+            console.log(set);
             if(err){
                 sendJsonResponse(res, 400, {
                     error: err
                 });
             }
+            
             else if(!set){
+                
                 sendJsonResponse(res, 400, {
                     error: "question set not found"
                 });
@@ -57,10 +67,10 @@ module.exports.addForm = (req, res, next)=>{
                             form.status='awaiting-hos';
                         }
                         form.submitter = req.body.submitter;
-                        form.owner=req.body.owner;
+                        form.owner= req.user._id;
                         form.questionSet=req.body.questionSet;
                         form.answers=req.body.answers;
-						// form.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
+						// fo   rm.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
 						form.dates = [new Date()];
                         
 						form.school= req.body.school;
@@ -72,7 +82,7 @@ module.exports.addForm = (req, res, next)=>{
                                 });
                             }
                             else{
-                                owner.forms.push(form._id);
+                                owner.submissions.push(form._id);
                                 owner.save((err, owner)=>{
                                     if(err){
                                         sendJsonResponse(res, 400, {
@@ -80,10 +90,38 @@ module.exports.addForm = (req, res, next)=>{
                                         });
                                     }
                                     else{
+                                        // Send email to school HOS/ADR depending on stuff.
+                                        if(req.school == 'ecm'){
+                                            if(req.body.submitter=='hos'){
+                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n","neosh11@gmail.com",form._id);
+                                            }
+                                            else{
+                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n","neosh11@gmail.com",form._id);    
+                                            }    
+                                        }
+                                        else if(req.school == 'eng'){
+                                            if(req.body.submitter=='hos'){
+                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n","neosh11@gmail.com",form._id);
+                                            }
+                                            else{
+                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n","neosh11@gmail.com",form._id);
+                                            }
+    
+                                        }
+                                        else{
+                                            if(req.body.submitter=='hos'){
+                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n","neosh11@gmail.com",form._id);                                                
+                                            }
+                                            else{
+                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n","neosh11@gmail.com",form._id);
+                                                
+                                            }
+    
+                                        }
+
                                         sendJsonResponse(res, 201, form);
                                     }
                                 })
-
                             }
                         });
                     }
