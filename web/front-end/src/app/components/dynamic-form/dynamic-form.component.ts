@@ -54,17 +54,16 @@ export class DynamicFormComponent implements OnInit {
     this.submission.submitter = this.submitter;
     this.submission.qset_id = this.qset_id;
 
-    console.log(this.submission);
-
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/dashboard']);
       }
-      else {
-        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
-        this.router.navigate(['/submission']);
-      }
-    });
+    },
+    err => {
+      this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+      window.scrollTo(0, 0);
+    }
+  );
   }
 }

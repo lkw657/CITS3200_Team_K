@@ -66,21 +66,23 @@ module.exports.verifyFormAccess = (req, res, next) => {
     if (req.body.mailID && req.body.secret && req.body.userID) {
         Mail.findById(req.body.mailID, (err, mail) => {
             if (err) {
-                sendJsonResponse(res, 404, {
-                    error: "forbidden"
+                return res.status(404).json({
+                    success: false,
+                    msg: "Forbidden"
                 });
-                console.log(err);
             }
             else if (!mail) {
-                sendJsonResponse(res, 403, {
-                    error: "forbidden"
+                return res.status(403).json({
+                    success: false,
+                    msg: "Forbidden"
                 });
             }
             else {
                 if(mail.status== "done")
                 {
-                    sendJsonResponse(res, 403, {
-                        error: "Link already used"
+                    return res.status(403).json({
+                        success: false,
+                        msg: "Link already used"
                     });
                 }
                 else if (mail.secret == req.body.secret && mail.type == 'form-access') {
@@ -92,38 +94,41 @@ module.exports.verifyFormAccess = (req, res, next) => {
                     mail.save((err, mail)=>{
                         console.log(err)
                     })
-
-                    sendJsonResponse(res, 200, {
-                        status: "success"
+                    return res.status(200).json({
+                        success: true,
+                        msg: "Success"
                     });
                 }
                 else{
-                    sendJsonResponse(res, 403, {
-                        error: "forbidden - 2"
+                    return res.status(403).json({
+                        success: false,
+                        msg: "Forbidden"
                     });
                 }
             }
         })
     }
     else {
-        sendJsonResponse(res, 400, {
-            error: "no formId or hash"
-        });
+        return res.status(400).json({
+            success: false,
+            msg: "No formId or hash"
+        }); 
     }
 }
 
 module.exports.listAllMail = (req, res, next) => {
     Mail.find({}, '', (err, mails) => {
         if (!mails) {
-            sendJsonResponse(res, 403, {
-                error: "forbidden"
+            return res.status(403).json({
+                success: false,
+                msg: "Forbidden"
             });
         }
         else if (err) {
-            sendJsonResponse(res, 404, {
-                error: "forbidden"
+            return res.status(404).json({
+                success: false,
+                msg: err
             });
-            console.log(err);
         }
         else {
             sendJsonResponse(res, 200, mails);
