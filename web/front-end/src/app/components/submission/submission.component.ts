@@ -6,6 +6,7 @@ import { QuestionBase } from '../../classes/question-base';
 import { TextboxQuestion } from '../../classes/question-textbox';
 import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
+import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class SubmissionComponent implements OnInit {
 
       for(let i = 0 ; i < this.questionList.length ; i++ ){
           let q = this.questionList[i];
+          console.log(q);
+
           let field : any;
           if(q['type'] == 'textarea'){
             qObjs.push(
@@ -59,6 +62,17 @@ export class SubmissionComponent implements OnInit {
                     label: q.text,
                     required: true,
                     order : q.order
+                })
+            );
+          } else if ( q['type'].indexOf("money_array") == 0 ){
+            let number_of_fields = 0;
+            qObjs.push(
+                new MoneyArrayQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : q.order,
+                    number: parseInt(q['type'].substring(q['type'].length - 1))
                 })
             );
           }
