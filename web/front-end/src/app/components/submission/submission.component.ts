@@ -4,6 +4,7 @@ import { QuestionService } from '../../services/question.service';
 
 import { QuestionBase } from '../../classes/question-base';
 import { TextboxQuestion } from '../../classes/question-textbox';
+import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
 
 
@@ -32,15 +33,37 @@ export class SubmissionComponent implements OnInit {
 
       for(let i = 0 ; i < this.questionList.length ; i++ ){
           let q = this.questionList[i];
-          qObjs.push(
-              new TextboxQuestion({
-                  key: i+1,
-                  label: q.text,
-                  required: true,
-                  order : i
-              })
-          );
+          let field : any;
+          if(q['type'] == 'textarea'){
+            qObjs.push(
+                new TextboxQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : i
+                })
+            );
+          } else if (q['type'] == 'text'){
+            qObjs.push(
+                new TextQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : i
+                })
+            );
+          } else if (q['type'] == 'money_single'){
+            qObjs.push(
+                new MoneyQuestion({
+                    key: i+1,
+                    label: q.text,
+                    required: true,
+                    order : i
+                })
+            );
+          }
       }
+
       this.isLoaded = true;
       this.questions = qObjs.sort((a,b) => a.order - b.order);
       this.version = questionSet['version'];
