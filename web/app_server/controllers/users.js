@@ -7,7 +7,7 @@ module.exports.listAll = (req, res, next) => {
     var stat = req.user == undefined ? 401 : 403
     return sendJsonResponse(res, stat, {
       success: false,
-      msg: "forbidden"
+      msg: "Forbidden"
     });
   }
   User.find({}, '', (err, users) => {
@@ -26,7 +26,7 @@ module.exports.updateUser = (req, res, next) => {
     stat = req.user == undefined ? 401 : 403
     return sendJsonResponse(res, stat, {
       success: false,
-      msg: "forbidden"
+      msg: "Forbidden"
     });
   }
 
