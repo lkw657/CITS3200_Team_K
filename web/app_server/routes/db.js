@@ -24,7 +24,7 @@ router.put('/removeUser', ctrlUsers.removeUser);
 owner
 questionSet (ref)
 */
-router.post('/form', ctrlForm.addForm);
+router.post('/newSubmission', ctrlForm.addForm);
 router.get('/form', ctrlForm.listAll);
 router.get('/form/:id', ctrlForm.formid);
 
