@@ -1,0 +1,99 @@
+<!-- IT View -->
+<div *ngIf=user.isIT>
+  <div *ngIf="select">
+    <div class="mb-5">
+      <a [routerLink]="['/editUsers']" class="btn btn-block btn-primary mt-3 p-4">Edit Users</a>
+      <a [routerLink]="['/editQuestions']" class="btn btn-block btn-warning float-right mt-3 mb-3 p-4">Edit Questions</a>
+      <!-- DEVELOPMENT ONLY - REMOVE BELOW LINE -->
+      <input type="button" class="btn btn-block btn-danger p-4" value="Change to non IT (Development Only)" (click)="changeIT()">
+    </div>
+  </div>
+</div>
+
+<!-- Everyone else's view -->
+<div *ngIf=!user.isIT>
+  <div *ngIf="select">
+    <div class="mb-5">
+      <input type="button" class="btn btn-block btn-primary mt-3 p-4" value="My Submissions" (click)="showSubmissions()">
+      <input type="button" class="btn btn-block btn-warning float-right mt-3 p-4" value="Approvals" (click)="showApprovals()">
+    </div>
+  </div>
+
+  <!-- Dashboard display for all user's submitted forms -->
+  <div *ngIf="submissions">
+    <div class="row">
+      <div class="col-sm">
+        <h1>Submissions Dashboard</h1>
+      </div>
+
+      <div class="col-sm">
+        <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
+        <input type="button" class="btn btn-w btn-lg btn-warning float-right mb-2 mr-2" value="Approvals" (click)="showApprovals()">
+      </div>
+    </div>
+
+    <div *ngIf="!user.forms">
+      <h2>You have no submissions</h2>
+    </div>
+
+    <div *ngIf="user.forms" class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let form of user.forms">
+            <td>{{form.created_date}}</td>
+            <td>{{form.status}}</td>
+            <td>{{form.comments.commenter}} : {{form.comments.comment}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DISPLAY SELECTED FORM FOR REVIEW -->
+  </div>
+
+  <!-- Dashboard display for all user's forms awaiting their approval -->
+  <div *ngIf="approvals">
+    <div class="row">
+      <div class="col-sm">
+        <h1>Approvals Dashboard</h1>
+      </div>
+      <div class="col-sm">
+        <input type="button" class="btn btn-w btn-lg btn-primary float-right mb-2" value="My Submissions" (click)="showSubmissions()">
+      </div>
+    </div>
+
+    <div *ngIf="!user.forms">
+      <h2>You have no forms awaiting approval</h2>
+    </div>
+
+    <div *ngIf="user.forms" class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Requested By</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let form of user.forms">
+            <td>{{form.created_date}}</td>
+            <td>{{form.owner}}</td>
+            <td>
+              <a [routerLink]="['/review']" class="btn btn-primary float-right">Review</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- DISPLAY SELECTED FORM FOR APPROVAL -->
+  </div>
+</div>
