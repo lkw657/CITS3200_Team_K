@@ -30,9 +30,8 @@ export class DynamicFormComponent implements OnInit {
   }
 
   // Saves role into form and changes view
-  selectRole(role, display) {
+  selectRole(role) {
     this.submitter = role;
-    this.submitter_display = display;
   }
 
   // Saves school into form and changes view
