@@ -40,7 +40,7 @@ export class SubmissionComponent implements OnInit {
                     key: i+1,
                     label: q.text,
                     required: true,
-                    order : i
+                    order : q.order
                 })
             );
           } else if (q['type'] == 'text'){
@@ -49,7 +49,7 @@ export class SubmissionComponent implements OnInit {
                     key: i+1,
                     label: q.text,
                     required: true,
-                    order : i
+                    order : q.order
                 })
             );
           } else if (q['type'] == 'money_single'){
@@ -58,7 +58,7 @@ export class SubmissionComponent implements OnInit {
                     key: i+1,
                     label: q.text,
                     required: true,
-                    order : i
+                    order : q.order
                 })
             );
           }
