@@ -8,13 +8,15 @@ var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
 /**
-req.body.owner
+req.user._id
 req.body.questionSet
 req.body.answers
+req.body.submitter
+
 Assign status
 **/
 module.exports.addForm = (req, res, next)=>{
-    if(req.body.owner && req.body.questionSet && req.body.answers && req.body.school)
+    if(req.user._id && req.body.questionSet && req.body.answers && req.body.school)
     {
         QuestionSet.findById(req.body.questionSet, (err, set)=>{
             if(err){
@@ -33,7 +35,7 @@ module.exports.addForm = (req, res, next)=>{
                 });
             }
             else{
-                User.findById(req.body.owner, (err, owner)=>{
+                User.findById(req.user._id, (err, owner)=>{
 
                     if(err){
                         sendJsonResponse(res, 400, {
@@ -48,12 +50,19 @@ module.exports.addForm = (req, res, next)=>{
                     else{
                         var form = new Form();
 
+                        if(req.body.submitter == 'hos'){
+                            form.status='awaiting-adr';
+                        }
+                        else{
+                            form.status='awaiting-hos';
+                        }
+                        form.submitter = req.body.submitter;
                         form.owner=req.body.owner;
                         form.questionSet=req.body.questionSet;
                         form.answers=req.body.answers;
-						form.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
-						//form.dates = [new Date()];
-                        form.status='created';
+						// form.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
+						form.dates = [new Date()];
+                        
 						form.school= req.body.school;
 
                         form.save((err,form)=>{
