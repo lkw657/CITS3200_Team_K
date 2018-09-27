@@ -39,6 +39,7 @@ export class EditQuestionsComponent implements OnInit {
   showEdit(question) {
 
     this.currentQuestion = question;
+    this.displayDelete = false;
     this.displayAll = false;
     this.displayEdit = true;
     window.scrollTo(0, 0);
@@ -48,6 +49,7 @@ export class EditQuestionsComponent implements OnInit {
   showDelete(question) {
 
     this.currentQuestion = question;
+    this.displayEdit = false;
     this.displayAll = false;
     this.displayDelete = true;
     window.scrollTo(0, 0);
