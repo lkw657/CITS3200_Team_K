@@ -76,6 +76,7 @@ export class EditQuestionsComponent implements OnInit {
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
+  
   // Update Question set database through the backend
   saveNewQuestionSet() {
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
