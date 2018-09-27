@@ -18,6 +18,7 @@ export class DynamicFormComponent implements OnInit {
   submitter: String;
   school_display: String;
   submitter_display: String;
+  answers: any[];
   payload = '';
 
   constructor( private qcs: QuestionControlService ) { }
@@ -36,6 +37,7 @@ export class DynamicFormComponent implements OnInit {
   selectSchool(school, display) {
     this.school = school;
     this.school_display = display;
+    console.log(this.form);
   }
 
   // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND

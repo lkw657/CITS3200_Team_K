@@ -17,6 +17,7 @@ export class SubmissionComponent implements OnInit {
 
   questions: any[] = [];
   qs : QuestionService;
+  version: string;
   constructor( service: QuestionService ) { this.qs = service; }
   questionList : any;
   isLoaded : boolean;
@@ -32,7 +33,7 @@ export class SubmissionComponent implements OnInit {
           let q = this.questionList[i];
           qObjs.push(
               new TextboxQuestion({
-                  key: Math.random().toString(36).substring(7),
+                  key: i+1,
                   label: q.text,
                   required: true,
                   order : i
