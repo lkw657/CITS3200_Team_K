@@ -2,7 +2,6 @@ var User = require('../models/users').User;
 var passport = require('passport')
 
 //This will receive an object containining the below -
-// role: req.body.role,
 // first name: req.body.fname
 // last name: req.body.lname
 // number: req.body.number,
