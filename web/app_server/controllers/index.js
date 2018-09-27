@@ -40,24 +40,59 @@ module.exports.authenticate = (req, res, next) => {
             return res.json({success: false, msg: 'User or password wrong'});
         req.login(user, function(err) {
             if (err) { return next(err); }
-            user.populate(['submissions','approvals'], (err) => {
-                if(err) console.log(err);
-                return res.json({
-                    success: true,
-                    msg: 'You are successfully logged in',
-                    user: {
-                        fname: user.fname,
-                        lname: user.lname,
-                        number: user.number,
-                        isIT: user.isIT,
-                        submissions: user.submissions,
-                        approvals: user.approvals
-                    }
-                });
+            return res.json({
+                success: true,
+                msg: 'You are successfully logged in',
+                user: {
+                    fname: user.fname,
+                    lname: user.lname,
+                    number: user.number,
+                    isIT: user.isIT,
+                    submissions: user.submissions,
+                    approvals: user.approvals
+                }
             });
         });
     })(req, res, next);
 };
+
+module.exports.submissions = (req, res, next) => {
+    if(!res.user)
+        return res.status(401).json({
+            success: false,
+            msg: "forbidden"
+        });
+    user.populate(['submissions', 'submissions.questionSet'], (err) => {
+        if (err)
+            return res.status(400).json({
+                success: false,
+                msg: "error"
+            });
+        res.json({
+            success: true,
+            submissions: user.submissions
+        });
+    });
+}
+
+module.exports.approvals = (req, res, next) => {
+    if(!res.user)
+        return res.status(401).json({
+            success: false,
+            msg: "forbidden"
+        });
+    user.populate(['approvals', 'approvals.questionSet'], (err) => {
+        if (err)
+            return res.status(400).json({
+                success: false,
+                msg: "error"
+            });
+        res.json({
+            success: true,
+            submissions: user.approvals
+        });
+    });
+}
 
 // This isn't actually called since I told the express generator not to use templates
 // I'm not entirely sure why it generated this funciton
