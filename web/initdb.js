@@ -39,6 +39,8 @@ async function run() {
     await User.register(user, password).catch((err) => console.log(err));
 
     qset = JSON.parse(fs.readFileSync('questionSet.json', 'utf8'));
+    for (var i = 0; i<qset.questionList.length; i++)
+        qset.questionList[i].order = i;
     await new QuestionSet(qset).save().catch((err) => console.log(err));
 
     process.exit()

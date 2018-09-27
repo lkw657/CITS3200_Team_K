@@ -18,7 +18,8 @@ var userSchema = new mongoose.Schema(
             type: String, unique: true, required: [true, "Please enter a valid UWA staff/student number"],
             match: [/^\d{8,}$/, "Please enter a valid UWA staff/student number"]
         },
-        forms: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
+        submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
+        approvals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
         isIT: Boolean
     }
 );
