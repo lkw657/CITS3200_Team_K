@@ -83,7 +83,7 @@ export class EditQuestionsComponent implements OnInit {
   // Update Question set database through the backend
   saveNewQuestionSet() {
     for (let i = 0; i < this.questionList.length; i++) {
-      this.questionList[i].order = i+1;
+      this.questionList[i].order = i;
     }
     console.log(this.questionList);
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
