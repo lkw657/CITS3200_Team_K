@@ -12,7 +12,7 @@ var mailer = require('./mailer');
 /**
 req.user._id
 
-req.body.questionSet
+req.body.qset_id
 req.body.answers
 req.body.submitter
 req.body.school
@@ -21,10 +21,10 @@ Assign status
 **/
 module.exports.addForm = (req, res, next)=>{
     console.log(req.user);
-    console.log(req.body.questionSet);
-    if(req.user && req.body.questionSet && req.body.answers && req.body.school)
+    console.log(req.body.qset_id);
+    if(req.user && req.body.qset_id && req.body.answers && req.body.school)
     {
-        QuestionSet.findById(req.body.questionSet, (err, set)=>{
+        QuestionSet.findById(req.body.qset_id, (err, set)=>{
             console.log("SET");
             console.log(set);
             if(err){
@@ -68,7 +68,9 @@ module.exports.addForm = (req, res, next)=>{
                         }
                         form.submitter = req.body.submitter;
                         form.owner= req.user._id;
-                        form.questionSet=req.body.questionSet;
+                        form.questionSet=req.body.qset_id;
+                        //fix format of answers
+                        req.body.answers.forEach((o, i, a) => a[i] = {order: i, answer: a[i]});
                         form.answers=req.body.answers;
 						// fo   rm.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
 						form.dates = [new Date()];
