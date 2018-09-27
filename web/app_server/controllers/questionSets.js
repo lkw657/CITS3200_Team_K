@@ -28,6 +28,9 @@ module.exports.addQuestionSet = (req, res, next) => {
         else
             questionSet.version = 1;
         questionSet.questionList = req.body;
+        // set order on questions
+        for (var i=0; i<questionSet.questionList.length; i++)
+            questionSet.questionList[i].order = i;
         questionSet.save((err, questionSet) => {
             if (err)
                 return res.json({ success: false, msg: 'Could not update Question Set' });
