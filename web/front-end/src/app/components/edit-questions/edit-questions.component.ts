@@ -26,7 +26,8 @@ export class EditQuestionsComponent implements OnInit {
 
   ngOnInit() {
     // Get question to show admin
-    this.dashboardService.getAllQuestions().subscribe(questionSet => {
+    this.dashboardService.getAllQuestions().subscribe(res => {
+      var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
     },
       err => {

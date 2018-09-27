@@ -44,15 +44,20 @@ module.exports.authenticate = (req, res, next) => {
             return res.json({success: false, msg: 'User or password wrong'});
         req.login(user, function(err) {
             if (err) { return next(err); }
-            return res.json({
-                success: true,
-                msg: 'You are successfully logged in',
-                user: {
-                    fname: user.fname,
-                    lname: user.lname,
-                    number: user.number,
-                    isIT: user.isIT
-                }
+            user.populate(['submissions','approvals'], (err) => {
+                if(err) console.log(err);
+                return res.json({
+                    success: true,
+                    msg: 'You are successfully logged in',
+                    user: {
+                        fname: user.fname,
+                        lname: user.lname,
+                        number: user.number,
+                        isIT: user.isIT,
+                        submissions: user.submissions,
+                        approvals: user.approvals
+                    }
+                });
             });
         });
     })(req, res, next);
