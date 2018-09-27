@@ -115,7 +115,7 @@ module.exports.latestQuestionSet = (req, res, next) => {
             msg: "forbidden"
         });
     }
-    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
+    QuestionSet.findOne({}, {'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
         if (err)
             return res.status(400).json({
                 success: false,
