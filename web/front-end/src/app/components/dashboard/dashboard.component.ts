@@ -15,6 +15,9 @@ export class DashboardComponent implements OnInit {
   submissions = false;
   approvals = false;
 
+  showSubmission = false;
+  showApproval = false;
+
   constructor(
     private authService: AuthService,
     private dashboardService: DashboardService
@@ -25,8 +28,9 @@ export class DashboardComponent implements OnInit {
     this.user = this.authService.getProfile();
 
     // Get all forms submitted by user  
-    this.dashboardService.getUserSubmissions().subscribe(res => {
-      this.userSubmissions = res;
+    this.dashboardService.getUserSubmissions().subscribe(data => {
+      this.userSubmissions = data.submissions;
+      console.log(this.userSubmissions);
     },
       err => {
         console.log(err);
@@ -34,14 +38,14 @@ export class DashboardComponent implements OnInit {
       });
 
     // Get forms awaiting approval by user
-    this.dashboardService.getUserApprovals().subscribe(res => {
-      this.userApprovals = res;
+    this.dashboardService.getUserApprovals().subscribe(data => {
+      this.userApprovals = data.approvals;
+      console.log(this.userApprovals);
     },
       err => {
         console.log(err);
         return false;
       });
-
   }
 
   // View selecting functions
@@ -49,12 +53,24 @@ export class DashboardComponent implements OnInit {
     this.approvals = false;
     this.select = false;
     this.submissions = true;
+    this.showSubmission = false;
+  }
+
+  showSingleSubmission() {
+    this.showSubmission = true;
+    this.submissions = false;
+  }
+
+  showSingleApproval() {
+    this.showApproval = true;
+    this.approvals = false;
   }
 
   showApprovals() {
     this.approvals = true;
     this.select = false;
     this.submissions = false;
+    this.showApproval = false;
   }
 
   // DEVELOPMENT ONLY - REMOVE
