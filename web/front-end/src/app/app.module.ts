@@ -29,6 +29,7 @@ import { AuthService } from './services/auth.service';
 //Http interceptors
 import { httpInterceptorProviders } from './http-interceptors/index';
 
+import { DragulaModule } from 'ng2-dragula';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -66,6 +67,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
+    DragulaModule.forRoot()
   ],
   providers: [
     ValidateService,

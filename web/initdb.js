@@ -23,6 +23,7 @@ function readSync(question, silent=false) {
 async function run() {
     await User.deleteMany().catch((err) => console.log(err));
     await QuestionSet.deleteMany().catch((err) => console.log(err));
+    await Form.deleteMany().catch((err) => console.log(err));
 
     var number = await readSync('Enter IT number: ');
     var fname = await readSync('Enter IT first name: ');
@@ -39,22 +40,22 @@ async function run() {
     user.isIT = true;
     await User.register(user, password).catch((err) => console.log(err));
 
-    qset = JSON.parse(fs.readFileSync('questionSet.json', 'utf8'));
+    var qset = JSON.parse(fs.readFileSync('questionSet.json', 'utf8'));
     for (var i = 0; i<qset.questionList.length; i++)
         qset.questionList[i].order = i;
-    qset = await new QuestionSet(qset).save().catch((err) => console.log(err));
+    var qset = await new QuestionSet(qset).save().catch((err) => console.log(err));
 
-    answers = []
-    answers2 = []
+    var answers = [];
+    var answers2 = [];
     for (var i=0; i<qset.questionList.length; i++) {
-        answers.push({order:i, answer:"foo"});
-        answers2.push({order:i, answer:"bar"});
+        answers.push({order:i, answer:'foo'});
+        answers2.push({order:i, answer:'bar'});
     }
-    var submission = await new Form({owner: user._id, dates:[new Date()], questionSet: qset, answers: answers, status:'awaiting-hos', school:'idk', submitter:'researcher'}).save().catch((err) => console.log(err));
-    var approval = await new Form({owner: user._id, dates:[new Date()], questionSet: qset, answers: answers2, status:'awaiting-hos', school:'idk', submitter:'researcher'}).save().catch((err) => console.log(err));
-    user.submissions = [submission._id]
-    user.approvals = [approval._id]
-    await user.save().catch((err) => console.log(err));
+    var submission = await new Form({owner: user._id, answers:answers, status:'awaiting-hos', dates:[new Date()], school:'idk', submitter:'it', questionSet:qset._id}).save().catch((err) => console.log(err));
+    var approval = await new Form({owner: user._id, answers:answers2, status:'awaiting-hos', dates:[new Date()], school:'idk', submitter:'it', questionSet:qset._id}).save().catch((err) => console.log(err));
+    user.submissions = [submission._id];
+    user.approvals = [approval._id];
+    await user.save().catch((err) => console.log(err))
 
     process.exit()
 }
