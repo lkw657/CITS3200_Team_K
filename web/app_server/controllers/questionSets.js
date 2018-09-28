@@ -28,9 +28,7 @@ module.exports.addQuestionSet = (req, res, next) => {
         else
             questionSet.version = 1;
         questionSet.questionList = req.body;
-        // set order on questions
-        for (var i = 0; i < questionSet.questionList.length; i++)
-            questionSet.questionList[i].order = i;
+
         questionSet.save((err, questionSet) => {
             if (err)
                 return res.json({ success: false, msg: 'Could not update Question Set' });
@@ -49,14 +47,14 @@ var isEqual = function (first, second) {
         function (a, b) {
             var x = a.order;
             var y = b.order;
-            return a - b;
+            return x - y;
         });
     //sort based on question order.
     second.sort(
         function (a, b) {
             var x = a.order;
             var y = b.order;
-            return a - b;
+            return x - y;
         });
     if (JSON.stringify(first) != JSON.stringify(second))    //Check if sorted arrays are the same.
         return false;

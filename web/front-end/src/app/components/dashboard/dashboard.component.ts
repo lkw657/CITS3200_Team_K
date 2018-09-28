@@ -25,8 +25,12 @@ export class DashboardComponent implements OnInit {
     this.user = this.authService.getProfile();
 
     // Get all forms submitted by user  
-    this.dashboardService.getUserSubmissions().subscribe(res => {
-      this.userSubmissions = res;
+    this.dashboardService.getUserSubmissions().subscribe(data => {
+      this.userSubmissions = data.submissions;
+      // for (let i = 0; i < data.submissions.length; i++) {
+      //   this.userSubmissions[i].sub_date = Date(data.submissions[i].dates[0]);
+      // }
+      console.log(this.userSubmissions);
     },
       err => {
         console.log(err);
@@ -34,14 +38,14 @@ export class DashboardComponent implements OnInit {
       });
 
     // Get forms awaiting approval by user
-    this.dashboardService.getUserApprovals().subscribe(res => {
-      this.userApprovals = res;
+    this.dashboardService.getUserApprovals().subscribe(data => {
+      this.userApprovals = data.approvals;
+      console.log(this.userApprovals);
     },
       err => {
         console.log(err);
         return false;
       });
-
   }
 
   // View selecting functions

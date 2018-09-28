@@ -32,24 +32,27 @@
       </div>
     </div>
 
-    <div *ngIf="!user.forms">
+    <div *ngIf="!userSubmissions">
       <h2>You have no submissions</h2>
     </div>
 
-    <div *ngIf="user.forms" class="table-responsive">
+    <div *ngIf="userSubmissions" class="table-responsive">
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Date</th>
+            <th scope="col">Submission Date</th>
             <th scope="col">Status</th>
-            <th scope="col">Comments</th>
+            <th scope="col">Last Action Date</th>
+            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let form of user.forms">
-            <td>{{form.created_date}}</td>
-            <td>{{form.status}}</td>
-            <td>{{form.comments.commenter}} : {{form.comments.comment}}</td>
+          <tr *ngFor="let submission of userSubmissions">
+            <td>{{submission.dates[0]}}</td>
+            <td>{{submission.status}}</td>
+            <td>{{submission.dates[0]}}</td>
+            <td><button class="btn btn-primary float-right">View Form</button></td>
+            <!-- <td>{{form.comments.commenter}} : {{form.comments.comment}}</td> -->
           </tr>
         </tbody>
       </table>
@@ -69,11 +72,11 @@
       </div>
     </div>
 
-    <div *ngIf="!user.forms">
+    <div *ngIf="!userApprovals">
       <h2>You have no forms awaiting approval</h2>
     </div>
 
-    <div *ngIf="user.forms" class="table-responsive">
+    <div *ngIf="userApprovals" class="table-responsive">
       <table class="table">
         <thead>
           <tr>
@@ -83,11 +86,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let form of user.forms">
-            <td>{{form.created_date}}</td>
-            <td>{{form.owner}}</td>
+          <tr *ngFor="let approval of userApprovals">
+            <td>{{approval.dates[0]}}</td>
+            <td>{{approval.owner}}</td>
             <td>
-              <a [routerLink]="['/review']" class="btn btn-primary float-right">Review</a>
+                <button class="btn btn-primary float-right">View Form</button>
             </td>
           </tr>
         </tbody>
