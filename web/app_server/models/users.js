@@ -2,6 +2,7 @@ mongoose = require('mongoose')
 var passportLocalMongoose = require('passport-local-mongoose')
 // Mongoose doesn't actually validate uniqueness
 var uniqueValidator = require('mongoose-unique-validator');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 
 var userSchema = new mongoose.Schema(
@@ -37,5 +38,6 @@ userSchema.statics.create = (fname, lname, number) => {
 
 userSchema.plugin(uniqueValidator, { message: "{PATH} already exists" });
 userSchema.plugin(passportLocalMongoose, { usernameField: 'number' });
+userSchema.plugin(deepPopulate)
 module.exports.User = mongoose.model('User', userSchema);
 
