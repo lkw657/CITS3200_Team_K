@@ -70,6 +70,9 @@ module.exports.submissions = (req, res, next) => {
             });
         var submissions = [];
         for (var i=0; i<req.user.submissions.length; i++) {
+            // For some reason on some computers deepPopulate seems to make this a list, but on others an object
+            if (req.user.submissions[i].owner.constructor == Array)
+                req.user.submissions[i].owner = req.user.submissions[i].owner[0]
             submissions.push({
                 owner: {fname: req.user.submissions[i].owner.fname, 
                         lname:req.user.submissions[i].owner.lname,
