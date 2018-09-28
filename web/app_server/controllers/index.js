@@ -62,18 +62,33 @@ module.exports.submissions = (req, res, next) => {
             success: false,
             msg: "Forbidden"
         });
-    req.user.populate(['submissions', 'submissions.questionSet'], (err) => {
+    User.deepPopulate(req.user, ['submissions', 'submissions.questionSet', 'submissions.owner'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
                 msg: "Error getting submissions"
             });
+        var submissions = [];
+        for (var i=0; i<req.user.submissions.length; i++) {
+            submissions.push({
+                owner: {fname: req.user.submissions[i].owner.fname, 
+                        lname:req.user.submissions[i].owner.lname,
+                        number: req.user.submissions[i].owner.number},
+                questionSet: req.user.submissions[i].questionSet,
+                school: req.user.submissions[i].school,
+                submitter: req.user.submissions[i].submitter,
+                answers: req.user.submissions[i].answers,
+                sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
+                action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length-1].toLocaleString('en-AU')
+            });
+        }
         res.json({
             success: true,
-            submissions: req.user.submissions
+            submissions: submissions
         });
     });
 }
+
 
 module.exports.approvals = (req, res, next) => {
     if(!req.user)
@@ -81,19 +96,32 @@ module.exports.approvals = (req, res, next) => {
             success: false,
             msg: "Forbidden"
         });
-    req.user.populate(['approvals', 'approvals.questionSet'], (err) => {
+    User.deepPopulate(req.user, ['approvals', 'approvals.questionSet', 'approvals.owner'], (err) => {
         if (err)
             return res.status(400).json({
                 success: false,
                 msg: "Error getting approvals"
             });
+        var approvals = [];
+        for (var i=0; i<req.user.approvals.length; i++) {
+            approvals.push({
+                owner: {fname: req.user.approvals[i].owner.fname, 
+                        lname:req.user.approvals[i].owner.lname,
+                        number: req.user.approvals[i].owner.number},
+                questionSet: req.user.approvals[i].questionSet,
+                school: req.user.approvals[i].school,
+                submitter: req.user.approvals[i].submitter,
+                answers: req.user.approvals[i].answers,
+                sub_date: req.user.approvals[i].dates[0].toLocaleString('en-AU'),
+                action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length-1].toLocaleString('en-AU')
+            });
+        }
         res.json({
             success: true,
-            approvals: req.user.approvals
+            approvals: approvals
         });
     });
 }
-
 // This isn't actually called since I told the express generator not to use templates
 // I'm not entirely sure why it generated this funciton
 module.exports.index = function(req, res, next) {
