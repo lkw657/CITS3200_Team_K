@@ -80,6 +80,7 @@ module.exports.submissions = (req, res, next) => {
                 questionSet: req.user.submissions[i].questionSet,
                 school: req.user.submissions[i].school,
                 submitter: req.user.submissions[i].submitter,
+                status: req.user.submissions[i].status,
                 answers: req.user.submissions[i].answers,
                 sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length-1].toLocaleString('en-AU')
@@ -117,6 +118,7 @@ module.exports.approvals = (req, res, next) => {
                 questionSet: req.user.approvals[i].questionSet,
                 school: req.user.approvals[i].school,
                 submitter: req.user.approvals[i].submitter,
+                status: req.user.approvals[i].status,
                 answers: req.user.approvals[i].answers,
                 sub_date: req.user.approvals[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length-1].toLocaleString('en-AU')

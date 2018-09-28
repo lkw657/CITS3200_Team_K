@@ -29,16 +29,6 @@ export class EditQuestionsComponent implements OnInit {
     this.dashboardService.getAllQuestions().subscribe(res => {
       var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
-
-      //sort based on question order.
-      console.log(this.questionList);
-      this.questionList.sort(
-        function (a, b) {
-          var x = a.order;
-          var y = b.order;
-          return x - y;
-        });
-        console.log(this.questionList);
     },
       err => {
         console.log(err);

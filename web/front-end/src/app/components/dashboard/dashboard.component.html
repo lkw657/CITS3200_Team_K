@@ -48,55 +48,78 @@
         </thead>
         <tbody>
           <tr *ngFor="let submission of userSubmissions">
-            <td>{{submission.dates[0]}}</td>
+            <td>{{submission.sub_date}}</td>
             <td>{{submission.status}}</td>
-            <td>{{submission.dates[0]}}</td>
-            <td><button class="btn btn-primary float-right">View Form</button></td>
+            <td>{{submission.action_date}}</td>
+            <td>
+              <button class="btn btn-primary float-right" (click)="showSingleSubmission()">View Form</button>
+            </td>
             <!-- <td>{{form.comments.commenter}} : {{form.comments.comment}}</td> -->
           </tr>
         </tbody>
       </table>
     </div>
-
-    <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   </div>
 
-  <!-- Dashboard display for all user's forms awaiting their approval -->
-  <div *ngIf="approvals">
+  <!-- DISPLAY SELECTED FORM FOR REVIEW -->
+  <div *ngIf="showSubmission">
     <div class="row">
       <div class="col-sm">
-        <h1>Approvals Dashboard</h1>
+        <h1>HERE IS YOUR SUBMISSION</h1>
       </div>
       <div class="col-sm">
-        <input type="button" class="btn btn-w btn-lg btn-primary float-right mb-2" value="My Submissions" (click)="showSubmissions()">
+        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showSubmissions()">
       </div>
     </div>
+  </div>
 
-    <div *ngIf="!userApprovals">
-      <h2>You have no forms awaiting approval</h2>
-    </div>
+    <!-- Dashboard display for all user's forms awaiting their approval -->
+    <div *ngIf="approvals">
+      <div class="row">
+        <div class="col-sm">
+          <h1>Approvals Dashboard</h1>
+        </div>
+        <div class="col-sm">
+          <input type="button" class="btn btn-w btn-lg btn-primary float-right mb-2" value="My Submissions" (click)="showSubmissions()">
+        </div>
+      </div>
 
-    <div *ngIf="userApprovals" class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Requested By</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let approval of userApprovals">
-            <td>{{approval.dates[0]}}</td>
-            <td>{{approval.owner}}</td>
-            <td>
-                <button class="btn btn-primary float-right">View Form</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div *ngIf="!userApprovals">
+        <h2>You have no forms awaiting approval</h2>
+      </div>
+
+      <div *ngIf="userApprovals" class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Requested By</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let approval of userApprovals">
+              <td>{{approval.sub_date}}</td>
+              <td>{{approval.owner.fname}} {{approval.owner.lname}}</td>
+              <td>{{approval.status}}</td>
+              <td>
+                <button class="btn btn-primary float-right" (click)="showSingleApproval()">View Form</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- DISPLAY SELECTED FORM FOR APPROVAL -->
-  </div>
-</div>
+    <div *ngIf="showApproval">
+      <div class="row">
+        <div class="col-sm">
+          <h1>HERE IS THE FORM FOR APPROVAL</h1>
+        </div>
+        <div class="col-sm">
+          <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showApprovals()">
+        </div>
+      </div>
+    </div>
