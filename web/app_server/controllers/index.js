@@ -107,6 +107,9 @@ module.exports.approvals = (req, res, next) => {
             });
         var approvals = [];
         for (var i=0; i<req.user.approvals.length; i++) {
+            // For some reason on some computers deepPopulate seems to make this a list, but on others an object
+            if (req.user.approvals[i].owner.constructor == Array)
+                req.user.approvals[i].owner = req.user.approvals[i].owner[0]
             approvals.push({
                 owner: {fname: req.user.approvals[i].owner.fname, 
                         lname:req.user.approvals[i].owner.lname,
