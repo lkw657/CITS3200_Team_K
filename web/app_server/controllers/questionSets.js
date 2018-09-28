@@ -5,7 +5,7 @@ module.exports.addQuestionSet = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     }
     //Check if a questionlist is included.
@@ -13,7 +13,7 @@ module.exports.addQuestionSet = (req, res, next) => {
         return res.json({ success: false, msg: 'Missing Data' });
     }
     //Find the question set with the highest version.
-    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset) {   
+    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset) {
         var questionSet = new QuestionSet(); //The question set to be saved.
         //If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
         if (qset) {
@@ -34,6 +34,7 @@ module.exports.addQuestionSet = (req, res, next) => {
             var y = b.order;
             return x-y;
         });
+
         questionSet.save((err, questionSet) => {
             if (err)
                 return res.json({ success: false, msg: 'Could not update Question Set' });
@@ -71,14 +72,14 @@ module.exports.listAll = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     }
     QuestionSet.find({}, (err, qsets) => {
         if (err) {
             return res.status(400).json({
                 success: false,
-                msg: "error"
+                msg: "Error getting all question lists"
             });
             console.log(err);
         }
@@ -96,15 +97,17 @@ module.exports.questionSetId = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     }
-    QuestionSet.findById(req.params.id).then(function(qset, err){
-        if (err)
+    QuestionSet.findById(req.params.id).then(function (qset, err) {
+        if (err) {
             return res.status(400).json({
                 success: false,
-                msg: "error"
+                msg: "Error getting question set by ID"
             });
+            console.log(err);
+        }
         res.json({
             success: true,
             questionSet: qset
@@ -118,15 +121,17 @@ module.exports.latestQuestionSet = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "forbidden"
+            msg: "Forbidden"
         });
     }
-    QuestionSet.findOne({}, {'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
-        if (err)
+    QuestionSet.findOne({}, { 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
+        if (err) {
             return res.status(400).json({
                 success: false,
-                msg: "error"
+                msg: "Error getting latest question list"
             });
+            console.log(err);
+        }
         res.json({
             success: true,
             questionSet: qset

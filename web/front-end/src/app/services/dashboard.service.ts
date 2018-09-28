@@ -23,26 +23,36 @@ export class DashboardService {
 
   //Get ALL users for IT to view
   getAllUsers() {
-    return this.http.get<any>(baseURI+'/db/users');
+    return this.http.get<any>(baseURI + '/db/users');
   }
 
   //Update User in database
   updateUser(user) {
-    return this.http.put<any>(baseURI+'/db/updateUser', user);
+    return this.http.put<any>(baseURI + '/db/updateUser', user);
   }
 
   //Remove User in database
   removeUser(user) {
-    return this.http.put<any>(baseURI+'/db/removeUser', user);
+    return this.http.put<any>(baseURI + '/db/removeUser', user);
   }
 
   //Get ALL questions for IT to view
   getAllQuestions() {
-    return this.http.get<any>(baseURI+'/db/questionSet/latest');
+    return this.http.get<any>(baseURI + '/db/questionSet/latest');
+  }
+
+  //Get users submissions
+  getUserSubmissions() {
+    return this.http.get<any>(baseURI + '/submissions');
+  }
+
+  //Get forms awaiting approval by user
+  getUserApprovals() {
+    return this.http.get<any>(baseURI + '/approvals');
   }
 
   //Update Questions in database
   updateQuestionSet(questionList) {
-    return this.http.post<any>(baseURI+'/db/questionSet', questionList);
+    return this.http.post<any>(baseURI + '/db/questionSet', questionList);
   }
 }

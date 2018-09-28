@@ -25,7 +25,7 @@ export class EditQuestionsComponent implements OnInit {
   displayDelete: boolean = false;
 
   ngOnInit() {
-    // Get question to show admin
+    // Get questions to show admin
     this.dashboardService.getAllQuestions().subscribe(res => {
       var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
@@ -79,9 +79,13 @@ export class EditQuestionsComponent implements OnInit {
     this.displayEdit = false;
     window.scrollTo(0, 0);
   }
-  
+
   // Update Question set database through the backend
   saveNewQuestionSet() {
+    for (let i = 0; i < this.questionList.length; i++) {
+      this.questionList[i].order = i;
+    }
+    console.log(this.questionList);
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
