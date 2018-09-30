@@ -78,6 +78,10 @@ module.exports.addForm = (req, res, next) => {
                         form.dates = [new Date()];
 
                         form.school = req.body.school;
+                        
+                        if(req.body.history){
+                            form.history = req.body.history;
+                        }
 
                         form.save((err, form) => {
                             if (err) {
@@ -142,6 +146,11 @@ module.exports.addForm = (req, res, next) => {
             msg: "Missing Data"
         });
     }
+}
+
+//THIS CONTROLLER NEEDS TO UPDATE A FORM WITH CHANGE TO THE STATUS FIELD
+module.exports.updateForm = (req, res, next) => {
+    return res.json({ success: true, msg: 'Form resubmitted!' });
 }
 
 module.exports.listAll = (req, res, next) => {

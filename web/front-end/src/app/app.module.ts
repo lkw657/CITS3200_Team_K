@@ -30,6 +30,7 @@ import { AuthService } from './services/auth.service';
 import { httpInterceptorProviders } from './http-interceptors/index';
 
 import { DragulaModule } from 'ng2-dragula';
+import { QuestionService } from './services/question.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -72,6 +73,9 @@ const routes: Routes = [
   providers: [
     ValidateService,
     httpInterceptorProviders,
+    QuestionService,
+    DashboardService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

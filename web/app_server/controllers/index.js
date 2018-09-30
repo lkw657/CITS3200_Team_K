@@ -74,6 +74,7 @@ module.exports.submissions = (req, res, next) => {
             if (req.user.submissions[i].owner.constructor == Array)
                 req.user.submissions[i].owner = req.user.submissions[i].owner[0]
             submissions.push({
+                _id: req.user.submissions[i]._id,
                 owner: {fname: req.user.submissions[i].owner.fname, 
                         lname:req.user.submissions[i].owner.lname,
                         number: req.user.submissions[i].owner.number},
@@ -82,6 +83,7 @@ module.exports.submissions = (req, res, next) => {
                 submitter: req.user.submissions[i].submitter,
                 status: req.user.submissions[i].status,
                 answers: req.user.submissions[i].answers,
+                history: req.user.submissions[i].history,
                 sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length-1].toLocaleString('en-AU')
             });

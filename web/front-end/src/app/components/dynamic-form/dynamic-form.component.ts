@@ -42,9 +42,8 @@ export class DynamicFormComponent implements OnInit {
   }
 
   // Saves school into form and changes view
-  selectSchool(school, display) {
+  selectSchool(school) {
     this.school = school;
-    this.school_display = display;
   }
 
   // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
@@ -53,6 +52,8 @@ export class DynamicFormComponent implements OnInit {
     this.submission.school = this.school;
     this.submission.submitter = this.submitter;
     this.submission.qset_id = this.qset_id;
+
+    console.log(this.submission);
 
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
