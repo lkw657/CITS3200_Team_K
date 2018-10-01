@@ -22,4 +22,8 @@ export class QuestionService {
     updateSubmission(form) {
         return this.http.post<any>(baseURI + '/db/updateSubmission', form);
     }
+
+    formResponse(response) {
+        return this.http.post<any>(baseURI + '/db/formResponse', response);
+    }
 }

@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     //Authenticate user in backend
     this.authService.authenticateUser(login).subscribe(data => {
 
-      //Renders dashboard if login is ok
+      //Renders homepage if login is ok
       if(data.success){
         this.flashMessage.show(data.msg,
           {cssClass: 'alert-success',
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
           }
 
           localStorage.setItem('user', JSON.stringify(data.user));
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend

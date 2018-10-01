@@ -89,7 +89,7 @@ export class EditQuestionsComponent implements OnInit {
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
