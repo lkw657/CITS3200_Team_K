@@ -1,0 +1,121 @@
+<div class="mb-5 p-1">
+  <!-- Dashboard display for all user's forms awaiting their approval -->
+  <div *ngIf=showAllApprovals>
+    <div class="row">
+      <div class="col-sm">
+        <h1>Approvals Dashboard</h1>
+      </div>
+    </div>
+
+    <div *ngIf="userApprovals" class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Requested By</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let approval of userApprovals">
+            <td>{{approval.sub_date}}</td>
+            <td>{{approval.owner.fname}} {{approval.owner.lname}}</td>
+            <td>{{approval.status}}</td>
+            <td>
+              <button class="btn btn-primary float-right" (click)="showApproval(approval)">View Form</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DISPLAY SELECTED FORM FOR REVIEW -->
+  <div *ngIf="showSingleApproval">
+    <div class="row">
+      <div class="col-sm">
+        <!-- DEVELOPMENT - THE BELOW NEEDS TO BE approvalView.history.length>0 -->
+        <input *ngIf="approvalView.history" type="button" class="btn btn-lg btn-warning mb-2 mr-2" value="View Previously submitted forms"
+          (click)="showFormHistory(approvalView.history)">
+        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showApprovals()">
+      </div>
+    </div>
+
+    <div class="mt-3 mb-5">
+      <h1>Form submitted as a {{approvalView.submitter}} from the {{approvalView.school}}</h1>
+      <div *ngFor="let answer of approvalView.answers; index as i">
+        <div class="card mb-2">
+          <div class="card-body">
+            <p>Question number: {{answer.order + 1}}</p>
+            <p>Question: {{approvalView.questionSet.questionList[i].text}}</p>
+            <p>Answer: {{answer.answer}}</p>
+            <input type="text" class="form-control" name="comment{{i}}" required [(ngModel)]="approvalView.comments[i]">
+          </div>
+        </div>
+      </div>
+
+      <div class="m-3">
+        <input type="button" class="btn btn-success btn-w2 float-left mr-5" (click)="submitForm(approvalView.comments, 'approve')" value="Approve">
+        <input type="button" class="btn btn-warning btn-w2 float-left mr-5" (click)="submitForm(approvalView.comments, 'provisionally approve')" value="Provisionally Approve">
+        <input type="button" class="btn btn-danger btn-w2 float-left" (click)="submitForm(approvalView.comments, 'reject')" value="Reject">
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOW FORM HISTORY -->
+  <div *ngIf=showHistory>
+    <div class="row">
+      <div class="col-lg">
+        <h1>History for form submitted on {{approvalView.sub_date}}</h1>
+      </div>
+      <div class="col-sm">
+        <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Submission Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last Action Date</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let history of formHistory">
+            <td>{{history.sub_date}}</td>
+            <td>{{history.status}}</td>
+            <td>{{history.action_date}}</td>
+            <td>
+              <button class="btn btn-primary float-right" (click)="showHistoricSubmission(history)">View Historical Form</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DISPLAY SELECTED HISTORICAL FORM -->
+  <div *ngIf="showHistoricalSubmission">
+    <div class="row">
+      <div class="col-sm">
+        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back to History" (click)="backToHistory()">
+      </div>
+    </div>
+    <div>
+      <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
+      <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
+        <div class="card mb-2">
+          <div class="card-body">
+            <p>Question number: {{answer.order + 1}}</p>
+            <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
+            <p>Answer: {{answer.answer}}</p>
+            <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

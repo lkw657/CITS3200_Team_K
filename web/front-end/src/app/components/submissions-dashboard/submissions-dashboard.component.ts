@@ -6,31 +6,25 @@ import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-submissions-dashboard',
+  templateUrl: './submissions-dashboard.component.html',
+  styleUrls: ['./submissions-dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class SubmissionsDashboardComponent implements OnInit {
 
   // View Objects
-  user: any;
   userSubmissions: any;
-  userApprovals: any;
   submissionView: any;
   historicalSubmissionView: any;
   submission: any = {};
-  approvalView: any;
   formHistory: any;
 
   // View Selectors
-  select = true;
-  submissions = false;
-  approvals = false;
-  resolve = false;
+  showAllSubmissions = true;
+  showSingleSubmission = false;
+  resolveComments = false;
   showHistory = false;
   showHistoricalSubmission = false;
-  showSubmission = false;
-  showApproval = false;
 
   constructor(
     private router: Router,
@@ -41,25 +35,36 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Gets current user profile on page render
-    this.user = this.authService.getProfile();
-  }
-
-  // View selecting functions
-  showSubmissions() {
-    window.scrollTo(0, 0);
-    this.approvals = false;
-    this.select = false;
-    this.submissions = true;
-    this.showSubmission = false;
-    this.resolve = false;
     this.refreshSubmissions();
   }
 
-  showSingleSubmission(form) {
+  refreshSubmissions() {
+    // Get all forms submitted by user  
+    this.dashboardService.getUserSubmissions().subscribe(data => {
+      this.userSubmissions = data.submissions;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
+  }
+
+  // View selecting functions
+
+  // Populates dashboard with all submissions that have not been resubmitted
+  showSubmissions() {
     window.scrollTo(0, 0);
-    this.showSubmission = true;
-    this.submissions = false;
+    this.showAllSubmissions = true;
+    this.showSingleSubmission = false;
+    this.resolveComments = false;
+    this.refreshSubmissions();
+  }
+
+  // Shows a single submission when View Form is clicked
+  showSubmission(form) {
+    window.scrollTo(0, 0);
+    this.showSingleSubmission = true;
+    this.showAllSubmissions = false;
 
     this.submissionView = form;
 
@@ -67,27 +72,14 @@ export class DashboardComponent implements OnInit {
     this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
   }
 
-  showSingleApproval() {
+  // Shows the questions that have comments relating to them on Provisional Approval
+  resolve() {
     window.scrollTo(0, 0);
-    this.showApproval = true;
-    this.approvals = false;
+    this.showSingleSubmission = false;
+    this.resolveComments = true;
   }
 
-  showApprovals() {
-    window.scrollTo(0, 0);
-    this.approvals = true;
-    this.select = false;
-    this.submissions = false;
-    this.showApproval = false;
-    this.refreshApprovals();
-  }
-
-  resolveComments() {
-    window.scrollTo(0, 0);
-    this.showSubmission = false;
-    this.resolve = true;
-  }
-
+  // Resubmits form for approval
   resubmit() {
 
     // Create new submission
@@ -113,6 +105,8 @@ export class DashboardComponent implements OnInit {
           if (data.success) {
             this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
             this.refreshSubmissions();
+            this.resolveComments = false;
+            this.showAllSubmissions = true;
             window.scrollTo(0, 0);
           }
         },
@@ -130,19 +124,10 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  // Saves role into form and changes view
-  selectRole(role) {
-    this.submissionView.submitter = role;
-  }
-
-  // Saves school into form and changes view
-  selectSchool(school) {
-    this.submissionView.school = school;
-  }
-
+  // Displays a dashboard of all historical forms attached to single form
   showFormHistory(history) {
     this.showHistory = true;
-    this.showSubmission = false;
+    this.showSingleSubmission = false;
     window.scrollTo(0, 0);
 
     this.formHistory = [];
@@ -153,51 +138,58 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // Goes back to single form display and clears history array
   backToForm() {
     this.showHistory = false;
-    this.showSubmission = true;
+    this.showSingleSubmission = true;
     this.formHistory = undefined;
     window.scrollTo(0, 0);
   }
 
+  // Displays a single historical form
+  showHistoricSubmission(form) {
+    this.historicalSubmissionView = form;
+    this.showHistory = false;
+    this.showHistoricalSubmission = true;
+    window.scrollTo(0, 0);
+
+    //DEVELOPMENT ONLY - TO BE DELETED
+    this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
+  }
+
+  // Goes back to history dashboard 
   backToHistory() {
     this.showHistory = true;
     this.showHistoricalSubmission = false;
     window.scrollTo(0, 0);
   }
 
-  showHistoricSubmission(form) {
-    this.historicalSubmissionView = form;
-    this.showHistory = false;
-    this.showHistoricalSubmission = true;
-    window.scrollTo(0, 0);
+  // Saves role into form
+  selectRole(role) {
+    this.submissionView.submitter = role;
   }
 
-  refreshSubmissions() {
-    // Get all forms submitted by user  
-    this.dashboardService.getUserSubmissions().subscribe(data => {
-      this.userSubmissions = data.submissions;
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
+  // Saves school into form
+  selectSchool(school) {
+    this.submissionView.school = school;
   }
 
-  refreshApprovals() {
-    // Get forms awaiting approval by user
-    this.dashboardService.getUserApprovals().subscribe(data => {
-      this.userApprovals = data.approvals;
-      console.log(this.userApprovals);
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
+  //Finds which questions have comments
+  isCommented(comments, order) {
+    for (let i in comments) {
+      if (comments[i].order === order) {
+        return true;
+      };
+    }
+    return false;
   }
 
-  // DEVELOPMENT ONLY - REMOVE
-  changeIT() {
-    this.user.isIT = !this.user.isIT;
+  // Gets the correct comment for display
+  getComment(comments, order) {
+    for (let i in comments) {
+      if (comments[i].order === order) {
+        return comments[i].text;
+      };
+    }
   }
 }
