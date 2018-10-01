@@ -153,6 +153,17 @@ module.exports.updateForm = (req, res, next) => {
     return res.json({ success: true, msg: 'Form resubmitted!' });
 }
 
+// THIS CONTROLLER WILL RECIEVE AN OBJECT WITH comments AND response.
+// IF response = 'approve' THEN A DATE NEEDS TO BE PUSHED ONTO THE DATES ARRAY 
+//      AND THE STATUS NEEDS TO BE SET TO THE NEXT APPROVER
+// IF response = 'provisional approve' OR 'rejected' THEN THE STATUS NEEDS TO BE SET TO response
+// IF THERE ARE comments AND response = 'provisional approve' or 'rejected' THEN PUSH COMMENTS ONTO ARRAY
+//      ELSE success=false AND msg='You cannot comment and approve, please select provional approve and resubmit'
+
+module.exports.formResponse = (req, res, next) => {
+    return res.json({ success: true, msg: 'Form moved to next step in process, thank you!' });
+}
+
 module.exports.listAll = (req, res, next) => {
     Form.find({}, '', (err, forms) => {
         if (!forms) {
