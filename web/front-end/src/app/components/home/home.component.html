@@ -1,0 +1,27 @@
+<div class="mb-5">
+
+  <!-- IT View -->
+  <div *ngIf=user.isIT>
+    <div>
+      <div class="mb-5">
+        <a [routerLink]="['/editUsers']" class="btn btn-block btn-primary mt-3 p-4">Edit Users</a>
+        <a [routerLink]="['/editQuestions']" class="btn btn-block btn-warning float-right mt-3 mb-3 p-4">Edit Questions</a>
+        <!-- DEVELOPMENT ONLY - REMOVE BELOW LINE -->
+        <input type="button" class="btn btn-block btn-danger p-4" value="Change to non IT (Development Only)" (click)="changeIT()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Everyone else's view -->
+  <div *ngIf=!user.isIT>
+    <div *ngIf="!user.submissions && !user.approvals" class="row">
+      <div>
+        <h1>You have no forms in your workspace</h1>
+      </div>
+      <div class="col-sm"></div>
+      <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
+    </div>
+    <a [routerLink]="['/submissionsDashboard']" class="btn btn-block btn-primary mt-3 p-4">Submissions</a>
+    <a [routerLink]="['/approvalsDashboard']" class="btn btn-block btn-warning float-right mt-3 p-4">Approvals</a>
+  </div>
+</div>
