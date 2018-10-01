@@ -14,6 +14,16 @@ app.use(require('express-session')({
     resave: false,
     saveUninitialized: false}));
 
+const cors = require('cors'); //Allows request to API from diff domain
+if (process.env.URI === undefined)
+    origin = ['http://127.0.0.1:4200', 'http://localhost:4200']
+else
+    origin = process.env.URI
+app.use(cors({
+    origin: origin,
+    credentials: true
+}));
+
 var passport = require('passport');
 var User = require('./app_server/models/users').User;
 app.use(passport.initialize());

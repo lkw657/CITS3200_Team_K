@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  username: String;
+  number: String;
   password: String;
 
   constructor(
@@ -23,22 +23,44 @@ export class LoginComponent implements OnInit {
 
   //Submit button sends user info to backend for authentication
   onLoginSubmit() {
-    const user = {
-      username: this.username,
+    const login = {
+      number: this.number,
       password: this.password
     }
 
-    this.authService.authenticateUser(user).subscribe(data => {
+    //Authenticate user in backend
+    this.authService.authenticateUser(login).subscribe(data => {
+
+      //Renders homepage if login is ok
       if(data.success){
-        this.authService.storeUserData(data.token, data.user);
-        this.flashMessage.show(data.msg, 
-          {cssClass: 'alert-success', 
+        this.flashMessage.show(data.msg,
+          {cssClass: 'alert-success',
           timeout:3000});
-          this.router.navigate(['/dashboard']);
+          data.user.loggedIn=true;
+
+          // DEVELOPMENT ONLY - REMOVE
+          if( data.user.role == "researcher" ){
+            data.user.forms = [
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
+            ];
+          } else if ( data.user.role == "staff" ){
+            data.user.forms = [
+              {created_date: "01/08/2018", owner: "Approved" },
+              {created_date: "01/08/2018", owner: "Approved" },
+              {created_date: "01/08/2018", owner: "Approved" },
+            ];
+          }
+
+          localStorage.setItem('user', JSON.stringify(data.user));
+          this.router.navigate(['/home']);
       }
+
+      //Returns to login and displays error message if any errors thrown from backend
       else{
-        this.flashMessage.show(data.msg, 
-          {cssClass: 'alert-danger', 
+        this.flashMessage.show(data.msg,
+          {cssClass: 'alert-danger',
           timeout:3000});
           this.router.navigate(['/']);
       }

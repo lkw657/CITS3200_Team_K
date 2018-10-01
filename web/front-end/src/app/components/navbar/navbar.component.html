@@ -3,7 +3,8 @@
 
   <!-- Always visible -->
   <div class="container">
-    <a class="navbar-brand" [routerLink]="['/dashboard']">EMS Research Priorities Fund Requests</a>
+    <a *ngIf="!authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/']">EMS Research Priorities Fund Requests</a>
+    <a *ngIf="authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/home']">Welcome {{authService.getProfile().fname}} {{authService.getProfile().lname}}!</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -11,54 +12,40 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
 
+      <!-- DEVELOPMENT ONLY - REMOVE -->
       <ul class="navbar-nav">
-        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a class="nav-link" [routerLink]="['/dashboard']">Dashboard</a>
-        </li>
-
         <li [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
           <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Development</a>
           <div class="dropdown-menu">
             <a [routerLink]="['/']" class="dropdown-item">Login</a>
             <a [routerLink]="['/register']" class="dropdown-item">Register</a>
+            <a [routerLink]="['/home']" class="dropdown-item">Home</a>
+            <a [routerLink]="['/submission']" class="dropdown-item">New Submission</a>
+            <a [routerLink]="['/verify']" class="dropdown-item">Verify Link</a>
             <a (click)="onLogoutClick()" href="#" class="dropdown-item">Logout</a>
           </div>
         </li>
       </ul>
 
-      <ul class="navbar-nav ml-auto">
-
-        <!-- visible only when not logged in -->
-        <!-- *ngIf="!authService.loggedIn()" -->
+      <!-- visible only when logged in -->
+      <ul *ngIf="authService.getProfile().loggedIn" class="navbar-nav ml-auto">
         <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/dashboard']" class="nav-link">USERNAME</a>
+            <a class="nav-link" [routerLink]="['/home']">Home</a>
         </li>
-        <!-- *ngIf="!authService.loggedIn()" -->
-        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
+        <li class="nav-item">
+            <a (click)="onLogoutClick()" href="#" class="nav-link">Logout</a>
         </li>
-        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/review']" class="nav-link">Review Submission</a>
-        </li>
-
-        <!-- visible only when logged in -->
-        <!-- <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" class="nav-item dropdown" [routerLinkActiveOptions]="{exact:true}">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">{{authService.getCurrentUserName()}}</a>
-        </li>
-
-        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/submission']" class="nav-link">New Submission</a>
-        </li>
-        
-        <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
-          <a [routerLink]="['/review']" class="nav-link">Review Submission</a>
-        </li>
-
-        <li *ngIf="authService.loggedIn()" class="nav-item">
-          <a (click)="onLogoutClick()" href="#" class="nav-link">Logout</a>
-        </li> -->
-
       </ul>
+
+      <!-- visible only when not logged in -->
+      <ul *ngIf="!authService.getProfile().loggedIn" class="navbar-nav ml-auto">
+          <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+              <a class="nav-link" [routerLink]="['/']">Login</a>
+          </li>
+          <li [routerLinkActive]="['active']" class="nav-item" [routerLinkActiveOptions]="{exact:true}">
+            <a [routerLink]="['/register']" class="nav-link">Register</a>
+          </li>
+        </ul>
     </div>
   </div>
 </nav>

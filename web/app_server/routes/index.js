@@ -7,4 +7,8 @@ router.get('/', ctrlIndex.index);
 router.post('/authenticate', ctrlIndex.authenticate);
 router.post('/register', ctrlIndex.register)
 
+//Dashboard API
+router.get('/submissions', ctrlIndex.submissions);
+router.get('/approvals', ctrlIndex.approvals);
+
 module.exports = router;

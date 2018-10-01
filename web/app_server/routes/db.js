@@ -16,14 +16,19 @@ password
 
 // Adding a user is register in index.js
 router.get('/users', ctrlUsers.listAll);
+router.put('/updateUser', ctrlUsers.updateUser);
+router.put('/removeUser', ctrlUsers.removeUser);
 
 //Form API
 /* Requires:
 owner
 questionSet (ref)
 */
-router.post('/form', ctrlForm.addForm);
+router.post('/newSubmission', ctrlForm.addForm);
+router.post('/updateSubmission', ctrlForm.updateForm);
+router.post('/formresponse', ctrlForm.formResponse);
 router.get('/form', ctrlForm.listAll);
+router.get('/form/:id', ctrlForm.formid);
 
 //Question Set API
 /* Requires:
@@ -31,5 +36,8 @@ questionList
 */
 router.post('/questionSet', ctrlQuestionSet.addQuestionSet);
 router.get('/questionSet', ctrlQuestionSet.listAll);
+router.get('/questionSet/latest', ctrlQuestionSet.latestQuestionSet);
+router.get('/questionSet/:id', ctrlQuestionSet.questionSetId);
+
 
 module.exports = router

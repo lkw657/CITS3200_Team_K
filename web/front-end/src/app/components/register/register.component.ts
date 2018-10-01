@@ -9,11 +9,14 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
+//DOES BACKEND ENSURE NAMES ARE ONLY CHARS AND NUMBER IS ONLY DIGITS????
+
 export class RegisterComponent implements OnInit {
 
-  username: String;
-  role: String;
-  email: String;
+  fname: String;
+  lname: String;
+  number: String;
   password: String;
   password2: String;
 
@@ -28,22 +31,18 @@ export class RegisterComponent implements OnInit {
   }
 
   onRegisterSubmit() {
+
     const user = {
-      username: this.username,
-      role: this.role,
-      email: this.email,
+      fname: this.fname,
+      lname: this.lname,
+      number: this.number,
       password: this.password,
       password2: this.password2
     }
+    
     //Required Fields
     if (!this.validateService.validateRegister(user)) {
       this.flashMessage.show('Please fill in all fields', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
-      return false;
-    }
-
-    //Validate Email
-    if (!this.validateService.validateEmail(user.email)) {
-      this.flashMessage.show('Please enter a valid email', { cssClass: 'align-top alert alert-danger', timeout: 3000 });
       return false;
     }
 
@@ -63,7 +62,7 @@ export class RegisterComponent implements OnInit {
     this.authService.registerUser(user).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 3000 });
