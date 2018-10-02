@@ -4,9 +4,8 @@ COPY . /www
 WORKDIR /www
 
 RUN npm install
-RUN npm install -g nodemon
 
-EXPOSE 80
+EXPOSE 3000
 
-ENV PORT 80
+ENV PORT 3000
 ENTRYPOINT ["./entrypoint.sh"]

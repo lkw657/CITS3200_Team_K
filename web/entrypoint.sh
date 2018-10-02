@@ -16,5 +16,6 @@ elif [[ $1 == "test" ]]; then
     done
     mocha -R spec --exit
 else
+    node initdb.js
     node bin/www
 fi

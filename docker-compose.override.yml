@@ -5,3 +5,6 @@ services:
         command: "debug"
         volumes:
             - ./web:/www
+    front:
+        volumes:
+            - ./web/front-end:/front-end
