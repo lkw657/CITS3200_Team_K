@@ -47,18 +47,18 @@
       <div *ngFor="let answer of approvalView.answers; index as i">
         <div class="card mb-2">
           <div class="card-body">
-            <p>Question number: {{answer.order + 1}}</p>
             <p>Question: {{approvalView.questionSet.questionList[i].text}}</p>
             <p>Answer: {{answer.answer}}</p>
+            <p>Enter comments below: </p>
             <input type="text" class="form-control" name="comment{{i}}" required [(ngModel)]="approvalView.comments[i]">
           </div>
         </div>
       </div>
 
       <div class="m-3">
-        <input type="button" class="btn btn-success btn-w2 float-left mr-5" (click)="submitForm(approvalView.comments, 'approve')" value="Approve">
-        <input type="button" class="btn btn-warning btn-w2 float-left mr-5" (click)="submitForm(approvalView.comments, 'provisionally approve')" value="Provisionally Approve">
-        <input type="button" class="btn btn-danger btn-w2 float-left" (click)="submitForm(approvalView.comments, 'reject')" value="Reject">
+        <input type="button" class="btn btn-success btn-w2 float-left mr-5 p-3" (click)="submitForm(approvalView.comments, 'approve')" value="Approve">
+        <input type="button" class="btn btn-warning btn-w2 float-left mr-5 p-3" (click)="submitForm(approvalView.comments, 'provisionally approve')" value="Provisionally Approve">
+        <input type="button" class="btn btn-danger btn-w2 float-left p-3" (click)="submitForm(approvalView.comments, 'reject')" value="Reject">
       </div>
     </div>
   </div>
@@ -109,7 +109,6 @@
       <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
         <div class="card mb-2">
           <div class="card-body">
-            <p>Question number: {{answer.order + 1}}</p>
             <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
             <p>Answer: {{answer.answer}}</p>
             <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>

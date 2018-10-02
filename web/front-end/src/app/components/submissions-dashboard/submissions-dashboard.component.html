@@ -53,7 +53,6 @@
       <div *ngFor="let answer of submissionView.answers; index as i">
         <div class="card mb-2">
           <div class="card-body">
-            <p>Question number: {{answer.order + 1}}</p>
             <p>Question: {{submissionView.questionSet.questionList[i].text}}</p>
             <p>Answer: {{answer.answer}}</p>
             <h4 *ngIf="isCommented(submissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(submissionView.comments, answer.order)}}</h4>
@@ -109,7 +108,6 @@
       <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
         <div class="card mb-2">
           <div class="card-body">
-            <p>Question number: {{answer.order + 1}}</p>
             <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
             <p>Answer: {{answer.answer}}</p>
             <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
@@ -163,7 +161,6 @@
         <div class="mt-4" *ngFor="let comment of submissionView.comments; let in = index">
           <div class="card mb-2">
             <div class="card-body">
-              <p>Question number: {{comment.order + 1}}</p>
               <p>Question: {{submissionView.questionSet.questionList[comment.order].text}}</p>
               <h4 class="text-danger">Comment: {{comment.text}}</h4>
 
