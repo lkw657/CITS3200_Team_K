@@ -9,9 +9,8 @@ var passport = require('passport')
 module.exports.register = (req, res) => {
     // passport-local-mongoose wants the username in a field called username, not email
     //req.body.username = req.body.email
-	// TODO better password checks?
 	if (req.body.password.length < 8) {
-		return res.json({success:false, msg: 'Passwords must be at least 8 characters long'});
+		return res.status(400).json({success:false, msg: 'Passwords must be at least 8 characters long'});
 	}
 	User.register(User.create(req.body.fname, req.body.lname, req.body.number),
 		req.body.password,
@@ -19,9 +18,9 @@ module.exports.register = (req, res) => {
 			if (err) {
 				// Find why the model didn't validate
 				if (err.errors) // multiple errors, get first
-					return res.json({success:false, msg: err.errors[Object.keys(err.errors)[0]].message})
+					return res.status(400).json({success:false, msg: err.errors[Object.keys(err.errors)[0]].message})
 				else
-					return res.json({success: false, msg: err.message})
+					return res.status(400).json({success: false, msg: err.message})
 			}
 			return res.json({success: true, msg: 'User Registered'});
 		}
@@ -37,7 +36,7 @@ module.exports.authenticate = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) { return next(err); }
         if (!user)
-            return res.json({success: false, msg: 'User or password wrong'});
+            return res.status(400).json({success: false, msg: 'User or password wrong'});
         req.login(user, function(err) {
             if (err) { return next(err); }
             return res.json({

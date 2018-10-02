@@ -48,11 +48,23 @@ describe('Login', () => {
 
     test("Valid researcher login",
          {number:'12345678', password:'abcdefghijkl'},
-         {success: true, msg: 'You are successfully logged in', user:{fname:'researcher', lname:'user', number:'12345678', role:'researcher'}});
+         {success: true, msg: 'You are successfully logged in', user: {
+             fname:'researcher',
+             lname:'user',
+             number:'12345678',
+             isIT: false,
+             approvals: [],
+             submissions:[]}});
 
     test("Valid staff login",
          {number:'01234567', password:'abcdefghijkl'},
-         {success: true, msg: 'You are successfully logged in', user:{fname:'staff', lname:'user', number:'01234567', role:'staff'}});
+         {success: true, msg: 'You are successfully logged in', user:{
+             fname:'staff',
+             lname:'user',
+             number:'01234567',
+             isIT: false,
+             approvals: [],
+             submissions:[]}});
 
     test("Missing number",
          {password:'abcdefghijkl'},
