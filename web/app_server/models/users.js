@@ -36,8 +36,14 @@ userSchema.statics.create = (fname, lname, number) => {
     });
 }
 
-userSchema.plugin(uniqueValidator, { message: "{PATH} already exists" });
-userSchema.plugin(passportLocalMongoose, { usernameField: 'number' });
+userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
+userSchema.plugin(passportLocalMongoose, {
+    usernameField:'number',
+    errorMessages: {
+        MissingUsernameError: 'Please enter a valid UWA staff/student number',
+        UserExistsError: 'A user with that UWA staff/student number already exists'
+    }
+});
 userSchema.plugin(deepPopulate)
 module.exports.User = mongoose.model('User', userSchema);
 
