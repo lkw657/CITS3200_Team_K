@@ -6,5 +6,6 @@ services:
         volumes:
             - ./web:/www
     front:
+        command: "debug"
         volumes:
             - ./web/front-end:/front-end

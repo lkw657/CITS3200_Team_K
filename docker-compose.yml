@@ -1,14 +1,11 @@
 version: "3.2"
-
 services:
     db:
         image: mongo
-        tty: true
         ports:
             - "27017:27017"
     web:
         build: web
-        tty: true
         ports:
             - "3000:3000"
         links:
