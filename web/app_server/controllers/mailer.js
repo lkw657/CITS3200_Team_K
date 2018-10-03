@@ -47,7 +47,7 @@ module.exports.sendFormAccessEmail = (text, to, formID) => {
             else {
                 var subject = "Access for Form";
                 var html = text;
-                html += `Here is your access link: http://localhost/formAccess/${mail._id}/${secret}`;
+                html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
                 module.exports.sendEmail(to, subject, html);
             }
         });
@@ -61,9 +61,11 @@ module.exports.sendFormAccessEmail = (text, to, formID) => {
 // ***************
 //req.body.mailID
 //req.body.secret
-//req.body.userID
+
+
+//req.user._id
 module.exports.verifyFormAccess = (req, res, next) => {
-    if (req.body.mailID && req.body.secret && req.body.userID) {
+    if (req.body.mailID && req.body.secret && req.user) {
         Mail.findById(req.body.mailID, (err, mail) => {
             if (err) {
                 return res.status(404).json({
@@ -87,7 +89,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
                 }
                 else if (mail.secret == req.body.secret && mail.type == 'form-access') {
                     // give userID access to mail.formID
-                    require('./users').addFormToUser(req.body.userID, mail.formID);
+                    require('./users').addFormToUser(req.user._id, mail.formID);
 
                     //Deactivate email
                     mail.status = "done";
