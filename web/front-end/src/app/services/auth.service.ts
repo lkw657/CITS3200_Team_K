@@ -22,6 +22,11 @@ export class AuthService {
     return this.http.post<any>(baseURI+'/authenticate', user);
   }
 
+    //Connects to back end to check username and password on login
+    logoutUser(user) {
+      return this.http.post<any>(baseURI+'/authenticate', user);
+    }
+
   // Gets user details from local storage
   getProfile(){
     var user = JSON.parse(localStorage.getItem('user'));
