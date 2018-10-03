@@ -34,7 +34,6 @@ export class SubmissionComponent implements OnInit {
 
       for(let i = 0 ; i < this.questionList.length ; i++ ){
           let q = this.questionList[i];
-          console.log(q);
 
           let field : any;
           if(q['type'] == 'textarea'){
