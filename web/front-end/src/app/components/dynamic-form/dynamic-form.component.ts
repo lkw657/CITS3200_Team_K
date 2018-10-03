@@ -26,7 +26,7 @@ export class DynamicFormComponent implements OnInit {
   submission: any = {};
   payload = '';
 
-  constructor( 
+  constructor(
     private router: Router,
     private flashMessage: FlashMessagesService,
     private qcs: QuestionControlService,
@@ -34,6 +34,8 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
+    console.log(this.form);
+    this.form.valueChanges.subscribe( (data) => {console.log(data);} )
   }
 
   // Saves role into form and changes view
@@ -53,7 +55,7 @@ export class DynamicFormComponent implements OnInit {
     this.submission.submitter = this.submitter;
     this.submission.qset_id = this.qset_id;
 
-    console.log(this.submission);
+    console.log(this.submission.answers);
 
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {

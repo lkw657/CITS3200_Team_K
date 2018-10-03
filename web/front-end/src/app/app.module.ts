@@ -42,7 +42,7 @@ const routes: Routes = [
   { path: 'submission', component: SubmissionComponent},
   { path: 'editUsers', component: EditUsersComponent},
   { path: 'editQuestions', component: EditQuestionsComponent},
-  { path: 'verify', component: VerifyComponent},
+  { path: 'verify/:mailID/:secret', component: VerifyComponent},
   { path: 'submissionsDashboard', component: SubmissionsDashboardComponent},
   { path: 'approvalsDashboard', component: ApprovalsDashboardComponent},
   { path: '**', component: NotFoundComponent}
