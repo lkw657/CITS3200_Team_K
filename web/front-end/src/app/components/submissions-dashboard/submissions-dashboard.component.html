@@ -23,10 +23,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let submission of userSubmissions">
-            <td *ngIf="submission.status!='resubmitted'">{{submission.sub_date}}</td>
-            <td *ngIf="submission.status!='resubmitted'">{{submission.status}}</td>
-            <td *ngIf="submission.status!='resubmitted'">{{submission.action_date}}</td>
-            <td *ngIf="submission.status!='resubmitted'">
+            <td *ngIf="submission.status!='Resubmitted'">{{submission.sub_date}}</td>
+            <td *ngIf="submission.status!='Resubmitted'">{{submission.status}}</td>
+            <td *ngIf="submission.status!='Resubmitted'">{{submission.action_date}}</td>
+            <td *ngIf="submission.status!='Resubmitted'">
               <button class="btn btn-primary float-right" (click)="showSubmission(submission)">View Form</button>
             </td>
           </tr>
@@ -38,7 +38,7 @@
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   <div *ngIf="showSingleSubmission">
     <div class="row mb-5">
-      <div *ngIf="submissionView.comments && submissionView.status!='resubmitted'" class="col-sm">
+      <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
         <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
           (click)="resolve()">
       </div>

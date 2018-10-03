@@ -100,7 +100,7 @@ export class SubmissionsDashboardComponent implements OnInit {
       if (data.success) {
 
         //Set new status on old copy of form and update in db
-        this.submissionView.status = 'resubmitted';
+        this.submissionView.status = 'Resubmitted';
         this.questionService.updateSubmission(this.submissionView).subscribe(data => {
           if (data.success) {
             this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
