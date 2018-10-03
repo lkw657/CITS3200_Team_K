@@ -156,11 +156,188 @@ module.exports.updateForm = (req, res, next) => {
 // THIS CONTROLLER WILL RECIEVE AN OBJECT WITH comments AND response.
 // IF response = 'approve' THEN A DATE NEEDS TO BE PUSHED ONTO THE DATES ARRAY 
 //      AND THE STATUS NEEDS TO BE SET TO THE NEXT APPROVER
-// IF response = 'provisional approve' OR 'rejected' THEN THE STATUS NEEDS TO BE SET TO response
-// IF THERE ARE comments AND response = 'provisional approve' or 'rejected' THEN PUSH COMMENTS ONTO ARRAY
-//      ELSE success=false AND msg='You cannot comment and approve, please select provional approve and resubmit'
+// ELSE IF response = 'provisional approve' THEN THE STATUS NEEDS TO BE SET TO 'provision'
+// ELSE IF response = 'rejected' THEN CHANGE STATUS TO 'rejected'
+
+// Comments neccessary for rejection and provisional approve
+//req.body.response
+//req.body.comments
+//req.body.form_id
+
+//req.user._id
 
 module.exports.formResponse = (req, res, next) => {
+
+    if (!(req.user && req.body.form_id && req.body.response))
+    {
+        return res.status(403).json({ success: false, msg: 'Not logged in or No response or No associated form!' });
+        
+    }
+    Form.findById(req.body.form_id, (err, form) => {
+        if(err){
+            return res.status(403).json({ success: false, msg: 'Something went wrong' });
+            
+        }
+        if(!form){
+            return res.status(403).json({ success: false, msg: 'No such form' });
+        }
+
+        if(req.body.response == 'approve'){
+            var email, emailContent;
+            if(form.status == 'awaiting-hos'){
+                if(form.submitter == 'adr'){
+                    form.status = 'awaiting-pvc-ed';
+
+                    var approver = form.allocatedStaff;
+                    form.approvedBy.push({role: 'hos', id: approver});
+                    form.allocatedStaff = null;
+                    form.dates.push(new Date());
+                    
+                    email = 'neosh11@gmail.com';
+                    emailContent = 'You are pvc ahha';
+                }
+                else{
+                    form.status = 'awaiting-adr';
+
+                    var approver = form.allocatedStaff;
+                    form.approvedBy.push({role: 'hos', id: approver});
+                    form.allocatedStaff = null;
+                    form.dates.push(new Date());
+
+                    email = 'neosh11@gmail.com';
+                    emailContent = 'You are adr ahha';
+                }
+            }
+            else if(form.status == 'awaiting-adr'){
+                form.status = 'awaiting-pvc-ed';
+
+                var approver = form.allocatedStaff;
+                form.approvedBy.push({role: 'adr', id: approver});
+                form.allocatedStaff = null;
+                form.dates.push(new Date());
+
+
+                email = 'neosh11@gmail.com';
+                emailContent = 'awaiting-pvc-ed';
+
+            }
+            else if(form.status == 'awaiting-pvc-ed'){
+                form.status = 'email-final';
+
+                var approver = form.allocatedStaff;
+                form.approvedBy.push({role: 'pvc-ed', id: approver});
+                form.allocatedStaff = null;
+                form.dates.push(new Date());
+
+
+                email = 'neosh11@gmail.com';
+                emailContent = 'Click this dodgy link hehe for pdf';
+            }
+            else{
+                return res.status(403).json({ success: false, msg: 'Form has bad status' });
+            }
+
+            form.save((err, form) => {
+                if (err) {
+                    return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                }
+                //send an email to who??
+                if(form.status == 'email-final'){
+                    //TODO EMAILS
+                }
+                else{
+                    //email person
+                    mailer.sendFormAccessEmail(emailContent+"\n", email, form._id);
+                    return res.status(200).json({ success: true, msg: 'Approved and email sent' });       
+                }
+            });
+        }
+        else if(req.body.response =='provisional approve'){
+            
+            form.status = 'provision';
+            
+            if(form.status == 'awaiting-hos'){
+                form.rejectionRole = 'hos';
+            }
+            else if(form.status == 'awaiting-adr'){
+                form.rejectionRole = 'adr';
+            }
+            else if(form.status == 'awaiting-pvc-ed'){
+                form.rejectionRole = 'pvc-ed';
+            }
+            else{
+                //Something is broken
+                return res.status(403).json({ success: false, msg: 'Bad form status' });
+
+            }
+
+            if(req.body.comments){
+                // TODO ask david
+                form.comments = req.body.comments;
+                form.dates.push(new Date());
+                allocatedStaff = null;
+
+                form.save((err, form) => {
+                    if (err) {
+                        return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                    }
+                    else{
+                        //email owner of form about provisional approval approval 
+                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval fo one of your forms", "Your email was provisionally approvede bro!");
+                        return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
+                    }
+                });
+            }
+            else{
+                return res.status(403).json({ success: false, msg: 'No comments' });
+            }
+        }
+        else if(req.body.response == 'rejected'){
+
+            if(form.status == 'awaiting-hos'){
+                form.rejectionRole = 'hos';
+            }
+            else if(form.status == 'awaiting-adr'){
+                form.rejectionRole = 'adr';
+            }
+            else if(form.status == 'awaiting-pvc-ed'){
+                form.rejectionRole = 'pvc-ed';
+            }
+            else{
+                //Something is broken
+                return res.status(403).json({ success: false, msg: 'Bad form status' });
+
+            }
+
+            if(req.body.comments){
+                form.status = 'rejected'
+                form.comments = req.body.comments;
+                form.dates.push(new Date());
+                allocatedStaff = null;
+
+                form.save((err, form) => {
+                    if (err) {
+                        return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                    }
+                    else{
+                        //email owner of form about provisional approval approval 
+                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval fo one of your forms", "Your email was provisionally approvede bro!");
+                        return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
+                    }
+                });
+                
+            }
+            else{
+                return res.status(403).json({ success: false, msg: 'No comments' });
+            }
+        }
+
+
+    });
+
+    
+
+
     return res.json({ success: true, msg: 'Form moved to next step in process, thank you!' });
 }
 

@@ -26,7 +26,7 @@ questionSet (ref)
 */
 router.post('/newSubmission', ctrlForm.addForm);
 router.post('/updateSubmission', ctrlForm.updateForm);
-router.post('/formresponse', ctrlForm.formResponse);
+router.post('/formResponse', ctrlForm.formResponse);
 router.get('/form', ctrlForm.listAll);
 router.get('/form/:id', ctrlForm.formid);
 
