@@ -10,7 +10,7 @@ export class QuestionControlService {
   toFormGroup(questions: QuestionBase<any>[] ) {
     let group: any = {};
 
-    questions.forEach(question => {
+    questions.forEach((question  : any) => {
       if(question.controlType === 'money_array'){
         let arrayofQuestions = [];
         for(var i = 0 ; i < question.number ; i++ ){

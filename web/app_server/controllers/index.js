@@ -56,6 +56,11 @@ module.exports.authenticate = (req, res, next) => {
     })(req, res, next);
 };
 
+module.exports.authenticate = (req, res, next) => {
+	req.logout();
+};
+
+
 module.exports.submissions = (req, res, next) => {
     if(!req.user)
         return res.status(401).json({
@@ -75,7 +80,7 @@ module.exports.submissions = (req, res, next) => {
                 req.user.submissions[i].owner = req.user.submissions[i].owner[0]
             submissions.push({
                 _id: req.user.submissions[i]._id,
-                owner: {fname: req.user.submissions[i].owner.fname, 
+                owner: {fname: req.user.submissions[i].owner.fname,
                         lname:req.user.submissions[i].owner.lname,
                         number: req.user.submissions[i].owner.number},
                 questionSet: req.user.submissions[i].questionSet,
@@ -114,7 +119,7 @@ module.exports.approvals = (req, res, next) => {
             if (req.user.approvals[i].owner.constructor == Array)
                 req.user.approvals[i].owner = req.user.approvals[i].owner[0]
             approvals.push({
-                owner: {fname: req.user.approvals[i].owner.fname, 
+                owner: {fname: req.user.approvals[i].owner.fname,
                         lname:req.user.approvals[i].owner.lname,
                         number: req.user.approvals[i].owner.number},
                 questionSet: req.user.approvals[i].questionSet,
