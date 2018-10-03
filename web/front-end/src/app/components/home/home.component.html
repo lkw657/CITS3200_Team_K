@@ -16,7 +16,7 @@
   <div *ngIf=!user.isIT>
 
     <!-- No submissions or approvals view -->
-    <div *ngIf="!user.submissions && !user.approvals" class="row">
+    <div *ngIf="!user.submissions.length>0 && !user.approvals.length>0" class="row">
       <div class="col">
         <h1>You have no forms in your workspace</h1>
       </div>
@@ -24,7 +24,7 @@
     </div>
 
     <!-- No submissions but does have approvals view -->
-    <div *ngIf="!user.submissions && user.approvals" class="row">
+    <div *ngIf="!user.submissions.length>0 && user.approvals.length>0" class="row">
       <div class="col">
         <h1>You have no submissions in your workspace</h1>
       </div>
@@ -33,8 +33,8 @@
 
     <!-- Buttons to access dashboards if user has approvals or submissions -->
     <div class="row">
-      <a *ngIf="user.submissions" [routerLink]="['/submissionsDashboard']" class="btn btn-block btn-primary mt-3 p-4">Submissions</a>
-      <a *ngIf="user.approvals" [routerLink]="['/approvalsDashboard']" class="btn btn-block btn-warning float-right mt-3 p-4">Approvals</a>
+      <a *ngIf="user.submissions.length>0" [routerLink]="['/submissionsDashboard']" class="btn btn-block btn-primary mt-3 p-4">Submissions</a>
+      <a *ngIf="user.approvals.length>0" [routerLink]="['/approvalsDashboard']" class="btn btn-block btn-warning float-right mt-3 p-4">Approvals</a>
     </div>
   
   </div>
