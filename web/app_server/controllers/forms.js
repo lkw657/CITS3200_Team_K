@@ -9,6 +9,35 @@ var QuestionSet = questionSetModel.questionSetSchema;
 
 var mailer = require('./mailer');
 
+function sendFirstEmailToNextPerson(school, submitter, form_id, ){
+    // Send email to school HOS/ADR depending on stuff.
+    if (school == 'ecm') {
+        if (submitter == 'hos') {
+            mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+        }
+        else {
+            mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+        }
+    }
+    else if (school == 'eng') {
+        if (submitter == 'hos') {
+            mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+        }
+        else {
+            mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+        }
+
+    }
+    else {
+        if (submitter == 'hos') {
+            mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+        }
+        else {
+            mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
+
+        }
+    }
+}
 /**
 req.user._id
 
@@ -100,33 +129,7 @@ module.exports.addForm = (req, res, next) => {
                                         });
                                     }
                                     else {
-                                        // Send email to school HOS/ADR depending on stuff.
-                                        if (req.school == 'ecm') {
-                                            if (req.body.submitter == 'hos') {
-                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-                                            }
-                                            else {
-                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-                                            }
-                                        }
-                                        else if (req.school == 'eng') {
-                                            if (req.body.submitter == 'hos') {
-                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-                                            }
-                                            else {
-                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-                                            }
-
-                                        }
-                                        else {
-                                            if (req.body.submitter == 'hos') {
-                                                mailer.sendFormAccessEmail("You are the ADR, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-                                            }
-                                            else {
-                                                mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form._id);
-
-                                            }
-                                        }
+                                        sendFirstEmailToNextPerson(req.body.school, req.body.submitter, form._id);
                                         return res.status(201).json({
                                             success: true,
                                             msg: "New Form Submitted"
@@ -149,7 +152,105 @@ module.exports.addForm = (req, res, next) => {
 }
 
 //THIS CONTROLLER NEEDS TO UPDATE A FORM WITH CHANGE TO THE STATUS FIELD
+
+// req.user._id
+// req.body.parent_id
+// req.body.answers
+
 module.exports.updateForm = (req, res, next) => {
+
+    // Clone parent form's stats
+    // copy owner
+    // questionSet
+    // history - update history.
+    // scholl
+    // submitter
+
+    Form.findById(req.body.parent_id, (err, form) => {
+        if(err){
+            return res.status(403).json({ success: false, msg: 'No such parent form' });   
+        }
+        else if(req.user._id != form.owner){
+            return res.status(403).json({ success: false, msg: 'Form not owned by user' });
+        }
+        else if(form.status != 'provision'){
+            return res.status(403).json({ success: false, msg: 'Form is not provisionally approved' });
+        }
+        else if(form.answers.length != req.body.answers.length){
+            return res.status(403).json({ success: false, msg: 'Invalid no. of questions' });            
+        }
+
+        //Valid form
+        var new_form = new Form();
+        // Clone parent form's stats
+        // copy owner
+        // questionSet
+        // history - update history.
+        // school
+        // submitter
+        new_form.owner = form.owner;
+        new_form.questionSet = form.questionSet;
+        // Deep clone history
+        new_form.history = form.history;
+        new_form.school = form.school;
+        new_form.submitter = form.submitter
+        new_form.dates = [new Date()];
+        new_form.answers = req.body.answers;
+        
+        form.status = 'provision-old';
+        form.save((err, form) => {
+            if(err){
+                return res.status(403).json({ success: false, msg: 'Something went wrong updating parent' });
+            }
+            new_form.history.push(form._id);
+
+            //Set statuses
+            if (req.body.submitter == 'hos') {
+                form.status = 'awaiting-adr';
+            }
+            else {
+                form.status = 'awaiting-hos';
+            }
+
+            new_form.save((err, new_form)=>{
+                if(err){
+                    return res.status(403).json({ success: false, msg: 'Something went wrong while saving form' });
+                }
+                else{
+                    // Update user
+                    User.findById(req.user._id, (err, user)=>{
+                        if(err){
+                            return res.status(403).json({ success: false, msg: 'Something went wrong getting user' });
+                        }
+                        else if(!user){
+                            return res.status(403).json({ success: false, msg: 'No such user found in DB' });
+                        }
+                        //Remove from array TOTO Check
+
+                        user.submissions = user.submissions.filter(item => item !== form._id);
+                        user.submissions.push(new_form.id);
+
+                        user.save((err, user)=>{
+                            if(err){
+                                return res.status(403).json({ success: false, msg: 'Could not update user array' });
+                            }
+                            else{
+                                //Send email
+                                sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
+                                return res.status(200).json({ success: true, msg: 'Form added to user and email sent' });
+                            }
+                        })
+                    })
+
+                }
+            });
+
+
+        });
+
+
+    });
+
     return res.json({ success: true, msg: 'Form resubmitted!' });
 }
 
@@ -160,6 +261,7 @@ module.exports.updateForm = (req, res, next) => {
 // ELSE IF response = 'rejected' THEN CHANGE STATUS TO 'rejected'
 
 // Comments neccessary for rejection and provisional approve
+
 //req.body.response
 //req.body.comments
 //req.body.acting
@@ -340,14 +442,12 @@ module.exports.formResponse = (req, res, next) => {
                 return res.status(403).json({ success: false, msg: 'No comments' });
             }
         }
+        else{
+            return res.status(403).json({ success: false, msg: 'Bad Form Status' });
+        }
 
 
     });
-
-    
-
-
-    return res.json({ success: true, msg: 'Form moved to next step in process, thank you!' });
 }
 
 module.exports.listAll = (req, res, next) => {
