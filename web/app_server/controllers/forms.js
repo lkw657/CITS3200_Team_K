@@ -162,6 +162,7 @@ module.exports.updateForm = (req, res, next) => {
 // Comments neccessary for rejection and provisional approve
 //req.body.response
 //req.body.comments
+//req.body.acting
 //req.body.form_id
 
 //req.user._id
@@ -173,6 +174,7 @@ module.exports.formResponse = (req, res, next) => {
         return res.status(403).json({ success: false, msg: 'Not logged in or No response or No associated form!' });
         
     }
+    
     Form.findById(req.body.form_id, (err, form) => {
         if(err){
             return res.status(403).json({ success: false, msg: 'Something went wrong' });
@@ -181,15 +183,22 @@ module.exports.formResponse = (req, res, next) => {
         if(!form){
             return res.status(403).json({ success: false, msg: 'No such form' });
         }
+        if(req.user._id != form.allocatedStaff ){
+            return res.status(403).json({ success: false, msg: 'Bad user' });
+        }
+
+        var actingString='';
+        if(req.body.acting){
+            actingString = 'acting-';
+        }
 
         if(req.body.response == 'approve'){
             var email, emailContent;
             if(form.status == 'awaiting-hos'){
                 if(form.submitter == 'adr'){
                     form.status = 'awaiting-pvc-ed';
-
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({role: 'hos', id: approver});
+                    form.approvedBy.push({role: actingString+'hos', id: approver});
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
                     
@@ -200,7 +209,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.status = 'awaiting-adr';
 
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({role: 'hos', id: approver});
+                    form.approvedBy.push({role: actingString+'hos', id: approver});
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
@@ -212,7 +221,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.status = 'awaiting-pvc-ed';
 
                 var approver = form.allocatedStaff;
-                form.approvedBy.push({role: 'adr', id: approver});
+                form.approvedBy.push({role: actingString+'adr', id: approver});
                 form.allocatedStaff = null;
                 form.dates.push(new Date());
 
@@ -225,7 +234,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.status = 'email-final';
 
                 var approver = form.allocatedStaff;
-                form.approvedBy.push({role: 'pvc-ed', id: approver});
+                form.approvedBy.push({role: actingString+'pvc-ed', id: approver});
                 form.allocatedStaff = null;
                 form.dates.push(new Date());
 
@@ -257,13 +266,13 @@ module.exports.formResponse = (req, res, next) => {
             form.status = 'provision';
             
             if(form.status == 'awaiting-hos'){
-                form.rejectionRole = 'hos';
+                form.rejectionRole = actingString+'hos';
             }
             else if(form.status == 'awaiting-adr'){
-                form.rejectionRole = 'adr';
+                form.rejectionRole = actingString+'adr';
             }
             else if(form.status == 'awaiting-pvc-ed'){
-                form.rejectionRole = 'pvc-ed';
+                form.rejectionRole = actingString+'pvc-ed';
             }
             else{
                 //Something is broken
@@ -295,13 +304,13 @@ module.exports.formResponse = (req, res, next) => {
         else if(req.body.response == 'rejected'){
 
             if(form.status == 'awaiting-hos'){
-                form.rejectionRole = 'hos';
+                form.rejectionRole = actingString+'hos';
             }
             else if(form.status == 'awaiting-adr'){
-                form.rejectionRole = 'adr';
+                form.rejectionRole = actingString+'adr';
             }
             else if(form.status == 'awaiting-pvc-ed'){
-                form.rejectionRole = 'pvc-ed';
+                form.rejectionRole = actingString+'pvc-ed';
             }
             else{
                 //Something is broken
@@ -325,7 +334,7 @@ module.exports.formResponse = (req, res, next) => {
                         return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
                     }
                 });
-                
+
             }
             else{
                 return res.status(403).json({ success: false, msg: 'No comments' });
