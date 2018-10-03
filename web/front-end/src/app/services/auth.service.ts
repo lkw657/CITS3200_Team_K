@@ -13,7 +13,7 @@ export class AuthService {
   ) { }
 
   //Connects to back end to add new user to db
-  registerUser(user) { 
+  registerUser(user) {
     return this.http.post<any>(baseURI+'/register', user);
   }
 
@@ -23,9 +23,9 @@ export class AuthService {
   }
 
     //Connects to back end to check username and password on login
-    logoutUser(user) {
-      return this.http.post<any>(baseURI+'/authenticate', user);
-    }
+  logoutUser(user) {
+    return this.http.post<any>(baseURI+'/logOut', user);
+  }
 
   // Gets user details from local storage
   getProfile(){
@@ -36,4 +36,3 @@ export class AuthService {
     return user;
   }
 }
-

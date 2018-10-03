@@ -56,8 +56,12 @@ module.exports.authenticate = (req, res, next) => {
     })(req, res, next);
 };
 
-module.exports.authenticate = (req, res, next) => {
+module.exports.logOut = (req, res, next) => {
 	req.logout();
+	return res.json({
+			success: true,
+			msg: 'You are successfully logged out!'
+	});
 };
 
 
