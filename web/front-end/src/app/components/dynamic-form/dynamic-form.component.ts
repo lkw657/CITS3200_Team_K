@@ -34,8 +34,7 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.qcs.toFormGroup(this.questions);
-    console.log(this.form);
-    this.form.valueChanges.subscribe( (data) => {console.log(data);} )
+    this.form.valueChanges.subscribe( (data) => { console.log(data);} )
   }
 
   // Saves role into form and changes view
@@ -48,7 +47,6 @@ export class DynamicFormComponent implements OnInit {
     this.school = school;
   }
 
-  // DEVELOPMENT - THIS NEEDS TO CHANGE TO SUBMIT TO BACKEND
   onSubmit() {
     this.submission.answers = Object.values(this.form.value);
     this.submission.school = this.school;
@@ -60,7 +58,7 @@ export class DynamicFormComponent implements OnInit {
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-        this.router.navigate(['/submissionDashboard']);
+        this.router.navigate(['/submissionsDashboard']);
       }
     },
     err => {

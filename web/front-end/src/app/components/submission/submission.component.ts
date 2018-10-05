@@ -8,6 +8,7 @@ import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
 import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
 
+import {Spinner} from 'spin.js';
 
 @Component({
   selector: 'app-submission',
@@ -25,7 +26,7 @@ export class SubmissionComponent implements OnInit {
   questionList : any;
   isLoaded : boolean;
 
-  ngOnInit() {
+  ngOnInit() {      
     let qObjs : QuestionBase<any> [] = [];
     this.qs.getData().subscribe(res => {
       this.questionList = res['questionSet']['questionList'];
@@ -71,6 +72,7 @@ export class SubmissionComponent implements OnInit {
                     label: q.text,
                     required: true,
                     order : q.order,
+                    value: 0,
                     number: parseInt(q['type'].substring(q['type'].length - 1))
                 })
             );

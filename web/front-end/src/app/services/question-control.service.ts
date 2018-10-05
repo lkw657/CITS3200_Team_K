@@ -16,6 +16,7 @@ export class QuestionControlService {
         for(var i = 0 ; i < question.number ; i++ ){
           arrayofQuestions.push(new FormControl(question.value || ''));
         }
+        arrayofQuestions.push(new FormControl(question.value || ''));
         group[question.key] = new FormArray(arrayofQuestions);
 
       } else {

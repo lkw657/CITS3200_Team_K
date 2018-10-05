@@ -1,5 +1,5 @@
 <div class="w-100" [formGroup]="form" >
-  <label [attr.for]="question.key">{{question.label}}</label>
+  <label class="questionlabel" [attr.for]="question.key">{{question.label}}</label>
 
   <div class="w-100" [ngSwitch]="question.controlType">
     <textarea rows="5" class="w-100 form-control" *ngSwitchCase="'textbox'" [formControlName]="question.key" [id]="question.key" ></textarea>
@@ -9,7 +9,12 @@
     <div *ngIf="question.controlType=='money_array'">
       <div class="row" [formArrayName]="question.key">
         <div class="col" *ngFor="let in of counter(question.number) ; let i = index">
-          <input type="text" class="form-control" *ngSwitchCase="'money_array'" placeholder="$$" formControlName="{{i}}" [id]="question.key">
+          <label>Year {{i+1}}</label>
+          <input type="text" class="form-control" *ngSwitchCase="'money_array'" placeholder="$$" formControlName="{{i}}" [id]="question.key" [value]="question.value">
+        </div>
+        <div class="col">
+          <label>Total</label>
+          <input type="text" class="form-control" *ngSwitchCase="'money_array'" placeholder="$$" formControlName="{{question.number}}" [id]="question.key" [value]="this.total">
         </div>
       </div>
     </div>
