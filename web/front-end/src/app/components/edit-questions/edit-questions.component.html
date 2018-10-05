@@ -1,0 +1,154 @@
+<div *ngIf="displayAll">
+
+  <button class="btn btn-block btn-success mt-3 p-4" (click)="saveNewQuestionSet()">Submit Edited Question Set</button>
+  <a [routerLink]="['/home']" class="btn btn-block btn-danger mt-3 p-4 mb-3">Cancel</a>
+
+  <div class="border-top border-primary pt-3 pb-3">
+    <div class="row">
+      <div class="col">
+        <h1>Click and drag to reorder questions</h1>
+      </div>
+      <button class="btn btn-w btn-primary float-right mr-3" (click)="showNew()">Add New Question</button>
+    </div>
+  </div>
+  <!-- Displays a list of questions in the current question set -->
+  <div class="border-top border-primary pt-3" dragula="QL" [(dragulaModel)]="questionList">
+    <div *ngFor="let question of questionList">
+      <div class="card mb-2">
+        <div class="card-body">
+          <p>Question number: {{questionList.indexOf(question)+1}}</p>
+          <p>Question: {{question.text}}</p>
+
+          <!-- Edit selected question in question set -->
+          <button class="btn btn-success mb-2 mr-2" (click)="showEdit(question)" title="Edit">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+
+          <!-- Remove question from question set -->
+          <button class="btn btn-danger mb-2" (click)="showDelete(question)" title="Delete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Display the new question form -->
+<div *ngIf="displayNew">
+    <div class="card">
+      <div class="card-body">
+        <form (submit)="onQuestionNew()">
+  
+          <div class="form-group">
+            <label>Title:</label>
+            <input type="text" class="form-control" name="title" required [(ngModel)]="currentQuestion.title">
+          </div>
+  
+          <div class="form-group">
+            <label>Question:</label>
+            <input type="text" class="form-control" name="text" [(ngModel)]="currentQuestion.text">
+          </div>
+  
+          <div class="form-group">
+            <label>Type of Form:</label>
+            <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.formName">
+              <option>faculty</option>
+              <option>central</option>
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label>Type of input:</label>
+            <select class="form-control" name="type" required [(ngModel)]="currentQuestion.type">
+              <option>textarea</option>
+              <option>text</option>
+              <option>date</option>
+              <option>money_single</option>
+              <option>money_array</option>
+              <option>number</option>
+            </select>
+          </div>
+  
+          <button type="submit" class="btn btn-success btn-block" [disabled]='!currentQuestion.text || !currentQuestion.type || !currentQuestion.formName'>Save new question</button>
+          <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<!-- Display the edit question form -->
+<div *ngIf="displayEdit">
+  <div class="card">
+    <div class="card-body">
+      <form (submit)="onQuestionEdit()">
+
+        <div class="form-group">
+          <label>Title:</label>
+          <input type="text" class="form-control" name="title" required [(ngModel)]="currentQuestion.title">
+        </div>
+
+        <div class="form-group">
+          <label>Question:</label>
+          <input type="text" class="form-control" name="text" [(ngModel)]="currentQuestion.text">
+        </div>
+
+        <div class="form-group">
+          <label>Type of Form:</label>
+          <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.formName">
+            <option>faculty</option>
+            <option>central</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Type of input:</label>
+          <select class="form-control" name="type" required [(ngModel)]="currentQuestion.type">
+            <option>textarea</option>
+            <option>text</option>
+            <option>date</option>
+            <option>money_single</option>
+            <option>money_array</option>
+            <option>number</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block">Save edits</button>
+        <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Display the delete question form -->
+<div *ngIf="displayDelete">
+  <div class="card">
+    <div class="card-body">
+
+      <div class="form-group">
+        Title: {{currentQuestion.title}}
+      </div>
+
+      <div class="form-group">
+        Question: {{currentQuestion.text}}
+      </div>
+
+      <div class="form-group">
+        Type of Form: {{currentQuestion.formName}}
+      </div>
+
+      <div class="form-group">
+        Type on input: {{currentQuestion.type}}
+      </div>
+
+      <button type="button" (click)="deleteQuestion()" class="btn btn-success btn-block">Confirm Deletion</button>
+      <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel Deletion</button>
+    </div>
+  </div>
+</div>
+
+<!-- <ul dragula="QL" [(dragulaModel)]="questionList">
+    <li *ngFor="let question of questionList">
+      {{ question.title }}
+    </li>
+  </ul> -->
