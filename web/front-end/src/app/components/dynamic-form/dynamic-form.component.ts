@@ -60,7 +60,7 @@ export class DynamicFormComponent implements OnInit {
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-        this.router.navigate(['/submissionDashboard']);
+        this.router.navigate(['/submissionsDashboard']);
       }
     },
     err => {
