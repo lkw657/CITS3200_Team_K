@@ -31,6 +31,9 @@ import { QuestionService } from './services/question.service';
 //Http interceptors
 import { httpInterceptorProviders } from './http-interceptors/index';
 
+//Guards
+import { AuthGuard } from './guards/auth.guard';
+
 import { DragulaModule } from 'ng2-dragula';
 
 
@@ -38,13 +41,13 @@ import { DragulaModule } from 'ng2-dragula';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent},
-  { path: 'submission', component: SubmissionComponent},
-  { path: 'editUsers', component: EditUsersComponent},
-  { path: 'editQuestions', component: EditQuestionsComponent},
+  { path: 'home', component: HomeComponent, canActivate:[AuthGuard]},
+  { path: 'submission', component: SubmissionComponent, canActivate:[AuthGuard]},
+  { path: 'editUsers', component: EditUsersComponent, canActivate:[AuthGuard]},
+  { path: 'editQuestions', component: EditQuestionsComponent, canActivate:[AuthGuard]},
   { path: 'verify/:mailID/:secret', component: VerifyComponent},
-  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent},
-  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent},
+  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate:[AuthGuard]},
+  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate:[AuthGuard]},
   { path: '**', component: NotFoundComponent}
 ];
 
@@ -80,6 +83,7 @@ const routes: Routes = [
     httpInterceptorProviders,
     QuestionService,
     DashboardService,
+    AuthGuard,
     AuthService
   ],
   bootstrap: [AppComponent]
