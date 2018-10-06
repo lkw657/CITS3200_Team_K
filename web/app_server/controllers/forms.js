@@ -23,21 +23,21 @@ module.exports.addForm = (req, res, next) => {
     if (req.user && req.body.qset_id && req.body.answers && req.body.school) {
         QuestionSet.findById(req.body.qset_id, (err, set) => {
             if (err) {
-                return res.status(400).json({
+                return res.json({
                     success: false,
                     msg: err
                 });
             }
 
             else if (!set) {
-                return res.status(400).json({
+                return res.json({
                     success: false,
                     msg: "No matching question set found"
                 });
 
             }
             else if (set.questionList.length != req.body.answers.length) {
-                return res.status(400).json({
+                return res.json({
                     success: false,
                     msg: "Number of questions does not match number of answers"
                 });
@@ -46,14 +46,14 @@ module.exports.addForm = (req, res, next) => {
                 User.findById(req.user._id, (err, owner) => {
 
                     if (err) {
-                        return res.status(400).json({
+                        return res.json({
                             success: false,
                             msg: err
                         });
 
                     }
                     else if (!owner) {
-                        return res.status(400).json({
+                        return res.json({
                             success: false,
                             msg: "User not found"
                         });
@@ -85,7 +85,7 @@ module.exports.addForm = (req, res, next) => {
 
                         form.save((err, form) => {
                             if (err) {
-                                return res.status(400).json({
+                                return res.json({
                                     success: false,
                                     msg: err
                                 });
@@ -94,7 +94,7 @@ module.exports.addForm = (req, res, next) => {
                                 owner.submissions.push(form._id);
                                 owner.save((err, owner) => {
                                     if (err) {
-                                        return res.status(400).json({
+                                        return res.json({
                                             success: false,
                                             msg: err
                                         });
@@ -141,7 +141,7 @@ module.exports.addForm = (req, res, next) => {
         });
     }
     else {
-        return res.status(400).json({
+        return res.json({
             success: false,
             msg: "Missing Data"
         });

@@ -16,8 +16,8 @@ var userSchema = new mongoose.Schema(
             match: [/^[a-zA-z'-_]*$/, "Names can only contain letters, dashes, apostrophes, and underscores"]
         },
         number: {
-            type: String, unique: true, required: [true, "Please enter a valid UWA staff/student number"],
-            match: [/^\d{8,}$/, "Please enter a valid UWA staff/student number"]
+            type: String, unique: true, required: [true, "Please enter a valid UWA staff number"],
+            match: [/^\d{8,}$/, "Please enter a valid UWA staff number"]
         },
         submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
         approvals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
@@ -40,8 +40,8 @@ userSchema.plugin(uniqueValidator, {message: "{PATH} already exists"});
 userSchema.plugin(passportLocalMongoose, {
     usernameField:'number',
     errorMessages: {
-        MissingUsernameError: 'Please enter a valid UWA staff/student number',
-        UserExistsError: 'A user with that UWA staff/student number already exists'
+        MissingUsernameError: 'Please enter a valid UWA staff number',
+        UserExistsError: 'A user with that UWA staff number already exists'
     }
 });
 userSchema.plugin(deepPopulate)

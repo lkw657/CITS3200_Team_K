@@ -3,6 +3,7 @@
 if [[ $1 == "debug" ]]; then
     npm install
     npm install -g nodemon
+    node initdb.js
     nodemon bin/www
 elif [[ $1 == "test" ]]; then
     # wait until web server has started before running tests

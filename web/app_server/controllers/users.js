@@ -12,11 +12,12 @@ module.exports.listAll = (req, res, next) => {
   }
   User.find({}, '', (err, users) => {
     if (err)
-      return sendJsonResponse(res, 400, {
+      return res.json({
+	success: false,
         error: err
       });
 
-    return sendJsonResponse(res, 200, users);
+    return res.json(users);
   });
 }
 

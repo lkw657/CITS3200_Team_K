@@ -9,7 +9,6 @@ var request = require('request')
 let ip = process.env.IP || 'localhost'
 let port = process.env.PORT || '3000'
 let endpoint = 'http://' + ip + ':' + port + '/register'
-console.log(endpoint)
 
 /* Creates a test
  * name: name of test
@@ -20,11 +19,6 @@ function test(name, send, shouldReceive, created) {
     it(name, (done) => {
         request.post(endpoint, {form:send}, (err, response, body) => {
             if (err) done(err);
-            // if there was a server error, we want to know why
-            if (shouldReceive.success)
-                assert.equal(response.statusCode, 200, "Did not get 200 OK \n"+body);
-            else
-                assert.equal(response.statusCode, 400, "Did not get 400 Bad Request\n"+body);
             assert.deepEqual(JSON.parse(body), shouldReceive, "Response doesn't match");
             User.find({}, (err, users) => {
                 if (err) done(err);
@@ -50,11 +44,6 @@ describe('Registration', function(){
          {success: true, msg: 'User Registered'},
          true);
 
-    test("Valid staff",
-         {fname:'aaa', lname:'bbb', number:'01111111', password:'abcdefghijkl'},
-         {success: true, msg: 'User Registered'},
-         true);
-
     test("No firstname",
          {lname:'bbb', number:'11111111', password:'abcdefghijkl'},
          {success: false, msg: 'Please enter your first name'},
@@ -67,12 +56,12 @@ describe('Registration', function(){
 
     test("No number",
          {fname:'aaa', lname:'bbb', password:'abcdefghijkl'},
-         {success: false, msg: 'Please enter a valid UWA staff/student number'},
+         {success: false, msg: 'Please enter a valid UWA staff number'},
          false);
 
     test("Invalid number",
          {fname:'aaa', lname:'bbb', number:'123a', password:'abcdefghijkl'},
-         {success: false, msg: 'Please enter a valid UWA staff/student number'},
+         {success: false, msg: 'Please enter a valid UWA staff number'},
          false);
 
     test("Short password",

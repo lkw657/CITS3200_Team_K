@@ -25,7 +25,6 @@ function test(name, send, shouldReceive) {
                 assert.property(res.headers, 'set-cookie');
             }
             else {
-                assert.equal(res.statusCode, 400, "Did not get 400 Bad Request\n"+body);
                 assert.notProperty(res.headers, 'set-cookie')
             }
             assert.deepEqual(JSON.parse(body), shouldReceive, "Response doesn't match");
@@ -39,29 +38,16 @@ describe('Login', () => {
         /* Delete the collection and add a researcher and staff user for testing */
         User.remove({}, (err) => {
             User.register(User.create('researcher', 'user','12345678'),
-                          'abcdefghijkl', (err) => {
-                              User.register(User.create('staff', 'user', '01234567'),
-                              'abcdefghijkl', done)
-                            });
+                          'abcdefghijkl', (err) => done(err));
         });
     });
 
-    test("Valid researcher login",
+    test("Valid login",
          {number:'12345678', password:'abcdefghijkl'},
          {success: true, msg: 'You are successfully logged in', user: {
              fname:'researcher',
              lname:'user',
              number:'12345678',
-             isIT: false,
-             approvals: [],
-             submissions:[]}});
-
-    test("Valid staff login",
-         {number:'01234567', password:'abcdefghijkl'},
-         {success: true, msg: 'You are successfully logged in', user:{
-             fname:'staff',
-             lname:'user',
-             number:'01234567',
              isIT: false,
              approvals: [],
              submissions:[]}});

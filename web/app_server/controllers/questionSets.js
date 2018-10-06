@@ -77,7 +77,7 @@ module.exports.listAll = (req, res, next) => {
     }
     QuestionSet.find({}, (err, qsets) => {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting all question lists"
             });
@@ -102,7 +102,7 @@ module.exports.questionSetId = (req, res, next) => {
     }
     QuestionSet.findById(req.params.id).then(function (qset, err) {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting question set by ID"
             });
@@ -126,7 +126,7 @@ module.exports.latestQuestionSet = (req, res, next) => {
     }
     QuestionSet.findOne({}, { 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting latest question list"
             });
