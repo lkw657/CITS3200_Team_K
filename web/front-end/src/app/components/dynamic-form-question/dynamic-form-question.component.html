@@ -10,11 +10,21 @@
       <div class="row" [formArrayName]="question.key">
         <div class="col" *ngFor="let in of counter(question.number) ; let i = index">
           <label>Year {{i+1}}</label>
-          <input type="text" class="form-control" *ngSwitchCase="'money_array'" placeholder="$$" formControlName="{{i}}" [id]="question.key" [value]="question.value">
+          <input type="text" class="form-control" *ngSwitchCase="'money_array'" 
+            placeholder="$$" formControlName="{{i}}" 
+            [id]="question.key" 
+            [value]="question.value"
+            (keyup)="calcTotal(question.key)"
+            (blur)="calcTotal(question.key)">
         </div>
         <div class="col">
           <label>Total</label>
-          <input type="text" class="form-control" *ngSwitchCase="'money_array'" placeholder="$$" formControlName="{{question.number}}" [id]="question.key" [value]="this.total">
+          <input 
+            type="text" class="form-control" *ngSwitchCase="'money_array'"
+            placeholder="$$" formControlName="{{question.number}}" 
+            [id]="question.key"
+            (keyup)="calcTotal(question.key)"
+            (blur)="calcTotal(question.key)">
         </div>
       </div>
     </div>

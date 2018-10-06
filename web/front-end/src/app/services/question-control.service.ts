@@ -16,7 +16,7 @@ export class QuestionControlService {
         for(var i = 0 ; i < question.number ; i++ ){
           arrayofQuestions.push(new FormControl(question.value || ''));
         }
-        arrayofQuestions.push(new FormControl(question.value || ''));
+        arrayofQuestions.push(new FormControl( {value: question.value || '', disabled: true }));
         group[question.key] = new FormArray(arrayofQuestions);
 
       } else {
