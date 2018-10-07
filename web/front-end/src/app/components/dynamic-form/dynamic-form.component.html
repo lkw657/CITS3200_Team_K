@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!display_only">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
     <!-- School selector -->
@@ -48,5 +48,17 @@
       </div>
     </div>
 
+  </form>
+</div>
+
+<div *ngIf="display_only">
+  <form [formGroup]="form">
+    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+      <app-question class="w-100" [question]="question" [form]="form" disabled></app-question>
+    </div>
+
+    <div class="form-row mt-3">
+      <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid">Submit</button>
+    </div>
   </form>
 </div>

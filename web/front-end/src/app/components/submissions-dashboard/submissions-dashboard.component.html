@@ -36,7 +36,11 @@
   </div>
 
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
-  <div *ngIf="showSingleSubmission">
+  <div *ngIf="showSingleSubmission && isLoaded">
+    <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [answers]="answers"></app-dynamic-form>
+  </div>
+
+  <!--<div *ngIf="showSingleSubmission">
     <div class="row mb-5">
       <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
         <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
@@ -60,7 +64,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- SHOW FORM HISTORY -->
   <div *ngIf=showHistory>

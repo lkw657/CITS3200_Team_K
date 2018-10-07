@@ -1,9 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { QuestionService } from '../../services/question.service';
 import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
+
+import { QuestionBase } from '../../classes/question-base';
+import { Answer } from '../../classes/answer';
+
+import { TextboxQuestion } from '../../classes/question-textbox';
+import { TextQuestion } from '../../classes/question-text';
+import { MoneyQuestion } from '../../classes/question-money';
+import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
+
 
 @Component({
   selector: 'app-submissions-dashboard',
@@ -26,6 +35,11 @@ export class SubmissionsDashboardComponent implements OnInit {
   showHistory = false;
   showHistoricalSubmission = false;
 
+  questions : any = [];
+  answers : Answer[] = [];
+  isLoaded = false;
+  qset_id : string = '';
+
   constructor(
     private router: Router,
     private flashMessage: FlashMessagesService,
@@ -44,13 +58,12 @@ export class SubmissionsDashboardComponent implements OnInit {
       this.userSubmissions = data.submissions;
     },
       err => {
+        this.flashMessage.show("An Error has Occurred - Please try again later!", { cssClass: 'align-top alert alert-danger', timeout: 5000 });
         console.log(err);
         return false;
       });
   }
-
-  // View selecting functions
-
+  
   // Populates dashboard with all submissions that have not been resubmitted
   showSubmissions() {
     window.scrollTo(0, 0);
@@ -60,6 +73,79 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
+  createQuestionList(questionSet){
+    this.questions = questionSet['questionList'];
+    let qObjs : QuestionBase<any> [] = [];
+
+    for(let i = 0 ; i < this.questions.length ; i++ ){
+      let q = this.questions[i];
+      if(q['type'] == 'textarea'){
+        qObjs.push(
+            new TextboxQuestion({
+                key: i+1,
+                label: q.text,
+                value: this.answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
+        );
+      } else if (q['type'] == 'text'){
+        qObjs.push(
+            new TextQuestion({
+                key: i+1,
+                label: q.text,
+                value: this.answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
+        );
+      } else if (q['type'] == 'money_single'){
+        qObjs.push(
+            new MoneyQuestion({
+                key: i+1,
+                label: q.text,
+                value: this.answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
+        );
+      } else if ( q['type'].indexOf("money_array") == 0 ){
+        let number_of_fields = 0;
+        qObjs.push(
+            new MoneyArrayQuestion({
+                key: i+1,
+                label: q.text,
+                required: true,
+                order : q.order,
+                value: this.answers[i].answer,
+                number: parseInt(q['type'].substring(q['type'].length - 1)),
+                disabled: true
+            })
+        );
+      }
+    }
+
+    this.isLoaded = true;
+    this.questions = qObjs.sort((a,b) => a.order - b.order);
+    this.qset_id = this.questions['_id'];
+  }
+  createAnswerList(answers){
+    this.answers = answers;
+    let aObjs : Answer[] = [];
+    for(let i = 0 ; i < answers.length; i++){
+      aObjs.push(
+        new Answer({
+          order: answers[i]['order'],
+          answer: answers[i]['answer']
+        })
+      );
+    }
+    this.answers = aObjs;
+  }
+
   // Shows a single submission when View Form is clicked
   showSubmission(form) {
     window.scrollTo(0, 0);
@@ -67,10 +153,15 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showAllSubmissions = false;
 
     this.submissionView = form;
+    console.log(form);
 
+    this.createAnswerList(this.submissionView['answers']);
+    this.createQuestionList(this.submissionView['questionSet']);
+    
     //DEVELOPMENT ONLY - TO BE DELETED
     this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
   }
+
 
   // Shows the questions that have comments relating to them on Provisional Approval
   resolve() {
