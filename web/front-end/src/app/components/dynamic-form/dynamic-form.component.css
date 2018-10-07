@@ -10,3 +10,10 @@
     font-size: 200%;
     vertical-align: text-bottom;
 }
+
+.comment{
+    background-color: #FFC857;
+    padding: 10px;
+
+    border-radius : 0px 0px 10px 10px;
+}

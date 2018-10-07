@@ -39,6 +39,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   answers : Answer[] = [];
   isLoaded = false;
   qset_id : string = '';
+  comments : any[] = [];
 
   constructor(
     private router: Router,
@@ -160,6 +161,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     
     //DEVELOPMENT ONLY - TO BE DELETED
     this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
+    this.comments = this.submissionView.comments;
   }
 
 

@@ -16,15 +16,15 @@ export class QuestionControlService {
         if(question.controlType === 'money_array'){
 
           let values : string[] = question.value.split(',');
+          let sum = 0;
           let arrayofQuestions = [];
-          console.log(values);
+
           for(let i = 0 ; i < question.number ; i++ ){
-            console.log(question.value[i]);
-            arrayofQuestions.push(new FormControl(values[i]));
-            //console.log(arrayofQuestions[i].reset({value: values[i], disabled: true}));
+            sum += parseInt(values[i]);
+            arrayofQuestions.push(new FormControl({value: values[i], disabled: true}));
           }
 
-          arrayofQuestions.push(new FormControl( {value: values[values.length - 1] || '', disabled: true }));
+          arrayofQuestions.push(new FormControl( {value: sum || '', disabled: true }));
           group[question.key] = new FormArray(arrayofQuestions);
 
         } else if ( question.controlType != 'money_array' ) {

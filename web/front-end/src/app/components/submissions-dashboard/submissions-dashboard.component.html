@@ -37,7 +37,12 @@
 
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   <div *ngIf="showSingleSubmission && isLoaded">
-    <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [answers]="answers"></app-dynamic-form>
+    <app-dynamic-form class="w-100" 
+    [qset_id]="qset_id" 
+    [questions]="questions" 
+    [display_only]="true"
+    [comments]="comments" 
+    ></app-dynamic-form>
   </div>
 
   <!--<div *ngIf="showSingleSubmission">

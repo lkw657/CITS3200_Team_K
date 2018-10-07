@@ -19,7 +19,7 @@ export class DynamicFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() qset_id : string = '';
-  @Input() answers : Answer[] = [];
+  @Input() comments : any[] = [];
   @Input() display_only : boolean = false;
 
   form: FormGroup;
@@ -45,6 +45,12 @@ export class DynamicFormComponent implements OnInit {
     }
   }
 
+  findspecificComment(order: number){
+    if( this.comments.find(x => x.order === order) != undefined ){
+      return this.comments.find(x => x.order === order).text;
+    }
+  }
+  
   // Saves role into form and changes view
   selectRole(role) {
     this.submitter = role;
