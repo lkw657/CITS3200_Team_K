@@ -75,6 +75,8 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   createQuestionList(questionSet){
+    let answers = this.createAnswerList(this.submissionView['answers']);
+
     this.questions = questionSet['questionList'];
     let qObjs : QuestionBase<any> [] = [];
 
@@ -85,7 +87,7 @@ export class SubmissionsDashboardComponent implements OnInit {
             new TextboxQuestion({
                 key: i+1,
                 label: q.text,
-                value: this.answers[i].answer,
+                value: answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
@@ -96,7 +98,7 @@ export class SubmissionsDashboardComponent implements OnInit {
             new TextQuestion({
                 key: i+1,
                 label: q.text,
-                value: this.answers[i].answer,
+                value: answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
@@ -107,7 +109,7 @@ export class SubmissionsDashboardComponent implements OnInit {
             new MoneyQuestion({
                 key: i+1,
                 label: q.text,
-                value: this.answers[i].answer,
+                value: answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
@@ -121,7 +123,7 @@ export class SubmissionsDashboardComponent implements OnInit {
                 label: q.text,
                 required: true,
                 order : q.order,
-                value: this.answers[i].answer,
+                value: answers[i].answer,
                 number: parseInt(q['type'].substring(q['type'].length - 1)),
                 disabled: true
             })
@@ -133,7 +135,8 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.questions = qObjs.sort((a,b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
-  createAnswerList(answers){
+
+  createAnswerList(answers) : Answer[] {
     this.answers = answers;
     let aObjs : Answer[] = [];
     for(let i = 0 ; i < answers.length; i++){
@@ -144,7 +147,7 @@ export class SubmissionsDashboardComponent implements OnInit {
         })
       );
     }
-    this.answers = aObjs;
+    return aObjs;
   }
 
   // Shows a single submission when View Form is clicked
@@ -153,15 +156,19 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showSingleSubmission = true;
     this.showAllSubmissions = false;
 
-    this.submissionView = form;
-    console.log(form);
+    console.log(this.submissionView);
 
-    this.createAnswerList(this.submissionView['answers']);
+    this.submissionView = form;
+
     this.createQuestionList(this.submissionView['questionSet']);
     
     //DEVELOPMENT ONLY - TO BE DELETED
-    this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
+    this.submissionView.comments = [
+      { order: 1, text: "Please don't try to kill yourself" }, 
+      { order: 5, text: "I don't have that much money :(" }
+    ];
     this.comments = this.submissionView.comments;
+
   }
 
 
