@@ -18,7 +18,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   historicalSubmissionView: any;
   approval: any = {};
   formHistory: any;
-  role: String = 'Head of School';
+  role: String = 'HoS';
 
   // View Selectors
   showAllApprovals = true;
@@ -72,7 +72,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
-  submitForm(comments, response) {
+  submitForm(comments, response, acting) {
 
     let commentArray = [];
     // Create approval object with new comments and response
@@ -83,7 +83,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     // Create approval object to be sent to back end
     this.approval.comments = commentArray;
     this.approval.response = response;
-    console.log(this.approval);
+    this.approval.acting = acting;
+    this.approval.form_id = this.approvalView._id;
 
     this.questionService.formResponse(this.approval).subscribe(data => {
       if (data.success) {
