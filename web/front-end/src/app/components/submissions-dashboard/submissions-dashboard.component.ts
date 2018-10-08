@@ -74,7 +74,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
-  createQuestionList(questionSet, ans) {
+  createQuestionList(questionSet, ans){
     let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
@@ -84,49 +84,49 @@ export class SubmissionsDashboardComponent implements OnInit {
       let q = this.questions[i];
       if (q['type'] == 'textarea') {
         qObjs.push(
-          new TextboxQuestion({
-            key: i + 1,
-            label: q.text,
-            value: answers[i].answer,
-            required: true,
-            order: q.order,
-            disabled: true
-          })
+            new TextboxQuestion({
+                key: i+1,
+                label: q.text,
+                value: answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
         );
       } else if (q['type'] == 'text') {
         qObjs.push(
-          new TextQuestion({
-            key: i + 1,
-            label: q.text,
-            value: answers[i].answer,
-            required: true,
-            order: q.order,
-            disabled: true
-          })
+            new TextQuestion({
+                key: i+1,
+                label: q.text,
+                value: answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
         );
       } else if (q['type'] == 'money_single') {
         qObjs.push(
-          new MoneyQuestion({
-            key: i + 1,
-            label: q.text,
-            value: answers[i].answer,
-            required: true,
-            order: q.order,
-            disabled: true
-          })
+            new MoneyQuestion({
+                key: i+1,
+                label: q.text,
+                value: answers[i].answer,
+                required: true,
+                order : q.order,
+                disabled: true
+            })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
         let number_of_fields = 0;
         qObjs.push(
-          new MoneyArrayQuestion({
-            key: i + 1,
-            label: q.text,
-            required: true,
-            order: q.order,
-            value: answers[i].answer,
-            number: parseInt(q['type'].substring(q['type'].length - 1)),
-            disabled: true
-          })
+            new MoneyArrayQuestion({
+                key: i+1,
+                label: q.text,
+                required: true,
+                order : q.order,
+                value: answers[i].answer,
+                number: parseInt(q['type'].substring(q['type'].length - 1)),
+                disabled: true
+            })
         );
       }
     }
@@ -135,7 +135,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
-  createAnswerList(answers): Answer[] {
+  createAnswerList(answers) : Answer[] {
     this.answers = answers;
     let aObjs: Answer[] = [];
     for (let i = 0; i < answers.length; i++) {
@@ -178,6 +178,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
+
   resubmit() {
     // Create new submission
     this.submission.parent_id = this.submissionView._id;
