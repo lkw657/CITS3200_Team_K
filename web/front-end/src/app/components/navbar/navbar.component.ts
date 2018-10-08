@@ -26,8 +26,9 @@ export class NavbarComponent implements OnInit {
 
     this.authService.logoutUser(this.user).subscribe(data => {
       if (data.success) {
-        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         localStorage.clear();
+        this.router.navigate(['']);
+        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         window.scrollTo(0, 0);
       }
     },

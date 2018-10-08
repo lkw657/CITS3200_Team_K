@@ -123,6 +123,7 @@ module.exports.approvals = (req, res, next) => {
             if (req.user.approvals[i].owner.constructor == Array)
                 req.user.approvals[i].owner = req.user.approvals[i].owner[0]
             approvals.push({
+                _id: req.user.approvals[i]._id,
                 owner: {fname: req.user.approvals[i].owner.fname,
                         lname:req.user.approvals[i].owner.lname,
                         number: req.user.approvals[i].owner.number},
