@@ -9,7 +9,7 @@ var QuestionSet = questionSetModel.questionSetSchema;
 
 var mailer = require('./mailer');
 
-function sendFirstEmailToNextPerson(school, submitter, form_id, ){
+function sendFirstEmailToNextPerson(school, submitter, form_id, ) {
     // Send email to school HoS/AD(R) depending on stuff.
     if (school == 'School of Physics, Mathematics and Computing') {
         if (submitter == 'HoS') {
@@ -107,8 +107,8 @@ module.exports.addForm = (req, res, next) => {
                         form.dates = [new Date()];
 
                         form.school = req.body.school;
-                        
-                        if(req.body.history){
+
+                        if (req.body.history) {
                             form.history = req.body.history;
                         }
 
@@ -167,17 +167,18 @@ module.exports.resubmitForm = (req, res, next) => {
     // submitter
 
     Form.findById(req.body.parent_id, (err, form) => {
-        if(err){
-            return res.status(403).json({ success: false, msg: 'No such parent form' });   
+
+        if (err) {
+            return res.status(400).json({ success: false, msg: 'No such parent form' });
         }
-        else if(req.user._id != form.owner){
-            return res.status(403).json({ success: false, msg: 'Form not owned by user' });
+        else if (JSON.stringify(form.owner) != JSON.stringify(req.user._id)) {
+            return res.status(400).json({ success: false, msg: 'Form not owned by user' });
         }
-        else if(form.status != 'Provisionally Approved'){
-            return res.status(403).json({ success: false, msg: 'Form is not provisionally approved' });
+        else if (form.status != 'Provisionally Approved') {
+            return res.status(400).json({ success: false, msg: 'Form is not provisionally approved' });
         }
-        else if(form.answers.length != req.body.answers.length){
-            return res.status(403).json({ success: false, msg: 'Invalid no. of questions' });            
+        else if (form.answers.length != req.body.answers.length) {
+            return res.status(400).json({ success: false, msg: 'Invalid no. of questions' });
         }
 
         //Valid form
@@ -196,15 +197,15 @@ module.exports.resubmitForm = (req, res, next) => {
         new_form.submitter = form.submitter
         new_form.dates = [new Date()];
         new_form.answers = req.body.answers;
-        
+
         form.status = 'Resubmitted';
         form.save((err, form) => {
-            if(err){
-                return res.status(403).json({ success: false, msg: 'Something went wrong updating parent' });
+            if (err) {
+                return res.status(400).json({ success: false, msg: 'Something went wrong updating parent' });
             }
 
             //Add Parent Id to history
-            new_form.history.push(form._id); 
+            new_form.history.push(form._id);
 
             //Set statuses
             if (req.body.submitter == 'HoS') {
@@ -214,46 +215,40 @@ module.exports.resubmitForm = (req, res, next) => {
                 form.status = 'Awaiting HoS';
             }
 
-            new_form.save((err, new_form)=>{
-                if(err){
-                    return res.status(403).json({ success: false, msg: 'Something went wrong while saving form' });
+            new_form.save((err, new_form) => {
+                if (err) {
+                    return res.status(400).json({ success: false, msg: 'Something went wrong while saving form' });
                 }
-                else{
+                else {
                     // Update user
-                    User.findById(req.user._id, (err, user)=>{
-                        if(err){
-                            return res.status(403).json({ success: false, msg: 'Something went wrong getting user' });
+                    User.findById(req.user._id, (err, user) => {
+                        if (err) {
+                            return res.status(400).json({ success: false, msg: 'Something went wrong getting user' });
                         }
-                        else if(!user){
-                            return res.status(403).json({ success: false, msg: 'No such user found in database' });
+                        else if (!user) {
+                            return res.status(400).json({ success: false, msg: 'No such user found in database' });
                         }
                         //Remove from array TOTO Check
 
                         user.submissions = user.submissions.filter(item => item !== form._id);
                         user.submissions.push(new_form.id);
 
-                        user.save((err, user)=>{
-                            if(err){
-                                return res.status(403).json({ success: false, msg: 'Could not update user array' });
+                        user.save((err, user) => {
+                            if (err) {
+                                return res.status(400).json({ success: false, msg: 'Could not update user array' });
                             }
-                            else{
+                            else {
                                 //Send email
                                 sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
                                 return res.status(200).json({ success: true, msg: 'Form added to user and email sent' });
                             }
                         })
                     })
-
                 }
             });
-
-
         });
-
-
+        return res.json({ success: true, msg: 'Form resubmitted!' });
     });
-
-    return res.json({ success: true, msg: 'Form resubmitted!' });
 }
 
 // THIS CONTROLLER WILL RECIEVE AN OBJECT WITH comments AND response.
@@ -273,46 +268,45 @@ module.exports.resubmitForm = (req, res, next) => {
 
 module.exports.formResponse = (req, res, next) => {
 
-    if (!(req.user && req.body.form_id && req.body.response))
-    {
-        return res.status(403).json({ success: false, msg: 'Not logged in or No response or No associated form!' });
-        
+    if (!(req.user && req.body.form_id && req.body.response)) {
+        return res.status(400).json({ success: false, msg: 'Not logged in or No response or No associated form!' });
+
     }
-    
+
     Form.findById(req.body.form_id, (err, form) => {
-        if(err){
-            return res.status(403).json({ success: false, msg: 'Something went wrong' });           
+        if (err) {
+            return res.status(400).json({ success: false, msg: 'Something went wrong' });
         }
-        if(!form){
-            return res.status(403).json({ success: false, msg: 'No such form' });
+        if (!form) {
+            return res.status(400).json({ success: false, msg: 'No such form' });
         }
-        if(req.user._id != form.allocatedStaff ){
-            return res.status(403).json({ success: false, msg: 'Bad user' });
+        if (JSON.stringify(req.user._id) != JSON.stringify(form.allocatedStaff)) {
+            return res.status(400).json({ success: false, msg: 'Bad user' });
         }
 
-        var actingString='';
-        if(req.body.acting){
+        var actingString = '';
+        if (req.body.acting) {
             actingString = 'Acting ';
         }
 
-        if(req.body.response == 'Approved'){
+        if (req.body.response == 'Approved') {
             var email, emailContent;
-            if(form.status == 'Awaiting HoS'){
-                if(form.submitter == 'AD(R)'){
+            if (form.status == 'Awaiting HoS') {
+                if (form.submitter == 'AD(R)') {
                     form.status = 'Awaiting PVC-ED';
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({role: actingString+'HoS', id: approver});
+                    form.approvedBy.push({ role: actingString + 'HoS', id: approver });
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
-                    
+
                     email = 'neosh11@gmail.com';
                     emailContent = 'You are PVC-ED ahha';
                 }
-                else{
+                else {
                     form.status = 'Awaiting AD(R)';
 
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({role: actingString+'HoS', id: approver});
+                    form.approvedBy.push({ role: actingString + 'HoS', id: approver });
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
@@ -320,11 +314,11 @@ module.exports.formResponse = (req, res, next) => {
                     emailContent = 'You are AD(R) ahha';
                 }
             }
-            else if(form.status == 'Awaiting AD(R)'){
+            else if (form.status == 'Awaiting AD(R)') {
                 form.status = 'Awaiting PVC-ED';
 
                 var approver = form.allocatedStaff;
-                form.approvedBy.push({role: actingString+'AD(R)', id: approver});
+                form.approvedBy.push({ role: actingString + 'AD(R)', id: approver });
                 form.allocatedStaff = null;
                 form.dates.push(new Date());
 
@@ -333,11 +327,11 @@ module.exports.formResponse = (req, res, next) => {
                 emailContent = 'Awaiting PVC-ED';
 
             }
-            else if(form.status == 'Awaiting PVC-ED'){
+            else if (form.status == 'Awaiting PVC-ED') {
                 form.status = 'Fully Approved';
 
                 var approver = form.allocatedStaff;
-                form.approvedBy.push({role: actingString+'PVC-ED', id: approver});
+                form.approvedBy.push({ role: actingString + 'PVC-ED', id: approver });
                 form.allocatedStaff = null;
                 form.dates.push(new Date());
 
@@ -345,45 +339,45 @@ module.exports.formResponse = (req, res, next) => {
                 email = 'neosh11@gmail.com';
                 emailContent = 'Click this dodgy link hehe for pdf';
             }
-            else{
-                return res.status(403).json({ success: false, msg: 'Form has bad status' });
+            else {
+                return res.status(400).json({ success: false, msg: 'Form has bad status' });
             }
 
             form.save((err, form) => {
                 if (err) {
-                    return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                    return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                 }
                 //send an email to who??
-                if(form.status == 'Fully Approved'){
+                if (form.status == 'Fully Approved') {
                     //TODO EMAILS
                 }
-                else{
+                else {
                     //email person
-                    mailer.sendFormAccessEmail(emailContent+"\n", email, form._id);
-                    return res.status(200).json({ success: true, msg: 'Approved and email sent' });       
+                    mailer.sendFormAccessEmail(emailContent + "\n", email, form._id);
+                    return res.status(200).json({ success: true, msg: 'Approved and email sent' });
                 }
             });
         }
-        else if(req.body.response =='Provisionally Approved'){
-            
+        else if (req.body.response == 'Provisionally Approved') {
+
             form.status = 'Provisionally Approved';
-            
-            if(form.status == 'Awaiting HoS'){
-                form.rejectionRole = actingString+'HoS';
+
+            if (form.status == 'Awaiting HoS') {
+                form.rejectionRole = actingString + 'HoS';
             }
-            else if(form.status == 'Awaiting AD(R)'){
-                form.rejectionRole = actingString+'AD(R)';
+            else if (form.status == 'Awaiting AD(R)') {
+                form.rejectionRole = actingString + 'AD(R)';
             }
-            else if(form.status == 'Awaiting PVC-ED'){
-                form.rejectionRole = actingString+'PVC-ED';
+            else if (form.status == 'Awaiting PVC-ED') {
+                form.rejectionRole = actingString + 'PVC-ED';
             }
-            else{
+            else {
                 //Something is broken
-                return res.status(403).json({ success: false, msg: 'Bad form status' });
+                return res.status(400).json({ success: false, msg: 'Bad form status' });
 
             }
 
-            if(req.body.comments){
+            if (req.body.comments) {
                 // TODO ask david
                 form.comments = req.body.comments;
                 form.dates.push(new Date());
@@ -391,37 +385,37 @@ module.exports.formResponse = (req, res, next) => {
 
                 form.save((err, form) => {
                     if (err) {
-                        return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                        return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
-                    else{
+                    else {
                         //email owner of form about provisional approval approval 
                         mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
                         return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
                     }
                 });
             }
-            else{
-                return res.status(403).json({ success: false, msg: 'No comments' });
+            else {
+                return res.status(400).json({ success: false, msg: 'No comments' });
             }
         }
-        else if(req.body.response == 'Rejected'){
+        else if (req.body.response == 'Rejected') {
 
-            if(form.status == 'Awaiting HoS'){
-                form.rejectionRole = actingString+'HoS';
+            if (form.status == 'Awaiting HoS') {
+                form.rejectionRole = actingString + 'HoS';
             }
-            else if(form.status == 'Awaiting AD(R)'){
-                form.rejectionRole = actingString+'AD(R)';
+            else if (form.status == 'Awaiting AD(R)') {
+                form.rejectionRole = actingString + 'AD(R)';
             }
-            else if(form.status == 'Awaiting PVC-ED'){
-                form.rejectionRole = actingString+'PVD-ED';
+            else if (form.status == 'Awaiting PVC-ED') {
+                form.rejectionRole = actingString + 'PVD-ED';
             }
-            else{
+            else {
                 //Something is broken
-                return res.status(403).json({ success: false, msg: 'Bad form status' });
+                return res.status(400).json({ success: false, msg: 'Bad form status' });
 
             }
 
-            if(req.body.comments){
+            if (req.body.comments) {
                 form.status = 'Rejected'
                 form.comments = req.body.comments;
                 form.dates.push(new Date());
@@ -429,9 +423,9 @@ module.exports.formResponse = (req, res, next) => {
 
                 form.save((err, form) => {
                     if (err) {
-                        return res.status(403).json({ success: false, msg: 'Something went wrong saving the form' });
+                        return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
-                    else{
+                    else {
                         //email owner of form about provisional approval approval 
                         mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
                         return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
@@ -439,12 +433,12 @@ module.exports.formResponse = (req, res, next) => {
                 });
 
             }
-            else{
-                return res.status(403).json({ success: false, msg: 'No comments' });
+            else {
+                return res.status(400).json({ success: false, msg: 'No comments' });
             }
         }
-        else{
-            return res.status(403).json({ success: false, msg: 'Bad Form Status' });
+        else {
+            return res.status(400).json({ success: false, msg: 'Bad Form Status' });
         }
 
 
@@ -454,7 +448,7 @@ module.exports.formResponse = (req, res, next) => {
 module.exports.listAll = (req, res, next) => {
     Form.find({}, '', (err, forms) => {
         if (!forms) {
-            return res.status(403).json({
+            return res.status(400).json({
                 success: false,
                 msg: "Forbidden"
             });
@@ -463,7 +457,7 @@ module.exports.listAll = (req, res, next) => {
             return res.status(404).json({
                 success: false,
                 msg: "Forbidden"
-            }); 
+            });
             console.log(err);
         }
         else {
