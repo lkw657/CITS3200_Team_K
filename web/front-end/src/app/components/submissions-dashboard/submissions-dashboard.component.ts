@@ -54,7 +54,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   refreshSubmissions() {
-    // Get all forms submitted by user  
+    // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
       this.userSubmissions = data.submissions;
     },
@@ -64,7 +64,7 @@ export class SubmissionsDashboardComponent implements OnInit {
         return false;
       });
   }
-  
+
   // Populates dashboard with all submissions that have not been resubmitted
   showSubmissions() {
     window.scrollTo(0, 0);
@@ -74,8 +74,8 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
-  createQuestionList(questionSet){
-    let answers = this.createAnswerList(this.submissionView['answers']);
+  createQuestionList(questionSet, ans){
+    let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
     let qObjs : QuestionBase<any> [] = [];
@@ -135,7 +135,6 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.questions = qObjs.sort((a,b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
-
   createAnswerList(answers) : Answer[] {
     this.answers = answers;
     let aObjs : Answer[] = [];
@@ -149,7 +148,6 @@ export class SubmissionsDashboardComponent implements OnInit {
     }
     return aObjs;
   }
-
   // Shows a single submission when View Form is clicked
   showSubmission(form) {
     window.scrollTo(0, 0);
@@ -160,11 +158,11 @@ export class SubmissionsDashboardComponent implements OnInit {
 
     this.submissionView = form;
 
-    this.createQuestionList(this.submissionView['questionSet']);
-    
+    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
+
     //DEVELOPMENT ONLY - TO BE DELETED
     this.submissionView.comments = [
-      { order: 1, text: "Please don't try to kill yourself" }, 
+      { order: 1, text: "Please don't try to kill yourself" },
       { order: 5, text: "I don't have that much money :(" }
     ];
     this.comments = this.submissionView.comments;
@@ -180,6 +178,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
+
   resubmit() {
 
     // Create new submission
@@ -225,6 +224,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Displays a dashboard of all historical forms attached to single form
+
   showFormHistory(history) {
     this.showHistory = true;
     this.showSingleSubmission = false;
@@ -252,12 +252,14 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
+    console.log(this.questions);
 
     //DEVELOPMENT ONLY - TO BE DELETED
     this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
   }
 
-  // Goes back to history dashboard 
+  // Goes back to history dashboard
   backToHistory() {
     this.showHistory = true;
     this.showHistoricalSubmission = false;
