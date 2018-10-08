@@ -54,7 +54,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   refreshSubmissions() {
-    // Get all forms submitted by user  
+    // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
       this.userSubmissions = data.submissions;
     },
@@ -74,7 +74,9 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
-  createQuestionList(questionSet) {
+  createQuestionList(questionSet, ans) {
+    let answers = this.createAnswerList(ans);
+
     this.questions = questionSet['questionList'];
     let qObjs: QuestionBase<any>[] = [];
 
@@ -85,7 +87,7 @@ export class SubmissionsDashboardComponent implements OnInit {
           new TextboxQuestion({
             key: i + 1,
             label: q.text,
-            value: this.answers[i].answer,
+            value: answers[i].answer,
             required: true,
             order: q.order,
             disabled: true
@@ -96,7 +98,7 @@ export class SubmissionsDashboardComponent implements OnInit {
           new TextQuestion({
             key: i + 1,
             label: q.text,
-            value: this.answers[i].answer,
+            value: answers[i].answer,
             required: true,
             order: q.order,
             disabled: true
@@ -107,7 +109,7 @@ export class SubmissionsDashboardComponent implements OnInit {
           new MoneyQuestion({
             key: i + 1,
             label: q.text,
-            value: this.answers[i].answer,
+            value: answers[i].answer,
             required: true,
             order: q.order,
             disabled: true
@@ -121,7 +123,7 @@ export class SubmissionsDashboardComponent implements OnInit {
             label: q.text,
             required: true,
             order: q.order,
-            value: this.answers[i].answer,
+            value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true
           })
@@ -133,8 +135,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
-
-  createAnswerList(answers) {
+  createAnswerList(answers): Answer[] {
     this.answers = answers;
     let aObjs: Answer[] = [];
     for (let i = 0; i < answers.length; i++) {
@@ -145,23 +146,27 @@ export class SubmissionsDashboardComponent implements OnInit {
         })
       );
     }
-    this.answers = aObjs;
+    return aObjs;
   }
-
   // Shows a single submission when View Form is clicked
   showSubmission(form) {
     window.scrollTo(0, 0);
     this.showSingleSubmission = true;
     this.showAllSubmissions = false;
 
+    console.log(this.submissionView);
+
     this.submissionView = form;
 
-    this.createAnswerList(this.submissionView['answers']);
-    this.createQuestionList(this.submissionView['questionSet']);
+    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
 
     //DEVELOPMENT ONLY - TO BE DELETED
-    this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
+    this.submissionView.comments = [
+      { order: 1, text: "Please don't try to kill yourself" },
+      { order: 5, text: "I don't have that much money :(" }
+    ];
     this.comments = this.submissionView.comments;
+
   }
 
 
@@ -174,23 +179,11 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   // Resubmits form for approval
   resubmit() {
-
     // Create new submission
     this.submission.parent_id = this.submissionView._id;
     this.submission.answers = this.submissionView.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
-
-    //this.submission.qset_id = this.submissionView.questionSet._id;
-    //this.submission.history = [];
-    //this.submission.history.push(this.submissionView._id);
-
-    // if (this.submissionView.history) {
-    //   for (let i in this.submissionView.history) {
-    //     this.submission.history.push(this.submissionView.history[i]);
-    //   }
-    // }
-
     //Sends updated form for resubmission
     this.questionService.resubmit(this.submission).subscribe(data => {
       if (data.success) {
@@ -209,6 +202,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Displays a dashboard of all historical forms attached to single form
+
   showFormHistory(history) {
     this.showHistory = true;
     this.showSingleSubmission = false;
@@ -236,16 +230,14 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-
-    this.createAnswerList(this.historicalSubmissionView['answers']);
-    this.createQuestionList(this.historicalSubmissionView['questionSet']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
+    console.log(this.questions);
 
     //DEVELOPMENT ONLY - TO BE DELETED
     this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
-    this.comments = this.historicalSubmissionView.comments;
   }
 
-  // Goes back to history dashboard 
+  // Goes back to history dashboard
   backToHistory() {
     this.showHistory = true;
     this.showHistoricalSubmission = false;

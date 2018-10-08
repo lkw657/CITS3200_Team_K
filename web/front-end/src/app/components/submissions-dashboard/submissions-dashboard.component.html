@@ -1,61 +1,42 @@
 <div class="mb-5">
-  <!-- Dashboard display for all user's submitted forms -->
-  <div *ngIf="showAllSubmissions">
-    <div class="row">
-      <div class="col-sm">
-        <h1>Submissions Dashboard</h1>
+    <!-- Dashboard display for all user's submitted forms -->
+    <div *ngIf="showAllSubmissions">
+      <div class="row">
+        <div class="col-sm">
+          <h1>Submissions Dashboard</h1>
+        </div>
+  
+        <div class="col-sm">
+          <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
+        </div>
       </div>
-
-      <div class="col-sm">
-        <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Submission Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Last Action Date</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let submission of userSubmissions">
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.sub_date}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.status}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.action_date}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">
-              <button class="btn btn-primary float-right" (click)="showSubmission(submission)">View Form</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- DISPLAY SELECTED FORM FOR REVIEW -->
-  <div *ngIf="showSingleSubmission && isLoaded">
-    <div class="row mb-5">
-      <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
-        <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
-          (click)="resolve()">
-      </div>
-      <div class="col-sm">
-        <input *ngIf="submissionView.history.length>0" type="button" class="btn btn-lg btn-warning mb-2 mr-2" value="View Previously submitted forms"
-          (click)="showFormHistory(submissionView.history)">
-        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showSubmissions()">
+  
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Submission Date</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last Action Date</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let submission of userSubmissions">
+              <td *ngIf="submission.status!='Resubmitted'">{{submission.sub_date}}</td>
+              <td *ngIf="submission.status!='Resubmitted'">{{submission.status}}</td>
+              <td *ngIf="submission.status!='Resubmitted'">{{submission.action_date}}</td>
+              <td *ngIf="submission.status!='Resubmitted'">
+                <button class="btn btn-primary float-right" (click)="showSubmission(submission)">View Form</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [comments]="comments"></app-dynamic-form>
-  </div>
-
-  <div *ngIf="resolveComments">
-    <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="false" [comments]="comments"></app-dynamic-form>
-  </div>
-
-  <!--<div *ngIf="showSingleSubmission">
+  
+    <!-- DISPLAY SELECTED FORM FOR REVIEW -->
+    <div *ngIf="showSingleSubmission && isLoaded">
       <div class="row mb-5">
         <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
           <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
@@ -67,136 +48,131 @@
           <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showSubmissions()">
         </div>
       </div>
+      <h4 class="form-title">Form submitted as a {{submissionView.submitter}} from the {{submissionView.school}}</h4>
+      <app-dynamic-form class="w-100"
+        [qset_id]="qset_id"
+        [questions]="questions"
+        [display_only]="true"
+        [comments]="comments"
+        ></app-dynamic-form>
+    </div>
+  
+    <!-- SHOW FORM HISTORY -->
+    <div *ngIf=showHistory>
+      <div class="row">
+        <div class="col-lg">
+          <h1>History for form submitted on {{submissionView.sub_date}}</h1>
+        </div>
+        <div class="col-sm">
+          <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Submission Date</th>
+              <th scope="col">Status</th>
+              <th scope="col">Last Action Date</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let history of formHistory">
+              <td>{{history.sub_date}}</td>
+              <td>{{history.status}}</td>
+              <td>{{history.action_date}}</td>
+              <td>
+                <button class="btn btn-primary float-right" (click)="showHistoricSubmission(history)">View Historical Form</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <!-- DISPLAY SELECTED HISTORICAL FORM -->
+    <div *ngIf="showHistoricalSubmission">
+      <div class="row">
+        <div class="col-sm">
+          <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back to History" (click)="backToHistory()">
+        </div>
+      </div>
       <div>
-        <h1>Form submitted as a {{submissionView.submitter}} from the {{submissionView.school}}</h1>
-        <div *ngFor="let answer of submissionView.answers; index as i">
+        <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
+        <!-- <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
           <div class="card mb-2">
             <div class="card-body">
-              <p>Question: {{submissionView.questionSet.questionList[i].text}}</p>
+              <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
               <p>Answer: {{answer.answer}}</p>
-              <h4 *ngIf="isCommented(submissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(submissionView.comments, answer.order)}}</h4>
+              <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
             </div>
           </div>
         </div>
-      </div>
-    </div> -->
-
-  <!-- SHOW FORM HISTORY -->
-  <div *ngIf=showHistory>
-    <div class="row">
-      <div class="col-lg">
-        <h1>History for form submitted on {{submissionView.sub_date}}</h1>
-      </div>
-      <div class="col-sm">
-        <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
+      </div> -->
+        <app-dynamic-form class="w-100"
+          [qset_id]="qset_id"
+          [questions]="questions"
+          [display_only]="true"
+          [comments]="comments"
+          ></app-dynamic-form>
       </div>
     </div>
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Submission Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Last Action Date</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let history of formHistory">
-            <td>{{history.sub_date}}</td>
-            <td>{{history.status}}</td>
-            <td>{{history.action_date}}</td>
-            <td>
-              <button class="btn btn-primary float-right" (click)="showHistoricSubmission(history)">View Historical Form</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- DISPLAY SELECTED HISTORICAL FORM -->
-  <div *ngIf="showHistoricalSubmission">
-    <div class="row">
-      <div class="col-sm">
-        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back to History" (click)="backToHistory()">
-      </div>
-    </div>
-    <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [comments]="comments"></app-dynamic-form>
-
-    <!-- <div class="row">
-      <div class="col-sm">
-        <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back to History" (click)="backToHistory()">
-      </div>
-    </div>
-    <div>
-      <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
-      <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
-        <div class="card mb-2">
-          <div class="card-body">
-            <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
-            <p>Answer: {{answer.answer}}</p>
-            <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
+  
+    <!-- RESOLVE COMMENTS AND RESUBMIT -->
+    <div *ngIf="resolveComments">
+      <form (submit)="resubmit()">
+  
+        <!-- School selector -->
+        <div class="form-row">
+          <div *ngIf=!submissionView.school>
+            <p class="mr-2 top-text">I am from the:</p>
+            <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('School of Engineering')">
+            <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')">
+            <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')">
           </div>
         </div>
-      </div>
-    </div> -->
-  </div>
-
-  <!-- RESOLVE COMMENTS AND RESUBMIT - DELETE -->
-  <div *ngIf='5==6'>
-    <form (submit)="resubmit()">
-
-      <!-- School selector -->
-      <div class="form-row">
-        <div *ngIf=!submissionView.school>
-          <p class="mr-2 top-text">I am from the:</p>
-          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('School of Engineering')">
-          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')">
-          <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')">
-        </div>
-      </div>
-
-      <!-- Role selector -->
-      <div class="form-row">
-        <div *ngIf="submissionView.school && !submissionView.submitter">
-          <p class="mr-2 top-text">I am filling this form in as a:</p>
-          <p class="btn btn-lg btn-secondary disabled mb-2 mr-2 btn-w2">{{submissionView.school}}</p>
-          <span class="mr-2">:</span>
-          <input type="button" class="btn btn-w btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
-          <input type="button" class="btn btn-w btn-lg btn-primary mb-2 mr-2" value="HoS" (click)="selectRole('HoS')">
-          <input type="button" class="btn btn-w btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
-        </div>
-
-        <!-- School/Role display -->
-        <div *ngIf="submissionView.submitter && submissionView.school">
-          <div>
-            <p class="btn btn-lg btn-w2 btn-secondary disabled mb-2 mr-2">{{submissionView.school}}</p>
+  
+        <!-- Role selector -->
+        <div class="form-row">
+          <div *ngIf="submissionView.school && !submissionView.submitter">
+            <p class="mr-2 top-text">I am filling this form in as a:</p>
+            <p class="btn btn-lg btn-secondary disabled mb-2 mr-2 btn-w2">{{submissionView.school}}</p>
             <span class="mr-2">:</span>
-            <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="submissionView.school=undefined">
+            <input type="button" class="btn btn-w btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
+            <input type="button" class="btn btn-w btn-lg btn-primary mb-2 mr-2" value="Head of School" (click)="selectRole('Head of School')">
+            <input type="button" class="btn btn-w btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
           </div>
-          <div>
-            <p class="btn btn-lg btn-w2 btn-secondary disabled mb-2 mr-2">{{submissionView.submitter}}</p>
-            <span class="mr-2">:</span>
-            <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submissionView.submitter=undefined">
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-4">
-        <div class="mt-4" *ngFor="let comment of submissionView.comments; let in = index">
-          <div class="card mb-2">
-            <div class="card-body">
-              <p>Question: {{submissionView.questionSet.questionList[comment.order].text}}</p>
-              <h4 class="text-danger">Comment: {{comment.text}}</h4>
-
-              <input type="text" class="form-control" name="answer{{in}}" required [(ngModel)]="submissionView.answers[comment.order].answer">
+  
+          <!-- School/Role display -->
+          <div *ngIf="submissionView.submitter && submissionView.school">
+            <div>
+              <p class="btn btn-lg btn-w2 btn-secondary disabled mb-2 mr-2">{{submissionView.school}}</p>
+              <span class="mr-2">:</span>
+              <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="submissionView.school=undefined">
+            </div>
+            <div>
+              <p class="btn btn-lg btn-w2 btn-secondary disabled mb-2 mr-2">{{submissionView.submitter}}</p>
+              <span class="mr-2">:</span>
+              <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submissionView.submitter=undefined">
             </div>
           </div>
         </div>
-      </div>
-      <button type="submit" class="btn btn-success btn-block">Resubmit</button>
-      <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
-    </form>
+  
+        <div class="mb-4">
+          <div class="mt-4" *ngFor="let comment of submissionView.comments; let in = index">
+            <div class="card mb-2">
+              <div class="card-body">
+                <p>Question: {{submissionView.questionSet.questionList[comment.order].text}}</p>
+                <h4 class="text-danger">Comment: {{comment.text}}</h4>
+  
+                <input type="text" class="form-control" name="answer{{in}}" required [(ngModel)]="submissionView.answers[comment.order].answer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success btn-block">Resubmit</button>
+        <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
+      </form>
+    </div>
   </div>
-</div>
