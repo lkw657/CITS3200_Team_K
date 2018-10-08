@@ -35,11 +35,11 @@ export class SubmissionsDashboardComponent implements OnInit {
   showHistory = false;
   showHistoricalSubmission = false;
 
-  questions : any = [];
-  answers : Answer[] = [];
+  questions: any = [];
+  answers: Answer[] = [];
   isLoaded = false;
-  qset_id : string = '';
-  comments : any[] = [];
+  qset_id: string = '';
+  comments: any[] = [];
 
   constructor(
     private router: Router,
@@ -78,11 +78,11 @@ export class SubmissionsDashboardComponent implements OnInit {
     let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
-    let qObjs : QuestionBase<any> [] = [];
+    let qObjs: QuestionBase<any>[] = [];
 
-    for(let i = 0 ; i < this.questions.length ; i++ ){
+    for (let i = 0; i < this.questions.length; i++) {
       let q = this.questions[i];
-      if(q['type'] == 'textarea'){
+      if (q['type'] == 'textarea') {
         qObjs.push(
             new TextboxQuestion({
                 key: i+1,
@@ -93,7 +93,7 @@ export class SubmissionsDashboardComponent implements OnInit {
                 disabled: true
             })
         );
-      } else if (q['type'] == 'text'){
+      } else if (q['type'] == 'text') {
         qObjs.push(
             new TextQuestion({
                 key: i+1,
@@ -104,7 +104,7 @@ export class SubmissionsDashboardComponent implements OnInit {
                 disabled: true
             })
         );
-      } else if (q['type'] == 'money_single'){
+      } else if (q['type'] == 'money_single') {
         qObjs.push(
             new MoneyQuestion({
                 key: i+1,
@@ -115,7 +115,7 @@ export class SubmissionsDashboardComponent implements OnInit {
                 disabled: true
             })
         );
-      } else if ( q['type'].indexOf("money_array") == 0 ){
+      } else if (q['type'].indexOf("money_array") == 0) {
         let number_of_fields = 0;
         qObjs.push(
             new MoneyArrayQuestion({
@@ -132,13 +132,13 @@ export class SubmissionsDashboardComponent implements OnInit {
     }
 
     this.isLoaded = true;
-    this.questions = qObjs.sort((a,b) => a.order - b.order);
+    this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
   createAnswerList(answers) : Answer[] {
     this.answers = answers;
-    let aObjs : Answer[] = [];
-    for(let i = 0 ; i < answers.length; i++){
+    let aObjs: Answer[] = [];
+    for (let i = 0; i < answers.length; i++) {
       aObjs.push(
         new Answer({
           order: answers[i]['order'],
@@ -180,40 +180,19 @@ export class SubmissionsDashboardComponent implements OnInit {
   // Resubmits form for approval
 
   resubmit() {
-
     // Create new submission
+    this.submission.parent_id = this.submissionView._id;
     this.submission.answers = this.submissionView.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
-    this.submission.qset_id = this.submissionView.questionSet._id;
-    this.submission.history = [];
-    this.submission.history.push(this.submissionView._id);
-
-    if (this.submissionView.history) {
-      for (let i in this.submissionView.history) {
-        this.submission.history.push(this.submissionView.history[i]);
-      }
-    }
-
-    this.questionService.newSubmission(this.submission).subscribe(data => {
+    //Sends updated form for resubmission
+    this.questionService.resubmit(this.submission).subscribe(data => {
       if (data.success) {
-
-        //Set new status on old copy of form and update in db
-        this.submissionView.status = 'Resubmitted';
-        this.questionService.updateSubmission(this.submissionView).subscribe(data => {
-          if (data.success) {
-            this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-            this.refreshSubmissions();
-            this.resolveComments = false;
-            this.showAllSubmissions = true;
-            window.scrollTo(0, 0);
-          }
-        },
-          err => {
-            this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
-            window.scrollTo(0, 0);
-          }
-        );
+        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.refreshSubmissions();
+        this.resolveComments = false;
+        this.showAllSubmissions = true;
+        window.scrollTo(0, 0);
       }
     },
       err => {
