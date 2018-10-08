@@ -1,46 +1,14 @@
 <div class="mb-5">
-  <!-- Dashboard display for all user's submitted forms -->
-  <div *ngIf="showAllSubmissions">
-    <div class="row">
-      <div class="col-sm">
-        <h1>Submissions Dashboard</h1>
-      </div>
-
-      <div class="col-sm">
-        <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
-      </div>
-    </div>
-
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Submission Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Last Action Date</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let submission of userSubmissions">
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.sub_date}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.status}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.action_date}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">
-              <button class="btn btn-primary float-right" (click)="showSubmission(submission)">View Form</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- DISPLAY SELECTED FORM FOR REVIEW -->
-  <div *ngIf="showSingleSubmission && isLoaded">
-    <div class="row mb-5">
-      <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
-        <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
-          (click)="resolve()">
+    <!-- Dashboard display for all user's submitted forms -->
+    <div *ngIf="showAllSubmissions">
+      <div class="row">
+        <div class="col-sm">
+          <h1>Submissions Dashboard</h1>
+        </div>
+  
+        <div class="col-sm">
+          <a [routerLink]="['/submission']" class="btn btn-w btn-lg btn-primary float-right mb-2">New Request</a>
+        </div>
       </div>
   
       <div class="table-responsive">
@@ -66,7 +34,6 @@
         </table>
       </div>
     </div>
-<<<<<<< HEAD
   
     <!-- DISPLAY SELECTED FORM FOR REVIEW -->
     <div *ngIf="showSingleSubmission && isLoaded">
@@ -99,22 +66,6 @@
         <div class="col-sm">
           <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
         </div>
-=======
-    <h4 class="form-title">Form submitted as a {{submissionView.submitter}} from the {{submissionView.school}}</h4>
-    <app-dynamic-form class="w-100"
-      [qset_id]="qset_id"
-      [questions]="questions"
-      [display_only]="true"
-      [comments]="comments"
-      ></app-dynamic-form>
-  </div>
-
-  <!-- SHOW FORM HISTORY -->
-  <div *ngIf=showHistory>
-    <div class="row">
-      <div class="col-lg">
-        <h1>History for form submitted on {{submissionView.sub_date}}</h1>
->>>>>>> 44f258e49cd748325c2a6ac14ed1829ec5600170
       </div>
       <div class="table-responsive">
         <table class="table">
@@ -147,7 +98,6 @@
           <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back to History" (click)="backToHistory()">
         </div>
       </div>
-<<<<<<< HEAD
       <div>
         <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
         <!-- <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
@@ -157,17 +107,6 @@
               <p>Answer: {{answer.answer}}</p>
               <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
             </div>
-=======
-    </div>
-    <div>
-      <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
-      <!-- <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
-        <div class="card mb-2">
-          <div class="card-body">
-            <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
-            <p>Answer: {{answer.answer}}</p>
-            <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
->>>>>>> 44f258e49cd748325c2a6ac14ed1829ec5600170
           </div>
         </div>
       </div> -->
@@ -178,13 +117,6 @@
           [comments]="comments"
           ></app-dynamic-form>
       </div>
-    </div> -->
-      <app-dynamic-form class="w-100"
-        [qset_id]="qset_id"
-        [questions]="questions"
-        [display_only]="true"
-        [comments]="comments"
-        ></app-dynamic-form>
     </div>
   
     <!-- RESOLVE COMMENTS AND RESUBMIT -->
@@ -239,17 +171,8 @@
             </div>
           </div>
         </div>
-<<<<<<< HEAD
         <button type="submit" class="btn btn-success btn-block">Resubmit</button>
         <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
       </form>
     </div>
   </div>
-=======
-      </div>
-      <button type="submit" class="btn btn-success btn-block">Resubmit</button>
-      <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
-    </form>
-  </div>
-</div>
->>>>>>> 44f258e49cd748325c2a6ac14ed1829ec5600170
