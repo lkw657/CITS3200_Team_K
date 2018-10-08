@@ -56,21 +56,33 @@
       </div>
 
       <div class="m-3">
-        <!-- <input type="button" class="btn btn-success btn-w2 float-left mr-5 p-3" (click)="submitForm(approvalView.comments, 'Approved')" value="Approve"> -->
-        <!-- Example single danger button -->
+        <button type="button" class="btn btn-success btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Approve as
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', false)">{{role}}</a>
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', true)">Acting {{role}}</a>
+        </div>
 
-          <button type="button" class="btn btn-success btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Approve as
-          </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved')">{{role}}</a>
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved')">Acting {{role}}</a>
-          </div>
-        
-        <input type="button" class="btn btn-warning btn-w2 float-left mr-5 p-3" (click)="submitForm(approvalView.comments, 'Provisionally Approved')"
-          value="Provisionally Approve">
-        <input type="button" class="btn btn-danger btn-w2 float-left p-3" (click)="submitForm(approvalView.comments, 'Rejected')"
-          value="Reject">
+        <button type="button" class="btn btn-warning btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Provisionally Approve as
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', false)">{{role}}</a>
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', true)">Acting {{role}}</a>
+        </div>
+
+        <button type="button" class="btn btn-danger btn-w2 float-left p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Reject as
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', false)">{{role}}</a>
+          <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', true)">Acting {{role}}</a>
+        </div>
+
       </div>
     </div>
   </div>

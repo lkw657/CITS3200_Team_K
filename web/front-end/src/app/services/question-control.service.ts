@@ -9,7 +9,6 @@ export class QuestionControlService {
 
   toFormGroup(questions: QuestionBase<any>[], display? : boolean ) {
     let group: any = {};
-    console.log(display);
     if(display){
       for(let j = 0 ; j < questions.length; j++) {
         let question : any = questions[j];
