@@ -100,16 +100,6 @@
       </div>
       <div>
         <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
-        <!-- <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
-          <div class="card mb-2">
-            <div class="card-body">
-              <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
-              <p>Answer: {{answer.answer}}</p>
-              <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
-            </div>
-          </div>
-        </div>
-      </div> -->
         <app-dynamic-form class="w-100"
           [qset_id]="qset_id"
           [questions]="questions"
@@ -158,21 +148,20 @@
             </div>
           </div>
         </div>
-  
-        <div class="mb-4">
-          <div class="mt-4" *ngFor="let comment of submissionView.comments; let in = index">
-            <div class="card mb-2">
-              <div class="card-body">
-                <p>Question: {{submissionView.questionSet.questionList[comment.order].text}}</p>
-                <h4 class="text-danger">Comment: {{comment.text}}</h4>
-  
-                <input type="text" class="form-control" name="answer{{in}}" required [(ngModel)]="submissionView.answers[comment.order].answer">
-              </div>
-            </div>
+        <app-dynamic-form class="w-100"
+          [qset_id]="qset_id"
+          [questions]="questions"
+          [comments]="comments"
+          [resubmit]="true"
+          ></app-dynamic-form>
+        <div class="row">
+          <div class="col">
+            <button type="submit" class="btn btn-success btn-block">Resubmit</button>
+          </div>
+          <div class="col">
+            <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
           </div>
         </div>
-        <button type="submit" class="btn btn-success btn-block">Resubmit</button>
-        <button type="button" (click)="showSubmissions()" class="btn btn-danger btn-block">Cancel</button>
       </form>
     </div>
   </div>
