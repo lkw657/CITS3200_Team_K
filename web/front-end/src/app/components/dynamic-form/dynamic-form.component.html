@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!display_only">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
     <!-- School selector -->
@@ -48,5 +48,16 @@
       </div>
     </div>
 
+  </form>
+</div>
+
+<div *ngIf="display_only">
+  <form [formGroup]="form">
+    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+      <app-question class="w-100" 
+                    [question]="question" 
+                    [form]="form" disabled></app-question>
+      <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
+    </div>
   </form>
 </div>

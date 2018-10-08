@@ -12,8 +12,7 @@
           <label>Year {{i+1}}</label>
           <input type="text" class="form-control" *ngSwitchCase="'money_array'" 
             placeholder="$$" formControlName="{{i}}" 
-            [id]="question.key" 
-            [value]="question.value"
+            [id]="question.key"
             (keyup)="calcTotal(question.key)"
             (blur)="calcTotal(question.key)">
         </div>

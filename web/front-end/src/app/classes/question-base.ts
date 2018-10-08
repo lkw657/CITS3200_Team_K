@@ -5,6 +5,7 @@ export class QuestionBase<T> {
     required: boolean;
     order: number;
     controlType: string;
+    disabled : boolean;
 
     constructor(paras: {
         value? : T,
@@ -12,7 +13,8 @@ export class QuestionBase<T> {
         label? : string,
         required?: boolean,
         order?: number,
-        controlType?: string
+        controlType?: string,
+        disabled? : boolean
     } = {}){
         this.value = paras.value;
         this.key = paras.key || '';
@@ -20,5 +22,6 @@ export class QuestionBase<T> {
         this.required = paras.required || true;
         this.order = paras.order === undefined ? 1 : paras.order;
         this.controlType = paras.controlType || '';
+        this.disabled = paras.disabled || false;
     }
 }

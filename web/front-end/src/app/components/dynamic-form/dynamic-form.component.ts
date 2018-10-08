@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { QuestionControlService } from '../../services/question-control.service';
 import { QuestionService } from '../../services/question.service';
 import { QuestionBase } from '../../classes/question-base';
+import { Answer } from '../../classes/answer'
 
 import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
@@ -18,6 +19,9 @@ export class DynamicFormComponent implements OnInit {
 
   @Input() questions: QuestionBase<any>[] = [];
   @Input() qset_id : string = '';
+  @Input() comments : any[] = [];
+  @Input() display_only : boolean = false;
+
   form: FormGroup;
   school: String;
   submitter: String;
@@ -33,10 +37,20 @@ export class DynamicFormComponent implements OnInit {
     private questionService: QuestionService ) { }
 
   ngOnInit() {
-    this.form = this.qcs.toFormGroup(this.questions);
-    this.form.valueChanges.subscribe( (data) => { console.log(data);} )
+    if(this.display_only){
+      this.form = this.qcs.toFormGroup(this.questions, this.display_only);
+      this.form.valueChanges.subscribe( (data) => { console.log(data);} )
+    } else {
+      this.form = this.qcs.toFormGroup(this.questions);
+    }
   }
 
+  findspecificComment(order: number){
+    if( this.comments.find(x => x.order === order) != undefined ){
+      return this.comments.find(x => x.order === order).text;
+    }
+  }
+  
   // Saves role into form and changes view
   selectRole(role) {
     this.submitter = role;
