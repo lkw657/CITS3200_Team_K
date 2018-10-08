@@ -35,11 +35,11 @@ export class SubmissionsDashboardComponent implements OnInit {
   showHistory = false;
   showHistoricalSubmission = false;
 
-  questions: any = [];
-  answers: Answer[] = [];
+  questions : any = [];
+  answers : Answer[] = [];
   isLoaded = false;
-  qset_id: string = '';
-  comments: any[] = [];
+  qset_id : string = '';
+  comments : any[] = [];
 
   constructor(
     private router: Router,
@@ -54,7 +54,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   refreshSubmissions() {
-    // Get all forms submitted by user
+    // Get all forms submitted by user  
     this.dashboardService.getUserSubmissions().subscribe(data => {
       this.userSubmissions = data.submissions;
     },
@@ -64,7 +64,7 @@ export class SubmissionsDashboardComponent implements OnInit {
         return false;
       });
   }
-
+  
   // Populates dashboard with all submissions that have not been resubmitted
   showSubmissions() {
     window.scrollTo(0, 0);
@@ -74,48 +74,46 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
-  createQuestionList(questionSet, ans){
-    let answers = this.createAnswerList(ans);
-
+  createQuestionList(questionSet){
     this.questions = questionSet['questionList'];
-    let qObjs: QuestionBase<any>[] = [];
+    let qObjs : QuestionBase<any> [] = [];
 
-    for (let i = 0; i < this.questions.length; i++) {
+    for(let i = 0 ; i < this.questions.length ; i++ ){
       let q = this.questions[i];
-      if (q['type'] == 'textarea') {
+      if(q['type'] == 'textarea'){
         qObjs.push(
             new TextboxQuestion({
                 key: i+1,
                 label: q.text,
-                value: answers[i].answer,
+                value: this.answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
             })
         );
-      } else if (q['type'] == 'text') {
+      } else if (q['type'] == 'text'){
         qObjs.push(
             new TextQuestion({
                 key: i+1,
                 label: q.text,
-                value: answers[i].answer,
+                value: this.answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
             })
         );
-      } else if (q['type'] == 'money_single') {
+      } else if (q['type'] == 'money_single'){
         qObjs.push(
             new MoneyQuestion({
                 key: i+1,
                 label: q.text,
-                value: answers[i].answer,
+                value: this.answers[i].answer,
                 required: true,
                 order : q.order,
                 disabled: true
             })
         );
-      } else if (q['type'].indexOf("money_array") == 0) {
+      } else if ( q['type'].indexOf("money_array") == 0 ){
         let number_of_fields = 0;
         qObjs.push(
             new MoneyArrayQuestion({
@@ -123,7 +121,7 @@ export class SubmissionsDashboardComponent implements OnInit {
                 label: q.text,
                 required: true,
                 order : q.order,
-                value: answers[i].answer,
+                value: this.answers[i].answer,
                 number: parseInt(q['type'].substring(q['type'].length - 1)),
                 disabled: true
             })
@@ -132,13 +130,13 @@ export class SubmissionsDashboardComponent implements OnInit {
     }
 
     this.isLoaded = true;
-    this.questions = qObjs.sort((a, b) => a.order - b.order);
+    this.questions = qObjs.sort((a,b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
   }
-  createAnswerList(answers) : Answer[] {
+  createAnswerList(answers){
     this.answers = answers;
-    let aObjs: Answer[] = [];
-    for (let i = 0; i < answers.length; i++) {
+    let aObjs : Answer[] = [];
+    for(let i = 0 ; i < answers.length; i++){
       aObjs.push(
         new Answer({
           order: answers[i]['order'],
@@ -146,27 +144,24 @@ export class SubmissionsDashboardComponent implements OnInit {
         })
       );
     }
-    return aObjs;
+    this.answers = aObjs;
   }
+
   // Shows a single submission when View Form is clicked
   showSubmission(form) {
     window.scrollTo(0, 0);
     this.showSingleSubmission = true;
     this.showAllSubmissions = false;
 
-    console.log(this.submissionView);
-
     this.submissionView = form;
+    console.log(form);
 
-    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
-
+    this.createAnswerList(this.submissionView['answers']);
+    this.createQuestionList(this.submissionView['questionSet']);
+    
     //DEVELOPMENT ONLY - TO BE DELETED
-    this.submissionView.comments = [
-      { order: 1, text: "Please don't try to kill yourself" },
-      { order: 5, text: "I don't have that much money :(" }
-    ];
+    this.submissionView.comments = [{ order: 1, text: "Q2 - Here is a comment" }, { order: 5, text: "Q6 - Here is another comment" }]
     this.comments = this.submissionView.comments;
-
   }
 
 
@@ -178,21 +173,41 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
-
   resubmit() {
+
     // Create new submission
-    this.submission.parent_id = this.submissionView._id;
     this.submission.answers = this.submissionView.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
-    //Sends updated form for resubmission
-    this.questionService.resubmit(this.submission).subscribe(data => {
+    this.submission.qset_id = this.submissionView.questionSet._id;
+    this.submission.history = [];
+    this.submission.history.push(this.submissionView._id);
+
+    if (this.submissionView.history) {
+      for (let i in this.submissionView.history) {
+        this.submission.history.push(this.submissionView.history[i]);
+      }
+    }
+
+    this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
-        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
-        this.refreshSubmissions();
-        this.resolveComments = false;
-        this.showAllSubmissions = true;
-        window.scrollTo(0, 0);
+
+        //Set new status on old copy of form and update in db
+        this.submissionView.status = 'Resubmitted';
+        this.questionService.updateSubmission(this.submissionView).subscribe(data => {
+          if (data.success) {
+            this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+            this.refreshSubmissions();
+            this.resolveComments = false;
+            this.showAllSubmissions = true;
+            window.scrollTo(0, 0);
+          }
+        },
+          err => {
+            this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+            window.scrollTo(0, 0);
+          }
+        );
       }
     },
       err => {
@@ -203,7 +218,6 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Displays a dashboard of all historical forms attached to single form
-
   showFormHistory(history) {
     this.showHistory = true;
     this.showSingleSubmission = false;
@@ -231,14 +245,12 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
-    console.log(this.questions);
 
     //DEVELOPMENT ONLY - TO BE DELETED
     this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
   }
 
-  // Goes back to history dashboard
+  // Goes back to history dashboard 
   backToHistory() {
     this.showHistory = true;
     this.showHistoricalSubmission = false;
