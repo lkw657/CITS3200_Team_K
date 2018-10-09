@@ -35,16 +35,29 @@ export class QuestionControlService {
     } else if(!display) {
       questions.forEach((question : any) => {
         if(question.controlType === 'money_array'){
-          let arrayofQuestions = [];
+          if(question.value != null && question.value.length > 0){
+            let values : string[] = question.value.split(',');
+            let sum = 0;
+            let arrayofQuestions = [];
 
-          for(let i = 0 ; i < question.number ; i++ ){
-            arrayofQuestions.push(new FormControl());
-          }
+            for(let i = 0 ; i < question.number ; i++ ){
+              sum += parseInt(values[i]);
+              arrayofQuestions.push(new FormControl({value: values[i], disabled: true}));
+            }
 
-          arrayofQuestions.push(new FormControl());
-          console.log(arrayofQuestions);
-          group[question.key] = new FormArray(arrayofQuestions);
+            arrayofQuestions.push(new FormControl( {value: sum || '', disabled: true }));
+            console.log(arrayofQuestions);
+            group[question.key] = new FormArray(arrayofQuestions);
+          } else {
+            let arrayofQuestions = [];
+            for(let i = 0 ; i < question.number ; i++ ){
+              arrayofQuestions.push(new FormControl());
+            }
   
+            arrayofQuestions.push(new FormControl());
+            console.log(arrayofQuestions);
+            group[question.key] = new FormArray(arrayofQuestions);
+          }
         } else {
           group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
                                                   : new FormControl(question.value || '');
