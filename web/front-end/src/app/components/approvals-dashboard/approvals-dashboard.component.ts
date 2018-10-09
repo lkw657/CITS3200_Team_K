@@ -43,7 +43,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
-      console.log(this.userApprovals);
     },
       err => {
         console.log(err);
@@ -74,7 +73,7 @@ export class ApprovalsDashboardComponent implements OnInit {
 
   // Resubmits form for approval
   submitForm(comments, response, acting) {
-
+    console.log(response);
     let commentArray = [];
     // Create approval object with new comments and response
     for (let i in comments) {
@@ -86,6 +85,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.approval.response = response;
     this.approval.acting = acting;
     this.approval.form_id = this.approvalView._id;
+
+    console.log(this.approval);
 
     this.questionService.formResponse(this.approval).subscribe(data => {
       if (data.success) {

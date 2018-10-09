@@ -18,6 +18,7 @@ import { DynamicFormQuestionComponent } from './components/dynamic-form-question
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { EditUsersComponent } from './components/edit-users/edit-users.component';
 import { EditQuestionsComponent } from './components/edit-questions/edit-questions.component';
+import { EditEmailsComponent } from './components/edit-emails/edit-emails.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { SubmissionsDashboardComponent } from './components/submissions-dashboard/submissions-dashboard.component';
 import { ApprovalsDashboardComponent } from './components/approvals-dashboard/approvals-dashboard.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
   { path: 'submission', component: SubmissionComponent, canActivate:[AuthGuard]},
   { path: 'editUsers', component: EditUsersComponent, canActivate:[AuthGuard]},
   { path: 'editQuestions', component: EditQuestionsComponent, canActivate:[AuthGuard]},
+  { path: 'editEmails', component: EditEmailsComponent, canActivate:[AuthGuard]},
   { path: 'verify/:mailID/:secret', component: VerifyComponent, canActivate:[AuthGuard]},
   { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate:[AuthGuard]},
   { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate:[AuthGuard]},
@@ -66,7 +68,8 @@ const routes: Routes = [
     EditQuestionsComponent,
     VerifyComponent,
     SubmissionsDashboardComponent,
-    ApprovalsDashboardComponent
+    ApprovalsDashboardComponent,
+    EditEmailsComponent
   ],
   imports: [
     BrowserModule,
