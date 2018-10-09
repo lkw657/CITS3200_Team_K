@@ -8,6 +8,9 @@ var Email = emailModel.emailSchema;
 const email = process.env.SMTP_EMAIL;
 const pass = process.env.SMTP_PASSWORD;
 
+var formModel = require('../models/forms');
+var Form = formModel.Form;
+
 var transporter = nodemailer.createTransport({
     host: process.env.SMPT_HOST,
     auth: {
@@ -16,7 +19,16 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports.sendEmail = (to, subject, html) => {
+function revertForm(backupForm) {
+    console.log("reverting");
+    Form.findOneAndUpdate({ _id: backupForm._id }, backupForm, (err, form) => {
+        if (err) {
+            console.log("SOmething is seriously fucked");
+        }
+    });
+}
+
+module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) => {
 
     var mailOptions = {
         from: email,
@@ -26,23 +38,41 @@ module.exports.sendEmail = (to, subject, html) => {
     };
 
     transporter.sendMail(mailOptions, function (err, info) {
-        if (err)
+        if (err) {
             console.log(err)
-        else
+            if (backupForm) {
+                revertForm(backupForm);
+            }
+            if (res)
+                return res.status(400).json({ success: false, msg: "Failed to connect to SMTP Server" });
+        }
+        else {
             console.log(info);
+            return res.status(200).json({ success: true, msg: successMessage });
+        }
     });
 
 };
 
-module.exports.sendFormAccessEmail = (form, roleToSend) => {
+module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, backupForm) => {
+
+
     Email.findOne({ role: roleToSend }, (err, email) => {
         if (err) {
             console.log(err);
-            return;
+            if (backupForm) {
+                revertForm(backupForm);
+            }
+            if (res)
+                return res.status(400).json({ success: false, msg: "Something went wrong!" });
         }
         else if (!email) {
             console.log("No Such Email in DB");
-            return;
+            if (backupForm) {
+                revertForm(backupForm);
+            }
+            if (res)
+                return res.status(400).json({ success: false, msg: "Could not find email" });
         }
 
         var mail = new Mail();
@@ -52,15 +82,19 @@ module.exports.sendFormAccessEmail = (form, roleToSend) => {
             mail.secret = secret;
             mail.save((err, mail) => {
                 if (err) {
-                    // something
                     console.log(err);
+                    if (backupForm) {
+                        revertForm(backupForm);
+                    }
+                    if (res)
+                        return res.status(400).json({ success: false, msg: "Failed to mail" });
                 }
                 else {
                     var subject = "Access for Form";
-                    var html = email.emailContent+'<br>';
+                    var html = email.emailContent + '<br>';
                     html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
-                    
-                    module.exports.sendEmail(email.email, subject, html);
+
+                    module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
                 }
             });
         });
@@ -76,56 +110,80 @@ module.exports.sendFormAccessEmail = (form, roleToSend) => {
 
 //req.user._id
 module.exports.verifyFormAccess = (req, res, next) => {
-    if (req.body.mailID && req.body.secret && req.user) {
-        Mail.findById(req.body.mailID, (err, mail) => {
-            if (err) {
-                return res.status(404).json({
+
+    console.log(req.body);
+    console.log(req.user);
+
+    if (!req.body.mailID) {
+        return res.status(403).json({
+            success: false,
+            msg: "No mailID"
+        });
+    }
+    if (!req.body.secret) {
+        return res.status(403).json({
+            success: false,
+            msg: "No secret"
+        });
+    }
+    if (!req.user) {
+        return res.status(403).json({
+            success: false,
+            msg: "Invalid user"
+        });
+    }
+
+
+    Mail.findById(req.body.mailID, (err, mail) => {
+        if (err) {
+            console.log(err);
+            return res.status(404).json({
+                success: false,
+                msg: "forbidden"
+            });
+        }
+        else if (!mail) {
+            return res.status(403).json({
+                success: false,
+                msg: "no such mail"
+            });
+        }
+        else {
+            if (mail.status == "done") {
+                return res.status(403).json({
                     success: false,
-                    msg: "Forbidden"
+                    msg: "Link already used"
                 });
             }
-            else if (!mail) {
+            else if (mail.secret == req.body.secret && mail.type == 'form-access') {
+                // give userID access to mail.formID
+                require('./users').addFormToUser(req.user._id, mail.formID);
+
+                //Deactivate email
+                mail.status = "done";
+                mail.save((err, mail) => {
+                    if (err || !mail) {
+                        return res.status(403).json({
+                            success: false,
+                            msg: err
+                        });
+                    }
+                    else {
+                        return res.status(200).json({
+                            success: true,
+                            msg: "Success"
+                        });
+                    }
+                })
+            }
+            else {
                 return res.status(403).json({
                     success: false,
                     msg: "Forbidden"
                 });
             }
-            else {
-                if (mail.status == "done") {
-                    return res.status(403).json({
-                        success: false,
-                        msg: "Link already used"
-                    });
-                }
-                else if (mail.secret == req.body.secret && mail.type == 'form-access') {
-                    // give userID access to mail.formID
-                    require('./users').addFormToUser(req.user._id, mail.formID);
-
-                    //Deactivate email
-                    mail.status = "done";
-                    mail.save((err, mail) => {
-                        console.log(err)
-                    })
-                    return res.status(200).json({
-                        success: true,
-                        msg: "Success"
-                    });
-                }
-                else {
-                    return res.status(403).json({
-                        success: false,
-                        msg: "Forbidden"
-                    });
-                }
-            }
-        })
-    }
-    else {
-        return res.status(400).json({
-            success: false,
-            msg: "No formId or hash"
-        });
-    }
+        }
+    })
 }
 
 module.exports.listAllMail = (req, res, next) => {
