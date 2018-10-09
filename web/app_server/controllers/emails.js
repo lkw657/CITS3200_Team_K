@@ -9,7 +9,6 @@ var Mail = mailModel.mailSchema;
 module.exports.listAllEmails = (req, res, next) => {
 
     Email.find({}, (err, mails) => {
-        console.log("HERHE");
         if (!mails) {
             res.status(403).json({
                 success: false,
@@ -29,7 +28,6 @@ module.exports.listAllEmails = (req, res, next) => {
             });
         }
     });
-
 }
 
 
@@ -45,8 +43,6 @@ module.exports.addEmail = (req, res, next) => {
     //     });
     // }
 
-
-    //Check if a questionlist is included.
     if (!req.body.email && !req.body.role) {
         return res.status(400).json({ success: false, msg: 'Missing Data' });
     }
