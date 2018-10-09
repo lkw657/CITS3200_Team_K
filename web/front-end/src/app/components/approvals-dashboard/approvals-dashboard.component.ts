@@ -38,12 +38,11 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.refreshApprovals();
   }
 
-  // Resfreshes approvals when Dashboard is loaded
+  // Refreshes approvals when Dashboard is loaded
   refreshApprovals() {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
-      console.log(this.userApprovals);
     },
       err => {
         console.log(err);
