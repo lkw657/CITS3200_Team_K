@@ -7,36 +7,21 @@ var User = userModel.User;
 var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
+var emailModel = require('../models/emails');
+var Email = emailModel.emailSchema;
+
+
 var mailer = require('./mailer');
 
-function sendFirstEmailToNextPerson(school, submitter, form_id, ) {
+function sendFirstEmailToNextPerson(form) {
     // Send email to school HoS/AD(R) depending on stuff.
-    if (school == 'School of Physics, Mathematics and Computing') {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HoS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-    }
-    else if (school == 'School of Engineering') {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-
+    if (form.submitter == 'HoS') {
+        mailer.sendFormAccessEmail(form, "AD(R)");
     }
     else {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HoS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-
-        }
+        mailer.sendFormAccessEmail(form, form.school+" HoS");
     }
+    
 }
 /**
 req.user._id
@@ -129,7 +114,7 @@ module.exports.addForm = (req, res, next) => {
                                         });
                                     }
                                     else {
-                                        sendFirstEmailToNextPerson(req.body.school, req.body.submitter, form._id);
+                                        sendFirstEmailToNextPerson(form);
                                         return res.status(201).json({
                                             success: true,
                                             msg: "New Form Submitted"
@@ -238,7 +223,7 @@ module.exports.resubmitForm = (req, res, next) => {
                         }
                         else {
                             //Send email
-                            sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
+                            sendFirstEmailToNextPerson(new_form);
                             form.save((err, form) => {
                                 if (err) {
                                     return res.status(400).json({ success: false, msg: 'Something went wrong updating parent' });
@@ -284,6 +269,8 @@ module.exports.formResponse = (req, res, next) => {
         if (!form) {
             return res.status(400).json({ success: false, msg: 'No such form' });
         }
+        console.log(JSON.stringify(req.user._id));
+        console.log(JSON.stringify(form.allocatedStaff));
         if (JSON.stringify(req.user._id) != JSON.stringify(form.allocatedStaff)) {
             return res.status(400).json({ success: false, msg: 'Bad user' });
         }
@@ -293,8 +280,18 @@ module.exports.formResponse = (req, res, next) => {
             actingString = 'Acting ';
         }
 
+        var backupForm = {
+            _id: form._id,
+            dates : form.dates.slice(0),
+            status : form.status,
+            allocatedStaff :form.allocatedStaff,
+            approvedBy : form.approvedBy.slice(0),
+        }
+
         if (req.body.response == 'Approved') {
-            var email, emailContent;
+            var role;
+            
+
             if (form.status == 'Awaiting HoS') {
                 if (form.submitter == 'AD(R)') {
                     form.status = 'Awaiting PVC-ED';
@@ -303,8 +300,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
-                    email = 'neosh11@gmail.com';
-                    emailContent = 'You are PVC-ED ahha';
+                    role = 'PVC-ED';
                 }
                 else {
                     form.status = 'Awaiting AD(R)';
@@ -314,8 +310,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
-                    email = 'neosh11@gmail.com';
-                    emailContent = 'You are AD(R) ahha';
+                    role = 'AD(R)';
                 }
             }
             else if (form.status == 'Awaiting AD(R)') {
@@ -327,8 +322,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.dates.push(new Date());
 
 
-                email = 'neosh11@gmail.com';
-                emailContent = 'Awaiting PVC-ED';
+                role = 'PVC-ED';
 
             }
             else if (form.status == 'Awaiting PVC-ED') {
@@ -340,8 +334,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.dates.push(new Date());
 
 
-                email = 'neosh11@gmail.com';
-                emailContent = 'Click this dodgy link hehe for pdf';
+                role = 'final';
             }
             else {
                 return res.status(400).json({ success: false, msg: 'Form has bad status' });
@@ -357,14 +350,11 @@ module.exports.formResponse = (req, res, next) => {
                 }
                 else {
                     //email person
-                    mailer.sendFormAccessEmail(emailContent + "\n", email, form._id);
-                    return res.status(200).json({ success: true, msg: 'Approved and email sent' });
+                    mailer.sendFormAccessEmail(form, role, res, 'Approved and email sent', backupForm);
                 }
             });
         }
         else if (req.body.response == 'Provisionally Approved') {
-
-            form.status = 'Provisionally Approved';
 
             if (form.status == 'Awaiting HoS') {
                 form.rejectionRole = actingString + 'HoS';
@@ -381,6 +371,8 @@ module.exports.formResponse = (req, res, next) => {
 
             }
 
+            form.status = 'Provisionally Approved';
+
             if (req.body.comments) {
                 // TODO ask david
                 form.comments = req.body.comments;
@@ -389,11 +381,23 @@ module.exports.formResponse = (req, res, next) => {
 
                 form.save((err, form) => {
                     if (err) {
+                        console.log(err);
                         return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
                     else {
+                        //No need to bother with confirming delete, low priority 
+                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                            //delete
+                            if(err) console.log(err);
+                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                            staff.save( (err, staff)=>{if(err) console.log(err);});
+                        })
                         //email owner of form about provisional approval approval 
-                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                        User.findById(form.owner, (err, usr)=>{
+                            //Shouldn't be errors
+                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                        });
+                        
                         return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
                     }
                 });
@@ -430,9 +434,21 @@ module.exports.formResponse = (req, res, next) => {
                         return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
                     else {
+
+                        //No need to bother with confirming delete, low priority 
+                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                            //delete
+                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                            staff.save( (err, staff)=>{});
+                        })
+
+
                         //email owner of form about provisional approval approval 
-                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
-                        return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
+                        User.findById(form.owner, (err, usr)=>{
+                            //Shouldn't be errors
+                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Rejection for a form for one of your forms", "You got rejected bro! :(");
+                        });
+                        return res.status(200).json({ success: true, msg: 'Rejected and email sent to owner' });
                     }
                 });
 

@@ -18,7 +18,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   historicalSubmissionView: any;
   approval: any = {};
   formHistory: any;
-  role: String = 'HoS';
+  role: String;
 
   // View Selectors
   showAllApprovals = true;
@@ -43,7 +43,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
-      console.log(this.userApprovals);
     },
       err => {
         console.log(err);
@@ -68,12 +67,13 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showAllApprovals = false;
 
     this.approvalView = form;
+    this.role = this.approvalView.status.split(" ")[1];
     this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
 
   // Resubmits form for approval
   submitForm(comments, response, acting) {
-
+    console.log(response);
     let commentArray = [];
     // Create approval object with new comments and response
     for (let i in comments) {
@@ -85,6 +85,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.approval.response = response;
     this.approval.acting = acting;
     this.approval.form_id = this.approvalView._id;
+
+    console.log(this.approval);
 
     this.questionService.formResponse(this.approval).subscribe(data => {
       if (data.success) {

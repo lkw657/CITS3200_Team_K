@@ -35,6 +35,7 @@ passport.deserializeUser(User.deserializeUser());
 var indexRouter = require('./app_server/routes/index');
 var dbRouter = require('./app_server/routes/db');
 var mailRouter = require('./app_server/routes/mail');
+var emailRouter = require('./app_server/routes/email');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -44,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/db', dbRouter);
 app.use('/mail', mailRouter);
+app.use('/email', emailRouter);
 app.use('/', indexRouter);
 
 module.exports = app;
