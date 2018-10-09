@@ -11,6 +11,9 @@ const pass = process.env.SMTP_PASSWORD;
 var formModel = require('../models/forms');
 var Form = formModel.Form;
 
+var userModel = require('../models/users');
+var User = userModel.User;
+
 var transporter = nodemailer.createTransport({
     host: process.env.SMPT_HOST,
     auth: {
@@ -48,7 +51,22 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
         }
         else {
             console.log(info);
-            return res.status(200).json({ success: true, msg: successMessage });
+            if(res && backupForm){
+                // Pop of approvals array of allocated staff
+                if(backupForm.approvals){
+                    User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                        //delete
+                        staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                        staff.save( (err, staff)=>{
+                            res.status(200).json({ success: true, msg: successMessage });
+                        });
+                    });
+                }
+                else{
+                    return res.status(200).json({ success: true, msg: successMessage });
+                }
+            }
+            
         }
     });
 

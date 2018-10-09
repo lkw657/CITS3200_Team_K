@@ -280,15 +280,17 @@ module.exports.formResponse = (req, res, next) => {
             actingString = 'Acting ';
         }
 
+        var backupForm = {
+            _id: form._id,
+            dates : form.dates.slice(0),
+            status : form.status,
+            allocatedStaff :form.allocatedStaff,
+            approvedBy : form.approvedBy.slice(0),
+        }
+
         if (req.body.response == 'Approved') {
             var role;
-            var backupForm = {
-                _id: form._id,
-                dates : form.dates.slice(0),
-                status : form.status,
-                allocatedStaff :form.allocatedStaff,
-                approvedBy : form.approvedBy.slice(0),
-            }
+            
 
             if (form.status == 'Awaiting HoS') {
                 if (form.submitter == 'AD(R)') {
@@ -354,8 +356,6 @@ module.exports.formResponse = (req, res, next) => {
         }
         else if (req.body.response == 'Provisionally Approved') {
 
-            form.status = 'Provisionally Approved';
-
             if (form.status == 'Awaiting HoS') {
                 form.rejectionRole = actingString + 'HoS';
             }
@@ -371,6 +371,8 @@ module.exports.formResponse = (req, res, next) => {
 
             }
 
+            form.status = 'Provisionally Approved';
+
             if (req.body.comments) {
                 // TODO ask david
                 form.comments = req.body.comments;
@@ -379,11 +381,23 @@ module.exports.formResponse = (req, res, next) => {
 
                 form.save((err, form) => {
                     if (err) {
+                        console.log(err);
                         return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
                     else {
+                        //No need to bother with confirming delete, low priority 
+                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                            //delete
+                            if(err) console.log(err);
+                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                            staff.save( (err, staff)=>{if(err) console.log(err);});
+                        })
                         //email owner of form about provisional approval approval 
-                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                        User.findById(form.owner, (err, usr)=>{
+                            //Shouldn't be errors
+                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                        });
+                        
                         return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
                     }
                 });
@@ -420,9 +434,21 @@ module.exports.formResponse = (req, res, next) => {
                         return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
                     else {
+
+                        //No need to bother with confirming delete, low priority 
+                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                            //delete
+                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                            staff.save( (err, staff)=>{});
+                        })
+
+
                         //email owner of form about provisional approval approval 
-                        mailer.sendEmail(req.user.number + "@uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
-                        return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
+                        User.findById(form.owner, (err, usr)=>{
+                            //Shouldn't be errors
+                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Rejection for a form for one of your forms", "You got rejected bro! :(");
+                        });
+                        return res.status(200).json({ success: true, msg: 'Rejected and email sent to owner' });
                     }
                 });
 
