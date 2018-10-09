@@ -18,7 +18,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   historicalSubmissionView: any;
   approval: any = {};
   formHistory: any;
-  role: String = 'HoS';
+  role: String;
 
   // View Selectors
   showAllApprovals = true;
@@ -68,6 +68,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showAllApprovals = false;
 
     this.approvalView = form;
+    this.role = this.approvalView.status.split(" ")[1];
     this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
 

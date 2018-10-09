@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { baseURI } from '../../config';
 
 
@@ -15,7 +15,7 @@ export class VerifyComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private http: Http
+    private http: HttpClient
   ) { }
 
   secret : string = '';
@@ -33,7 +33,7 @@ export class VerifyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.secret = this.route.snapshot.paramMap.get('mailID');
-    this.mailID = this.route.snapshot.paramMap.get('secret');
+    this.mailID = this.route.snapshot.paramMap.get('mailID');
+    this.secret = this.route.snapshot.paramMap.get('secret');
   }
 }
