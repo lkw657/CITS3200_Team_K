@@ -36,46 +36,51 @@
 
 <!-- Display the new question form -->
 <div *ngIf="displayNew">
-    <div class="card">
-      <div class="card-body">
-        <form (submit)="onQuestionNew()">
-  
-          <div class="form-group">
-            <label>Title:</label>
-            <input type="text" class="form-control" name="title" required [(ngModel)]="currentQuestion.title">
-          </div>
-  
-          <div class="form-group">
-            <label>Question:</label>
-            <input type="text" class="form-control" name="text" [(ngModel)]="currentQuestion.text">
-          </div>
-  
-          <div class="form-group">
-            <label>Type of Form:</label>
-            <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.formName">
-              <option>faculty</option>
-              <option>central</option>
-            </select>
-          </div>
-  
-          <div class="form-group">
-            <label>Type of input:</label>
-            <select class="form-control" name="type" required [(ngModel)]="currentQuestion.type">
-              <option>textarea</option>
-              <option>text</option>
-              <option>date</option>
-              <option>money_single</option>
-              <option>money_array</option>
-              <option>number</option>
-            </select>
-          </div>
-  
-          <button type="submit" class="btn btn-success btn-block" [disabled]='!currentQuestion.text || !currentQuestion.type || !currentQuestion.formName'>Save new question</button>
-          <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
-        </form>
-      </div>
+  <div class="card">
+    <div class="card-body">
+      <form (submit)="onQuestionNew()">
+
+        <div class="form-group">
+          <label>Title:</label>
+          <input type="text" class="form-control" name="title" required [(ngModel)]="currentQuestion.title">
+        </div>
+
+        <div class="form-group">
+          <label>Question:</label>
+          <input type="text" class="form-control" name="text" [(ngModel)]="currentQuestion.text">
+        </div>
+
+        <div class="form-group">
+          <label>Type of Form:</label>
+          <select class="form-control" name="formName" required [(ngModel)]="currentQuestion.formName">
+            <option>faculty</option>
+            <option>central</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Type of input:</label>
+          <select class="form-control" name="type" required [(ngModel)]="currentQuestion.type">
+            <option>textarea</option>
+            <option>text</option>
+            <option>date</option>
+            <option>money_single</option>
+            <option>money_array</option>
+            <option>number</option>
+          </select>
+        </div>
+
+        <div *ngIf="currentQuestion.type=='money_array'" class="form-group">
+          <label>Number of fields:</label>
+          <input type="number" class="form-control" name="array" required [(ngModel)]="currentQuestion.array">
+        </div>
+
+        <button type="submit" class="btn btn-success btn-block" [disabled]='!currentQuestion.text || !currentQuestion.type || !currentQuestion.formName'>Save new question</button>
+        <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
+      </form>
     </div>
   </div>
+</div>
 
 <!-- Display the edit question form -->
 <div *ngIf="displayEdit">
@@ -111,6 +116,11 @@
             <option>money_array</option>
             <option>number</option>
           </select>
+        </div>
+
+        <div *ngIf="currentQuestion.type=='money_array'" class="form-group">
+          <label>Number of fields:</label>
+          <input type="number" min="1" max="8" class="form-control" name="array" required [(ngModel)]="currentQuestion.array">
         </div>
 
         <button type="submit" class="btn btn-success btn-block">Save edits</button>

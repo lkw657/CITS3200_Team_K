@@ -17,7 +17,7 @@ export class EditQuestionsComponent implements OnInit {
   ) { }
 
   questionList: any;
-  currentQuestion: Object;
+  currentQuestion: any;
 
   // What should be displayed
   displayAll: boolean = true;
@@ -41,6 +41,12 @@ export class EditQuestionsComponent implements OnInit {
   showEdit(question) {
 
     this.currentQuestion = question;
+
+    let type = this.currentQuestion.type.split("_")[0] + "_" + this.currentQuestion.type.split("_")[1];
+    if(type=="money_array") {
+      this.currentQuestion.array = this.currentQuestion.type.split("_")[2];
+      this.currentQuestion.type = type;
+    }
     this.displayAll = false;
     this.displayEdit = true;
     window.scrollTo(0, 0);
@@ -112,7 +118,12 @@ export class EditQuestionsComponent implements OnInit {
   saveNewQuestionSet() {
     for (let i = 0; i < this.questionList.length; i++) {
       this.questionList[i].order = i;
+      if(this.questionList[i].array > 0) {
+        this.questionList[i].type = this.questionList[i].type + "_" + this.questionList[i].array
+        this.questionList[i].array = undefined
+      }
     }
+    console.log(this.questionList);
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
