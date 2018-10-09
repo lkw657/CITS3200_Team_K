@@ -45,7 +45,7 @@ const routes: Routes = [
   { path: 'submission', component: SubmissionComponent, canActivate:[AuthGuard]},
   { path: 'editUsers', component: EditUsersComponent, canActivate:[AuthGuard]},
   { path: 'editQuestions', component: EditQuestionsComponent, canActivate:[AuthGuard]},
-  { path: 'verify/:mailID/:secret', component: VerifyComponent},
+  { path: 'verify/:mailID/:secret', component: VerifyComponent, canActivate:[AuthGuard]},
   { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate:[AuthGuard]},
   { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate:[AuthGuard]},
   { path: '**', component: NotFoundComponent}
