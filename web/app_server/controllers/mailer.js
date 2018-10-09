@@ -65,16 +65,19 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
             }
             if (res)
                 return res.status(400).json({ success: false, msg: "Something went wrong!" });
+            return;
         }
         else if (!email) {
             console.log("No Such Email in DB");
             if (backupForm) {
                 revertForm(backupForm);
+                console.log(roleToSend);
             }
             if (res)
                 return res.status(400).json({ success: false, msg: "Could not find email" });
+            return;
         }
-
+    
         var mail = new Mail();
         mail.type = "form-access";
         mail.formID = form._id;
@@ -88,6 +91,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                     }
                     if (res)
                         return res.status(400).json({ success: false, msg: "Failed to mail" });
+                    return;
                 }
                 else {
                     var subject = "Access for Form";
