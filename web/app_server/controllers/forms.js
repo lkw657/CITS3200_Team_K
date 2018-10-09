@@ -7,36 +7,21 @@ var User = userModel.User;
 var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
+var emailModel = require('../models/emails');
+var Email = emailModel.emailSchema;
+
+
 var mailer = require('./mailer');
 
-function sendFirstEmailToNextPerson(school, submitter, form_id, ) {
+function sendFirstEmailToNextPerson(form) {
     // Send email to school HoS/AD(R) depending on stuff.
-    if (school == 'School of Physics, Mathematics and Computing') {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HoS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-    }
-    else if (school == 'School of Engineering') {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HOS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-
+    if (form.submitter == 'HoS') {
+        mailer.sendFormAccessEmail(form, "AD(R)");
     }
     else {
-        if (submitter == 'HoS') {
-            mailer.sendFormAccessEmail("You are the AD(R), and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-        }
-        else {
-            mailer.sendFormAccessEmail("You are the HoS, and have been sent this email for review\n", "neosh11@gmail.com", form_id);
-
-        }
+        mailer.sendFormAccessEmail(form, form.school+" HoS");
     }
+    
 }
 /**
 req.user._id
@@ -129,7 +114,7 @@ module.exports.addForm = (req, res, next) => {
                                         });
                                     }
                                     else {
-                                        sendFirstEmailToNextPerson(req.body.school, req.body.submitter, form._id);
+                                        sendFirstEmailToNextPerson(form);
                                         return res.status(201).json({
                                             success: true,
                                             msg: "New Form Submitted"
@@ -239,7 +224,7 @@ module.exports.resubmitForm = (req, res, next) => {
                             }
                             else {
                                 //Send email
-                                sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
+                                sendFirstEmailToNextPerson(new_form);
                                 return res.status(200).json({ success: true, msg: 'Form added to user and email sent' });
                             }
                         })
@@ -290,7 +275,7 @@ module.exports.formResponse = (req, res, next) => {
         }
 
         if (req.body.response == 'Approved') {
-            var email, emailContent;
+            var role;
             if (form.status == 'Awaiting HoS') {
                 if (form.submitter == 'AD(R)') {
                     form.status = 'Awaiting PVC-ED';
@@ -299,8 +284,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
-                    email = 'neosh11@gmail.com';
-                    emailContent = 'You are PVC-ED ahha';
+                    role = 'PVC-ED';
                 }
                 else {
                     form.status = 'Awaiting AD(R)';
@@ -310,8 +294,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
-                    email = 'neosh11@gmail.com';
-                    emailContent = 'You are AD(R) ahha';
+                    role = 'AD(R)';
                 }
             }
             else if (form.status == 'Awaiting AD(R)') {
@@ -323,8 +306,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.dates.push(new Date());
 
 
-                email = 'neosh11@gmail.com';
-                emailContent = 'Awaiting PVC-ED';
+                role = 'PVC-ED';
 
             }
             else if (form.status == 'Awaiting PVC-ED') {
@@ -336,8 +318,7 @@ module.exports.formResponse = (req, res, next) => {
                 form.dates.push(new Date());
 
 
-                email = 'neosh11@gmail.com';
-                emailContent = 'Click this dodgy link hehe for pdf';
+                role = 'final';
             }
             else {
                 return res.status(400).json({ success: false, msg: 'Form has bad status' });
@@ -353,7 +334,7 @@ module.exports.formResponse = (req, res, next) => {
                 }
                 else {
                     //email person
-                    mailer.sendFormAccessEmail(emailContent + "\n", email, form._id);
+                    mailer.sendFormAccessEmail(form, role);
                     return res.status(200).json({ success: true, msg: 'Approved and email sent' });
                 }
             });

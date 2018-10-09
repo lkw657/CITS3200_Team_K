@@ -2,6 +2,8 @@ const nodemailer = require('nodemailer');
 var mailModel = require('../models/mails');
 var Mail = mailModel.mailSchema;
 
+var emailModel = require('../models/emails');
+var Email = emailModel.emailSchema;
 
 const email = process.env.SMTP_EMAIL;
 const pass = process.env.SMTP_PASSWORD;
@@ -32,28 +34,37 @@ module.exports.sendEmail = (to, subject, html) => {
 
 };
 
-module.exports.sendFormAccessEmail = (text, to, formID) => {
+module.exports.sendFormAccessEmail = (form, roleToSend) => {
+    Email.findOne({ role: roleToSend }, (err, email) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        else if (!email) {
+            console.log("No Such Email in DB");
+            return;
+        }
 
-    var mail = new Mail();
-    mail.type = "form-access";
-    mail.formID = formID;
-    mail.generateSecret((secret)=>{
-        mail.secret = secret;
-        mail.save((err, mail) => {
-            if (err) {
-                // something
-                console.log(err);
-            }
-            else {
-                var subject = "Access for Form";
-                var html = text;
-                html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
-                module.exports.sendEmail(to, subject, html);
-            }
+        var mail = new Mail();
+        mail.type = "form-access";
+        mail.formID = form._id;
+        mail.generateSecret((secret) => {
+            mail.secret = secret;
+            mail.save((err, mail) => {
+                if (err) {
+                    // something
+                    console.log(err);
+                }
+                else {
+                    var subject = "Access for Form";
+                    var html = email.emailContent+'<br>';
+                    html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
+                    
+                    module.exports.sendEmail(email.email, subject, html);
+                }
+            });
         });
     });
-
-
 };
 
 // ***************
@@ -80,8 +91,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
                 });
             }
             else {
-                if(mail.status== "done")
-                {
+                if (mail.status == "done") {
                     return res.status(403).json({
                         success: false,
                         msg: "Link already used"
@@ -93,7 +103,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
 
                     //Deactivate email
                     mail.status = "done";
-                    mail.save((err, mail)=>{
+                    mail.save((err, mail) => {
                         console.log(err)
                     })
                     return res.status(200).json({
@@ -101,7 +111,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
                         msg: "Success"
                     });
                 }
-                else{
+                else {
                     return res.status(403).json({
                         success: false,
                         msg: "Forbidden"
@@ -114,7 +124,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
         return res.status(400).json({
             success: false,
             msg: "No formId or hash"
-        }); 
+        });
     }
 }
 
