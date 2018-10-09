@@ -196,58 +196,62 @@ module.exports.resubmitForm = (req, res, next) => {
         new_form.school = form.school;
         new_form.submitter = form.submitter
         new_form.dates = [new Date()];
+
+        req.body.answers.forEach((o, i, a) => a[i] = { order: i, answer: a[i] });
         new_form.answers = req.body.answers;
 
         form.status = 'Resubmitted';
-        form.save((err, form) => {
+
+        //Add Parent Id to history
+        new_form.history.push(form._id);
+
+        //Set statuses
+        if (req.body.submitter == 'HoS') {
+            new_form.status = 'Awaiting AD(R)';
+        }
+        else {
+            new_form.status = 'Awaiting HoS';
+        }
+        console.log(new_form);
+
+        new_form.save((err, new_form) => {
             if (err) {
-                return res.status(400).json({ success: false, msg: 'Something went wrong updating parent' });
-            }
-
-            //Add Parent Id to history
-            new_form.history.push(form._id);
-
-            //Set statuses
-            if (req.body.submitter == 'HoS') {
-                form.status = 'Awaiting AD(R)';
+                return res.status(400).json({ success: false, msg: 'Something went wrong while saving form' });
             }
             else {
-                form.status = 'Awaiting HoS';
-            }
+                // Update user
+                User.findById(req.user._id, (err, user) => {
+                    if (err) {
+                        return res.status(400).json({ success: false, msg: 'Something went wrong getting user' });
+                    }
+                    else if (!user) {
+                        return res.status(400).json({ success: false, msg: 'No such user found in database' });
+                    }
+                    //Remove from array TOTO Check
+                    // WE DON'T WANT TO REMOVE FORM FROM SUBMISSIONS ELSE I WON'T BE ABLE TO RENDER HISTORY
+                    //user.submissions = user.submissions.filter(item => item !== form._id);
+                    user.submissions.push(new_form.id);
 
-            new_form.save((err, new_form) => {
-                if (err) {
-                    return res.status(400).json({ success: false, msg: 'Something went wrong while saving form' });
-                }
-                else {
-                    // Update user
-                    User.findById(req.user._id, (err, user) => {
+                    user.save((err, user) => {
                         if (err) {
-                            return res.status(400).json({ success: false, msg: 'Something went wrong getting user' });
+                            return res.status(400).json({ success: false, msg: 'Could not update user array' });
                         }
-                        else if (!user) {
-                            return res.status(400).json({ success: false, msg: 'No such user found in database' });
+                        else {
+                            //Send email
+                            sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
+                            form.save((err, form) => {
+                                if (err) {
+                                    return res.status(400).json({ success: false, msg: 'Something went wrong updating parent' });
+                                }
+                                else {
+                                    return res.status(200).json({ success: true, msg: 'Form resubmitted!' });
+                                }
+                            });
                         }
-                        //Remove from array TOTO Check
-
-                        user.submissions = user.submissions.filter(item => item !== form._id);
-                        user.submissions.push(new_form.id);
-
-                        user.save((err, user) => {
-                            if (err) {
-                                return res.status(400).json({ success: false, msg: 'Could not update user array' });
-                            }
-                            else {
-                                //Send email
-                                sendFirstEmailToNextPerson(new_form.school, new_form.submitter, new_form._id);
-                                return res.status(200).json({ success: true, msg: 'Form added to user and email sent' });
-                            }
-                        })
                     })
-                }
-            });
+                })
+            }
         });
-        return res.json({ success: true, msg: 'Form resubmitted!' });
     });
 }
 
