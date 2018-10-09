@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate{
     }
     else{
       this.router.navigate(['']);
+      localStorage.clear();
       this.flashMessage.show('Please login to access page', { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       return false;
     }

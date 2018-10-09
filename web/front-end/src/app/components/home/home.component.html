@@ -4,9 +4,9 @@
   <div *ngIf=user.isIT>
     <div>
       <div class="mb-5">
-        <a [routerLink]="['/editUsers']" class="btn btn-block btn-primary mt-3 p-4">Edit Users</a>
-        <a [routerLink]="['/editEmails']" class="btn btn-block btn-warning mt-3 p-4">Edit Emails</a>
-        <a [routerLink]="['/editQuestions']" class="btn btn-block btn-primary float-right mt-3 mb-3 p-4">Edit Questions</a>
+        <a [routerLink]="['/editUsers']" class="btn btn-block btn-warning mt-3 p-4">Edit Users</a>
+        <a [routerLink]="['/editEmails']" class="btn btn-block btn-primary mt-3 p-4">Edit Emails</a>
+        <a [routerLink]="['/editQuestions']" class="btn btn-block btn-warning float-right mt-3 mb-3 p-4">Edit Questions</a>
         <!-- DEVELOPMENT ONLY - REMOVE BELOW LINE -->
         <input type="button" class="btn btn-block btn-danger p-4" value="Change to non IT (Development Only)" (click)="changeIT()">
       </div>
