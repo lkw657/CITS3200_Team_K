@@ -24,6 +24,7 @@ export class QuestionControlService {
           }
 
           arrayofQuestions.push(new FormControl( {value: sum || '', disabled: true }));
+          console.log(arrayofQuestions);
           group[question.key] = new FormArray(arrayofQuestions);
 
         } else if ( question.controlType != 'money_array' ) {
@@ -34,11 +35,17 @@ export class QuestionControlService {
     } else if(!display) {
       questions.forEach((question : any) => {
         if(question.controlType === 'money_array'){
+          let values : string[] = question.value.split(',');
+          let sum = 0;
           let arrayofQuestions = [];
-          for(var i = 0 ; i < question.number ; i++ ){
-            arrayofQuestions.push(new FormControl(question.value || ''));
+
+          for(let i = 0 ; i < question.number ; i++ ){
+            sum += parseInt(values[i]);
+            arrayofQuestions.push(new FormControl(values[i]));
           }
-          arrayofQuestions.push(new FormControl( {value: question.value || '', disabled: true }));
+
+          arrayofQuestions.push(new FormControl( sum || ''));
+          console.log(arrayofQuestions);
           group[question.key] = new FormArray(arrayofQuestions);
   
         } else {

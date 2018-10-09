@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Http } from '@angular/http';
+import { baseURI } from '../../config';
 
 
 @Component({
@@ -14,26 +15,25 @@ export class VerifyComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private http: Http
   ) { }
 
-  ngOnInit() {
-    let secret = this.route.snapshot.paramMap.get('mailID');
-    let mailID = this.route.snapshot.paramMap.get('secret');
+  secret : string = '';
+  mailID : string = '';
 
-    var user = this.authService.getProfile();
-    console.log(user);
-    if (user != null) {
-      if(user.loggedIn){
-        console.log("Logged In");
-      } else {
-        console.log("Not Logged In");
-      }
-    } else {
-      console.log("User doesn't exist -- Redirecting to Login");
-
-    }
-
+  onAccept(){
+    this.http.post(baseURI + '/mail/verifyFormAccess', {'mailID': this.mailID, 'secret': this.secret}).subscribe(
+      (data) => {console.log(data)},
+      (err) => console.log(err)
+    );
   }
 
+  onReject(){
+    console.log("Rejected!!");
+  }
+
+  ngOnInit() {
+    this.secret = this.route.snapshot.paramMap.get('mailID');
+    this.mailID = this.route.snapshot.paramMap.get('secret');
+  }
 }

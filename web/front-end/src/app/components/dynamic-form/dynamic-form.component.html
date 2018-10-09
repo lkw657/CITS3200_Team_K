@@ -1,6 +1,5 @@
-<div *ngIf="!display_only">
+<div *ngIf="!display_only && !resubmit">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
-
     <!-- School selector -->
     <div class="form-row">
       <div *ngIf=!school>
@@ -51,7 +50,18 @@
   </form>
 </div>
 
-<div *ngIf="display_only">
+<div class="display_only" *ngIf="display_only && !resubmit">
+  <form [formGroup]="form">
+    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+      <app-question class="w-100" 
+                    [question]="question" 
+                    [form]="form" disabled></app-question>
+      <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
+    </div>
+  </form>
+</div>
+
+<div class="resubmit" *ngIf="resubmit && !display_only">
   <form [formGroup]="form">
     <div *ngFor="let question of questions; index as i" class="form-row mt-3">
       <app-question class="w-100" 
