@@ -1,3 +1,8 @@
-<p>
-    This page is for staff to verify they will approve a form via the emailed link
+<p class="permission">
+    Please accept or reject based on whether or not you take responsibility for this RPF.
 </p>
+
+<div class="row">
+    <div class="col"><button (click)="onAccept()" class="btn btn-block btn-primary">Accept</button></div>
+    <div class="col"><button (click)="onReject()" class="btn btn-block btn-danger">Reject</button></div>
+</div>

@@ -21,6 +21,7 @@ export class DynamicFormComponent implements OnInit {
   @Input() qset_id : string = '';
   @Input() comments : any[] = [];
   @Input() display_only : boolean = false;
+  @Input() resubmit : boolean = false;
 
   form: FormGroup;
   school: String;
