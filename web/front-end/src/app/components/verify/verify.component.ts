@@ -15,6 +15,7 @@ export class VerifyComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private http: HttpClient
   ) { }
 
@@ -23,7 +24,9 @@ export class VerifyComponent implements OnInit {
 
   onAccept(){
     this.http.post(baseURI + '/mail/verifyFormAccess', {'mailID': this.mailID, 'secret': this.secret}).subscribe(
-      (data) => {console.log(data)},
+      (data) => {
+        console.log(data)
+        this.router.navigate(['/home']);},
       (err) => console.log(err)
     );
   }

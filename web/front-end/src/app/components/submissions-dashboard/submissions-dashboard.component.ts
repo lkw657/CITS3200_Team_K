@@ -154,8 +154,6 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showSingleSubmission = true;
     this.showAllSubmissions = false;
 
-    console.log(this.submissionView);
-
     this.submissionView = form;
 
     this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
@@ -185,6 +183,8 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.submission.answers = this.submissionView.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
+
+    console.log(this.submission);
     
     //Sends updated form for resubmission
     this.questionService.resubmit(this.submission).subscribe(data => {
