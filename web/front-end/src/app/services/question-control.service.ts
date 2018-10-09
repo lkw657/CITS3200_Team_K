@@ -35,16 +35,13 @@ export class QuestionControlService {
     } else if(!display) {
       questions.forEach((question : any) => {
         if(question.controlType === 'money_array'){
-          let values : string[] = question.value.split(',');
-          let sum = 0;
           let arrayofQuestions = [];
 
           for(let i = 0 ; i < question.number ; i++ ){
-            sum += parseInt(values[i]);
-            arrayofQuestions.push(new FormControl(values[i]));
+            arrayofQuestions.push(new FormControl());
           }
 
-          arrayofQuestions.push(new FormControl( sum || ''));
+          arrayofQuestions.push(new FormControl());
           console.log(arrayofQuestions);
           group[question.key] = new FormArray(arrayofQuestions);
   
