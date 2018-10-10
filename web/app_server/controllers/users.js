@@ -56,7 +56,7 @@ module.exports.removeUser = (req, res, next) => {
     stat = req.user == undefined ? 401 : 403
   return sendJsonResponse(res, stat, {
     success: false,
-    msg: "forbidden"
+    msg: "Forbidden"
   });
   User.findById(req.body._id, function (err, user) {
 

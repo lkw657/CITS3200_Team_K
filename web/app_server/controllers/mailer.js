@@ -53,10 +53,13 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
             console.log(info);
             if(res && backupForm){
                 // Pop of approvals array of allocated staff
-                if(backupForm.approvals){
+
+                if(backupForm.allocatedStaff){
                     User.findById(backupForm.allocatedStaff, (err, staff)=>{
                         //delete
+
                         staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                        console.log(staff);
                         staff.save( (err, staff)=>{
                             res.status(200).json({ success: true, msg: successMessage });
                         });
@@ -159,20 +162,20 @@ module.exports.verifyFormAccess = (req, res, next) => {
     Mail.findById(req.body.mailID, (err, mail) => {
         if (err) {
             console.log(err);
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
                 msg: "forbidden"
             });
         }
         else if (!mail) {
-            return res.status(403).json({
+            return res.status(400).json({
                 success: false,
                 msg: "no such mail"
             });
         }
         else {
             if (mail.status == "done") {
-                return res.status(403).json({
+                return res.status(400).json({
                     success: false,
                     msg: "Link already used"
                 });

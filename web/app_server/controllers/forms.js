@@ -19,9 +19,9 @@ function sendFirstEmailToNextPerson(form) {
         mailer.sendFormAccessEmail(form, "AD(R)");
     }
     else {
-        mailer.sendFormAccessEmail(form, form.school+" HoS");
+        mailer.sendFormAccessEmail(form, form.school + " HoS");
     }
-    
+
 }
 /**
 req.user._id
@@ -274,191 +274,196 @@ module.exports.formResponse = (req, res, next) => {
         if (JSON.stringify(req.user._id) != JSON.stringify(form.allocatedStaff)) {
             return res.status(400).json({ success: false, msg: 'Bad user' });
         }
+        else {
 
-        var actingString = '';
-        if (req.body.acting) {
-            actingString = 'Acting ';
-        }
+            var actingString = '';
+            if (req.body.acting) {
+                actingString = 'Acting ';
+            }
 
-        var backupForm = {
-            _id: form._id,
-            dates : form.dates.slice(0),
-            status : form.status,
-            allocatedStaff :form.allocatedStaff,
-            approvedBy : form.approvedBy.slice(0),
-        }
+            var backupForm = {
+                _id: form._id,
+                dates: form.dates.slice(0),
+                status: form.status,
+                allocatedStaff: form.allocatedStaff,
+                approvedBy: form.approvedBy.slice(0),
+            }
 
-        if (req.body.response == 'Approved') {
-            var role;
-            
+            if (req.body.response == 'Approved') {
+                var role;
 
-            if (form.status == 'Awaiting HoS') {
-                if (form.submitter == 'AD(R)') {
+
+                if (form.status == 'Awaiting HoS') {
+                    if (form.submitter == 'AD(R)') {
+                        form.status = 'Awaiting PVC-ED';
+                        var approver = form.allocatedStaff;
+                        form.approvedBy.push({ role: actingString + 'HoS', id: approver });
+                        form.allocatedStaff = null;
+                        form.dates.push(new Date());
+
+                        role = 'PVC-ED';
+                    }
+                    else {
+                        form.status = 'Awaiting AD(R)';
+
+                        var approver = form.allocatedStaff;
+                        form.approvedBy.push({ role: actingString + 'HoS', id: approver });
+                        form.allocatedStaff = null;
+                        form.dates.push(new Date());
+
+                        role = 'AD(R)';
+                    }
+                }
+                else if (form.status == 'Awaiting AD(R)') {
                     form.status = 'Awaiting PVC-ED';
+
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({ role: actingString + 'HoS', id: approver });
+                    form.approvedBy.push({ role: actingString + 'AD(R)', id: approver });
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
+
 
                     role = 'PVC-ED';
+
                 }
-                else {
-                    form.status = 'Awaiting AD(R)';
+                else if (form.status == 'Awaiting PVC-ED') {
+                    form.status = 'Fully Approved';
 
                     var approver = form.allocatedStaff;
-                    form.approvedBy.push({ role: actingString + 'HoS', id: approver });
+                    form.approvedBy.push({ role: actingString + 'PVC-ED', id: approver });
                     form.allocatedStaff = null;
                     form.dates.push(new Date());
 
-                    role = 'AD(R)';
-                }
-            }
-            else if (form.status == 'Awaiting AD(R)') {
-                form.status = 'Awaiting PVC-ED';
 
-                var approver = form.allocatedStaff;
-                form.approvedBy.push({ role: actingString + 'AD(R)', id: approver });
-                form.allocatedStaff = null;
-                form.dates.push(new Date());
-
-
-                role = 'PVC-ED';
-
-            }
-            else if (form.status == 'Awaiting PVC-ED') {
-                form.status = 'Fully Approved';
-
-                var approver = form.allocatedStaff;
-                form.approvedBy.push({ role: actingString + 'PVC-ED', id: approver });
-                form.allocatedStaff = null;
-                form.dates.push(new Date());
-
-
-                role = 'final';
-            }
-            else {
-                return res.status(400).json({ success: false, msg: 'Form has bad status' });
-            }
-
-            form.save((err, form) => {
-                if (err) {
-                    return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
-                }
-                //send an email to who??
-                if (form.status == 'Fully Approved') {
-                    //TODO EMAILS
+                    role = 'final';
                 }
                 else {
-                    //email person
-                    mailer.sendFormAccessEmail(form, role, res, 'Approved and email sent', backupForm);
+                    return res.status(400).json({ success: false, msg: 'Form has bad status' });
                 }
-            });
-        }
-        else if (req.body.response == 'Provisionally Approved') {
-
-            if (form.status == 'Awaiting HoS') {
-                form.rejectionRole = actingString + 'HoS';
-            }
-            else if (form.status == 'Awaiting AD(R)') {
-                form.rejectionRole = actingString + 'AD(R)';
-            }
-            else if (form.status == 'Awaiting PVC-ED') {
-                form.rejectionRole = actingString + 'PVC-ED';
-            }
-            else {
-                //Something is broken
-                return res.status(400).json({ success: false, msg: 'Bad form status' });
-
-            }
-
-            form.status = 'Provisionally Approved';
-
-            if (req.body.comments) {
-                // TODO ask david
-                form.comments = req.body.comments;
-                form.dates.push(new Date());
-                allocatedStaff = null;
-
-                form.save((err, form) => {
-                    if (err) {
-                        console.log(err);
-                        return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
-                    }
-                    else {
-                        //No need to bother with confirming delete, low priority 
-                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
-                            //delete
-                            if(err) console.log(err);
-                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
-                            staff.save( (err, staff)=>{if(err) console.log(err);});
-                        })
-                        //email owner of form about provisional approval approval 
-                        User.findById(form.owner, (err, usr)=>{
-                            //Shouldn't be errors
-                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
-                        });
-                        
-                        return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
-                    }
-                });
-            }
-            else {
-                return res.status(400).json({ success: false, msg: 'No comments' });
-            }
-        }
-        else if (req.body.response == 'Rejected') {
-
-            if (form.status == 'Awaiting HoS') {
-                form.rejectionRole = actingString + 'HoS';
-            }
-            else if (form.status == 'Awaiting AD(R)') {
-                form.rejectionRole = actingString + 'AD(R)';
-            }
-            else if (form.status == 'Awaiting PVC-ED') {
-                form.rejectionRole = actingString + 'PVD-ED';
-            }
-            else {
-                //Something is broken
-                return res.status(400).json({ success: false, msg: 'Bad form status' });
-
-            }
-
-            if (req.body.comments) {
-                form.status = 'Rejected'
-                form.comments = req.body.comments;
-                form.dates.push(new Date());
-                allocatedStaff = null;
 
                 form.save((err, form) => {
                     if (err) {
                         return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                     }
+                    //send an email to who??
+                    if (form.status == 'Fully Approved') {
+
+                        return res.status(200).json({ success: true, msg: 'Form approved but no PDF email sent' });
+
+                    }
                     else {
-
-                        //No need to bother with confirming delete, low priority 
-                        User.findById(backupForm.allocatedStaff, (err, staff)=>{
-                            //delete
-                            staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
-                            staff.save( (err, staff)=>{});
-                        })
-
-
-                        //email owner of form about provisional approval approval 
-                        User.findById(form.owner, (err, usr)=>{
-                            //Shouldn't be errors
-                            mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Rejection for a form for one of your forms", "You got rejected bro! :(");
-                        });
-                        return res.status(200).json({ success: true, msg: 'Rejected and email sent to owner' });
+                        //email person
+                        mailer.sendFormAccessEmail(form, role, res, 'Approved and email sent', backupForm);
                     }
                 });
+            }
+            else if (req.body.response == 'Provisionally Approved') {
 
+                if (form.status == 'Awaiting HoS') {
+                    form.rejectionRole = actingString + 'HoS';
+                }
+                else if (form.status == 'Awaiting AD(R)') {
+                    form.rejectionRole = actingString + 'AD(R)';
+                }
+                else if (form.status == 'Awaiting PVC-ED') {
+                    form.rejectionRole = actingString + 'PVC-ED';
+                }
+                else {
+                    //Something is broken
+                    return res.status(400).json({ success: false, msg: 'Bad form status' });
+
+                }
+
+                form.status = 'Provisionally Approved';
+
+                if (req.body.comments) {
+                    // TODO ask david
+                    form.comments = req.body.comments;
+                    form.dates.push(new Date());
+                    allocatedStaff = null;
+
+                    form.save((err, form) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
+                        }
+                        else {
+                            //No need to bother with confirming delete, low priority 
+                            User.findById(backupForm.allocatedStaff, (err, staff) => {
+                                //delete
+                                if (err) console.log(err);
+                                staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                                console.log(staff);
+                                staff.save((err, staff) => { if (err) console.log(err); });
+                            })
+                            //email owner of form about provisional approval approval 
+                            User.findById(form.owner, (err, usr) => {
+                                //Shouldn't be errors
+                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                            });
+
+                            return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
+                        }
+                    });
+                }
+                else {
+                    return res.status(400).json({ success: false, msg: 'No comments' });
+                }
+            }
+            else if (req.body.response == 'Rejected') {
+
+                if (form.status == 'Awaiting HoS') {
+                    form.rejectionRole = actingString + 'HoS';
+                }
+                else if (form.status == 'Awaiting AD(R)') {
+                    form.rejectionRole = actingString + 'AD(R)';
+                }
+                else if (form.status == 'Awaiting PVC-ED') {
+                    form.rejectionRole = actingString + 'PVD-ED';
+                }
+                else {
+                    //Something is broken
+                    return res.status(400).json({ success: false, msg: 'Bad form status' });
+
+                }
+
+                if (req.body.comments) {
+                    form.status = 'Rejected'
+                    form.comments = req.body.comments;
+                    form.dates.push(new Date());
+                    allocatedStaff = null;
+
+                    form.save((err, form) => {
+                        if (err) {
+                            return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
+                        }
+                        else {
+
+                            //No need to bother with confirming delete, low priority 
+                            User.findById(backupForm.allocatedStaff, (err, staff) => {
+                                //delete
+                                staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
+                                staff.save((err, staff) => { });
+                            })
+
+
+                            //email owner of form about provisional approval approval 
+                            User.findById(form.owner, (err, usr) => {
+                                //Shouldn't be errors
+                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Rejection for a form for one of your forms", "You got rejected bro! :(");
+                            });
+                            return res.status(200).json({ success: true, msg: 'Rejected and email sent to owner' });
+                        }
+                    });
+
+                }
+                else {
+                    return res.status(400).json({ success: false, msg: 'No comments' });
+                }
             }
             else {
-                return res.status(400).json({ success: false, msg: 'No comments' });
+                return res.status(400).json({ success: false, msg: 'Bad Form Status' });
             }
-        }
-        else {
-            return res.status(400).json({ success: false, msg: 'Bad Form Status' });
         }
 
 
