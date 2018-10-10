@@ -41,9 +41,19 @@ export class DashboardService {
     return this.http.put<any>(baseURI + '/email/updateEmail', email);
   }
 
+  // Add new email to DB
+  newEmail(email) {
+    return this.http.post<any>(baseURI + '/email/addEmail', email);
+  }
+
   //Remove User in database
   removeUser(user) {
     return this.http.put<any>(baseURI + '/db/removeUser', user);
+  }
+
+  //Remove Email in database
+  removeEmail(email) {
+    return this.http.put<any>(baseURI + '/email/removeEmail', email);
   }
 
   //Get ALL questions for IT to view

@@ -28,6 +28,7 @@ export class EditUsersComponent implements OnInit {
     // Get users to show admin
     this.dashboardService.getAllUsers().subscribe(allUsers => {
       this.allUsers = allUsers;
+      console.log(allUsers);
     },
       err => {
         console.log(err);
