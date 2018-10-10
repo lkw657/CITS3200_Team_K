@@ -123,7 +123,7 @@ export class EditQuestionsComponent implements OnInit {
         this.questionList[i].array = undefined
       }
     }
-    console.log(this.questionList);
+
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
