@@ -20,16 +20,16 @@ export class QuestionControlService {
 
           for(let i = 0 ; i < question.number ; i++ ){
             sum += parseInt(values[i]);
-            arrayofQuestions.push(new FormControl({value: values[i], disabled: true}));
+            arrayofQuestions.push(new FormControl({value: values[i] || '0', disabled: true}));
           }
 
-          arrayofQuestions.push(new FormControl( {value: sum || '', disabled: true }));
+          arrayofQuestions.push(new FormControl( {value: sum || '0', disabled: true }));
           console.log(arrayofQuestions);
           group[question.key] = new FormArray(arrayofQuestions);
 
         } else if ( question.controlType != 'money_array' ) {
-          group[question.key] = question.required ? new FormControl({value: question.value || '', disabled: true}, Validators.required)
-                                                  : new FormControl({value: question.value || '', disabled: true});
+          group[question.key] = question.required ? new FormControl({value: question.value || '0', disabled: true}, Validators.required)
+                                                  : new FormControl({value: question.value || '0', disabled: true});
         }
       }
     } else if(!display) {
@@ -42,19 +42,19 @@ export class QuestionControlService {
 
             for(let i = 0 ; i < question.number ; i++ ){
               sum += parseInt(values[i]);
-              arrayofQuestions.push(new FormControl({value: values[i], disabled: true}));
+              arrayofQuestions.push(new FormControl(values[i] || '0'));
             }
 
-            arrayofQuestions.push(new FormControl( {value: sum || '', disabled: true }));
+            arrayofQuestions.push(new FormControl( sum || '0' ));
             console.log(arrayofQuestions);
             group[question.key] = new FormArray(arrayofQuestions);
           } else {
             let arrayofQuestions = [];
             for(let i = 0 ; i < question.number ; i++ ){
-              arrayofQuestions.push(new FormControl());
+              arrayofQuestions.push(new FormControl('0'));
             }
-  
-            arrayofQuestions.push(new FormControl());
+
+            arrayofQuestions.push(new FormControl('0'));
             console.log(arrayofQuestions);
             group[question.key] = new FormArray(arrayofQuestions);
           }

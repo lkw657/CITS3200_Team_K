@@ -66,6 +66,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Populates dashboard with all submissions that have not been resubmitted
+
   showSubmissions() {
     window.scrollTo(0, 0);
     this.showAllSubmissions = true;
@@ -185,7 +186,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.submission.submitter = this.submissionView.submitter;
 
     console.log(this.submission);
-    
+
     //Sends updated form for resubmission
     this.questionService.resubmit(this.submission).subscribe(data => {
       if (data.success) {
