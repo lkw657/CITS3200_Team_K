@@ -7,6 +7,7 @@ require('./app_server/models/db');
 var QuestionSet = require('./app_server/models/questionSets').questionSetSchema;
 var User  = require('./app_server/models/users').User;
 var Form  = require('./app_server/models/forms').Form;
+var Email = require('./app_server/models/emails').emailSchema;
 
 function readSync(question, silent=false) {
     return new Promise((resolve, reject) => {
@@ -56,6 +57,10 @@ async function run() {
     user.submissions = [submission._id];
     user.approvals = [approval._id];
     await user.save().catch((err) => console.log(err))
+
+    var emails = JSON.parse(fs.readFileSync('emails.json', 'utf8'));
+    for (var i=0; i<emails.length; i++)
+        await new Email(emails[i]).save().catch((err) => console.log(err))
 
     process.exit()
 }

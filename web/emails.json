@@ -1,0 +1,32 @@
+[
+    {
+        "role": "School of Engineering HoS",
+        "email": "admin-cmce@noexist",
+        "emailContent":"You have been nominated as the HoS from the School of Engineering to approve the attached form"
+    },
+    {
+        "role": "School of Physics, Mathematics and Computing HoS",
+        "email": "admin-csse@noexist",
+        "emailContent":"You have been nominated as the HoS from the School of School of Physics, Mathematics and Computing to approve the attached form"
+    },
+    {
+        "role": "Ocean Graduate School HoS",
+        "email": "admin-ogs@noexist",
+        "emailContent":"You have been nominated as the HoS from the Ocean Graduate School to approve the attached form"
+    },
+    {
+        "role": "AD(R)",
+        "email": "research-ems@noexist",
+        "emailContent": "You need to approve the attached form"
+    },
+    {
+        "role": "PVC-ED",
+        "email": "research-ems@noexist",
+        "emailContent": "You need to approve the attached form"
+    },
+    {
+        "role": "final",
+        "email": "research-ems@noexist",
+        "emailContent": "You need to approve the attached form"
+    }
+]
