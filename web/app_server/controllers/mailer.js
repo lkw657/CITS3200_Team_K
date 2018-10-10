@@ -53,13 +53,11 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
             console.log(info);
             if(res && backupForm){
                 // Pop of approvals array of allocated staff
-                console.log("Here 1");
-                console.log(backupForm.approvals);
 
-                if(backupForm.approvals){
+                if(backupForm.allocatedStaff){
                     User.findById(backupForm.allocatedStaff, (err, staff)=>{
                         //delete
-                        
+
                         staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
                         console.log(staff);
                         staff.save( (err, staff)=>{
