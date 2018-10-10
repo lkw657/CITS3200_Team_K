@@ -7,6 +7,7 @@ require('./app_server/models/db');
 var QuestionSet = require('./app_server/models/questionSets').questionSetSchema;
 var User  = require('./app_server/models/users').User;
 var Form  = require('./app_server/models/forms').Form;
+var Email = require('./app_server/models/mails').mailSchema;
 
 /*
 function readSync(question, silent=false) {
@@ -24,15 +25,18 @@ function readSync(question, silent=false) {
 
 async function run() {
     // Check if database exists
+    // TODO better check
     var qsets = await QuestionSet.find().catch((err) => console.log(err));
-    if (qsets.length != 0) {
+    if (qsets.length != 0 && process.env['DESTROY'] !== 'true') {
         console.log("Database already exists, not initialising")
+        console.log("If clearing the database was intentional rerun with \"DEBUG='true' node initdb.js\"");
         process.exit(0)
     }
     console.log("Initialising database");
-    /*await User.deleteMany().catch((err) => console.log(err));
+    await User.deleteMany().catch((err) => console.log(err));
     await QuestionSet.deleteMany().catch((err) => console.log(err));
-    await Form.deleteMany().catch((err) => console.log(err));*/
+    await Form.deleteMany().catch((err) => console.log(err));
+    await Email.deleteMany().catch((err) => console.log(err));
 
     /*var number = await readSync('Enter IT number: ');
     var fname = await readSync('Enter IT first name: ');
