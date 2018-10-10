@@ -114,8 +114,8 @@ module.exports.addFormToUser = (userID, formID) => {
           }
 
           // Update User to include form if needed
-          if (!usr.forms.includes(formID)) {
-            usr.forms.push(formID);
+          if (!usr.approvals.includes(formID)) {
+            usr.approvals.push(formID);
             usr.save((err, usr) => {
               if (err) {
                 console.log(err)

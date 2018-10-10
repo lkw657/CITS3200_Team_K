@@ -19,6 +19,9 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.authService.getProfile().loggedIn) {
+      this.router.navigate(['/home']);
+    }
   }
 
   //Submit button sends user info to backend for authentication
@@ -32,37 +35,41 @@ export class LoginComponent implements OnInit {
     this.authService.authenticateUser(login).subscribe(data => {
 
       //Renders homepage if login is ok
-      if(data.success){
+      if (data.success) {
         this.flashMessage.show(data.msg,
-          {cssClass: 'alert-success',
-          timeout:3000});
-          data.user.loggedIn=true;
+          {
+            cssClass: 'alert-success',
+            timeout: 3000
+          });
+        data.user.loggedIn = true;
 
-          // DEVELOPMENT ONLY - REMOVE
-          if( data.user.role == "researcher" ){
-            data.user.forms = [
-              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
-              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
-              {created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" }},
-            ];
-          } else if ( data.user.role == "staff" ){
-            data.user.forms = [
-              {created_date: "01/08/2018", owner: "Approved" },
-              {created_date: "01/08/2018", owner: "Approved" },
-              {created_date: "01/08/2018", owner: "Approved" },
-            ];
-          }
+        // DEVELOPMENT ONLY - REMOVE
+        if (data.user.role == "researcher") {
+          data.user.forms = [
+            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
+            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
+            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
+          ];
+        } else if (data.user.role == "staff") {
+          data.user.forms = [
+            { created_date: "01/08/2018", owner: "Approved" },
+            { created_date: "01/08/2018", owner: "Approved" },
+            { created_date: "01/08/2018", owner: "Approved" },
+          ];
+        }
 
-          localStorage.setItem('user', JSON.stringify(data.user));
-          this.router.navigate(['/home']);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        this.router.navigate(['/home']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
-      else{
+      else {
         this.flashMessage.show(data.msg,
-          {cssClass: 'alert-danger',
-          timeout:3000});
-          this.router.navigate(['/']);
+          {
+            cssClass: 'alert-danger',
+            timeout: 3000
+          });
+        this.router.navigate(['/']);
       }
     });
   }

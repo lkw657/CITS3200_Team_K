@@ -26,9 +26,19 @@ export class DashboardService {
     return this.http.get<any>(baseURI + '/db/users');
   }
 
+  //Get ALL emails for IT to view
+  getAllEmails() {
+    return this.http.get<any>(baseURI + '/email/list');
+  }
+
   //Update User in database
   updateUser(user) {
     return this.http.put<any>(baseURI + '/db/updateUser', user);
+  }
+
+  //Update Email in database
+  updateEmail(email) {
+    return this.http.put<any>(baseURI + '/email/updateEmail', email);
   }
 
   //Remove User in database

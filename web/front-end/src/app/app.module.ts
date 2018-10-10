@@ -18,6 +18,7 @@ import { DynamicFormQuestionComponent } from './components/dynamic-form-question
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
 import { EditUsersComponent } from './components/edit-users/edit-users.component';
 import { EditQuestionsComponent } from './components/edit-questions/edit-questions.component';
+import { EditEmailsComponent } from './components/edit-emails/edit-emails.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { SubmissionsDashboardComponent } from './components/submissions-dashboard/submissions-dashboard.component';
 import { ApprovalsDashboardComponent } from './components/approvals-dashboard/approvals-dashboard.component';
@@ -31,6 +32,9 @@ import { QuestionService } from './services/question.service';
 //Http interceptors
 import { httpInterceptorProviders } from './http-interceptors/index';
 
+//Guards
+import { AuthGuard } from './guards/auth.guard';
+
 import { DragulaModule } from 'ng2-dragula';
 
 
@@ -38,13 +42,14 @@ import { DragulaModule } from 'ng2-dragula';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent},
-  { path: 'submission', component: SubmissionComponent},
-  { path: 'editUsers', component: EditUsersComponent},
-  { path: 'editQuestions', component: EditQuestionsComponent},
-  { path: 'verify', component: VerifyComponent},
-  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent},
-  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent},
+  { path: 'home', component: HomeComponent, canActivate:[AuthGuard]},
+  { path: 'submission', component: SubmissionComponent, canActivate:[AuthGuard]},
+  { path: 'editUsers', component: EditUsersComponent, canActivate:[AuthGuard]},
+  { path: 'editQuestions', component: EditQuestionsComponent, canActivate:[AuthGuard]},
+  { path: 'editEmails', component: EditEmailsComponent, canActivate:[AuthGuard]},
+  { path: 'verify/:mailID/:secret', component: VerifyComponent, canActivate:[AuthGuard]},
+  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate:[AuthGuard]},
+  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate:[AuthGuard]},
   { path: '**', component: NotFoundComponent}
 ];
 
@@ -63,7 +68,8 @@ const routes: Routes = [
     EditQuestionsComponent,
     VerifyComponent,
     SubmissionsDashboardComponent,
-    ApprovalsDashboardComponent
+    ApprovalsDashboardComponent,
+    EditEmailsComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +86,7 @@ const routes: Routes = [
     httpInterceptorProviders,
     QuestionService,
     DashboardService,
+    AuthGuard,
     AuthService
   ],
   bootstrap: [AppComponent]

@@ -68,11 +68,15 @@ async function run() {
         answers.push({order:i, answer:'foo'});
         answers2.push({order:i, answer:'bar'});
     }
-    var submission = await new Form({owner: user._id, answers:answers, status:'awaiting-hos', dates:[new Date()], school:'idk', submitter:'it', questionSet:qset._id}).save().catch((err) => console.log(err));
-    var approval = await new Form({owner: user._id, answers:answers2, status:'awaiting-hos', dates:[new Date()], school:'idk', submitter:'it', questionSet:qset._id}).save().catch((err) => console.log(err));
+    var submission = await new Form({owner: user._id, answers:answers, status:'Provisionally Approved', dates:[new Date()], school:'School of Engineering', submitter:'Researcher', questionSet:qset._id}).save().catch((err) => console.log(err));
+    var approval = await new Form({owner: user._id, answers:answers2, status:'Awaiting HoS', dates:[new Date()], school:'idk', submitter:'it', questionSet:qset._id}).save().catch((err) => console.log(err));
     user.submissions = [submission._id];
     user.approvals = [approval._id];
     await user.save().catch((err) => console.log(err))
+
+    var emails = JSON.parse(fs.readFileSync('emails.json', 'utf8'));
+    for (var i=0; i<emails.length; i++)
+        await new Email(emails[i]).save().catch((err) => console.log(err))
 
     process.exit()
 }

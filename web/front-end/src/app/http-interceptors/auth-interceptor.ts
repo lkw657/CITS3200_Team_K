@@ -21,7 +21,8 @@ export class AuthInterceptor implements HttpInterceptor {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
                     // Cookie was bad, or other reason why backend doesn't like user's login
-                    console.log('Not logged in')
+                    console.log('Not logged in');
+                    localStorage.clear();
                     this.flashMessage.show('Please log in',
                         {cssClass: 'alert-danger',
                         timeout:3000});

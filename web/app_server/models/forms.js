@@ -34,7 +34,8 @@ var formSchema = new mongoose.Schema(
     approvedBy: [{type: approvedBySchema}],	//Users (HoS, etc.) who have approved the form.
     comments: [{type: commentSchema}],
     school: {type: String, required: true},	//What school the researcher belongs to, determines HoS to send to.
-    submitter: {type: String, required: true}
+    submitter: {type: String, required: true},
+    rejectionRole : {type: String}
     }
 );
 

@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   user: any;
+  userApprovals: any;
+  userSubmissions: any;
 
   constructor(
     private router: Router,
@@ -25,10 +27,36 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     // Gets current user profile on page render
     this.user = this.authService.getProfile();
+    this.refreshSubmissions();
+    this.refreshApprovals();
   }
 
   // DEVELOPMENT ONLY - REMOVE
   changeIT() {
     this.user.isIT = !this.user.isIT;
+  }
+
+  refreshSubmissions() {
+    // Get all forms submitted by user
+    this.dashboardService.getUserSubmissions().subscribe(data => {
+      this.userSubmissions = data.submissions;
+    },
+      err => {
+        this.flashMessage.show("An Error has Occurred - Please try again later!", { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        console.log(err);
+        return false;
+      });
+  }
+
+  // Refreshes approvals when Dashboard is loaded
+  refreshApprovals() {
+    // Get forms awaiting approval by user
+    this.dashboardService.getUserApprovals().subscribe(data => {
+      this.userApprovals = data.approvals;
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
   }
 }

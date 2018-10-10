@@ -17,12 +17,13 @@ export class EditQuestionsComponent implements OnInit {
   ) { }
 
   questionList: any;
-  currentQuestion: Object;
+  currentQuestion: any;
 
   // What should be displayed
   displayAll: boolean = true;
   displayEdit: boolean = false;
   displayDelete: boolean = false;
+  displayNew: boolean = false;
 
   ngOnInit() {
     // Get questions to show admin
@@ -40,7 +41,12 @@ export class EditQuestionsComponent implements OnInit {
   showEdit(question) {
 
     this.currentQuestion = question;
-    this.displayDelete = false;
+
+    let type = this.currentQuestion.type.split("_")[0] + "_" + this.currentQuestion.type.split("_")[1];
+    if(type=="money_array") {
+      this.currentQuestion.array = this.currentQuestion.type.split("_")[2];
+      this.currentQuestion.type = type;
+    }
     this.displayAll = false;
     this.displayEdit = true;
     window.scrollTo(0, 0);
@@ -50,13 +56,29 @@ export class EditQuestionsComponent implements OnInit {
   showDelete(question) {
 
     this.currentQuestion = question;
-    this.displayEdit = false;
     this.displayAll = false;
     this.displayDelete = true;
     window.scrollTo(0, 0);
   }
 
-  // This will delete queation from current question set
+  // This will hide all content besides the delete screen.
+  showNew() {
+    
+    // Creates blank question
+    this.currentQuestion = {
+      title: '',
+      text: '',
+      type: '',
+      formName: '',
+      order: this.questionList.length
+    };
+
+    this.displayAll = false;
+    this.displayNew = true;
+    window.scrollTo(0, 0);
+  }
+
+  // This will delete question from current question set
   deleteQuestion() {
 
     this.questionList.splice(this.questionList.indexOf(this.currentQuestion), 1);
@@ -70,11 +92,23 @@ export class EditQuestionsComponent implements OnInit {
   showAll() {
     this.displayAll = true;
     this.displayEdit = false;
+    this.displayDelete = false;
+    this.displayNew = false;
+    window.scrollTo(0, 0);
+  }
+
+  // Adds question to question list for submission
+  onQuestionNew() {
+    this.displayAll = true;
+    this.displayNew = false;
+
+    // Add new question to questionList array
+    this.questionList.push(this.currentQuestion);
     window.scrollTo(0, 0);
   }
 
   // Updates question in question list for submission
-  onQuestionEdit(question) {
+  onQuestionEdit() {
     this.displayAll = true;
     this.displayEdit = false;
     window.scrollTo(0, 0);
@@ -84,6 +118,10 @@ export class EditQuestionsComponent implements OnInit {
   saveNewQuestionSet() {
     for (let i = 0; i < this.questionList.length; i++) {
       this.questionList[i].order = i;
+      if(this.questionList[i].array > 0) {
+        this.questionList[i].type = this.questionList[i].type + "_" + this.questionList[i].array
+        this.questionList[i].array = undefined
+      }
     }
     console.log(this.questionList);
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {

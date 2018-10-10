@@ -19,8 +19,8 @@ export class QuestionService {
         return this.http.post<any>(baseURI + '/db/newSubmission', form);
     }
 
-    updateSubmission(form) {
-        return this.http.post<any>(baseURI + '/db/updateSubmission', form);
+    resubmit(form) {
+        return this.http.post<any>(baseURI + '/db/resubmit', form);
     }
 
     formResponse(response) {

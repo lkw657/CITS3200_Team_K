@@ -10,6 +10,8 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 })
 export class NavbarComponent implements OnInit { 
 
+  user: any;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -20,14 +22,20 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogoutClick() {
-    localStorage.clear();
+    this.user = this.authService.getProfile();
 
-    this.flashMessage.show('You are logged out', {
-      cssClass: 'alert-success',
-      timeout: 3000
-    });
-    
-    this.router.navigate(['/']);
-    return false;
+    this.authService.logoutUser(this.user).subscribe(data => {
+      if (data.success) {
+        localStorage.clear();
+        this.router.navigate(['']);
+        this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        window.scrollTo(0, 0);
+      }
+    },
+      err => {
+        this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        window.scrollTo(0, 0);
+      }
+    );
   }
 }

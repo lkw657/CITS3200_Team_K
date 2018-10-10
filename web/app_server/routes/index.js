@@ -5,6 +5,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', ctrlIndex.index);
 router.post('/authenticate', ctrlIndex.authenticate);
+router.post('/logOut', ctrlIndex.logOut);
 router.post('/register', ctrlIndex.register)
 
 //Dashboard API
