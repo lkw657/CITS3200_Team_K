@@ -399,7 +399,7 @@ module.exports.formResponse = (req, res, next) => {
                             //email owner of form about provisional approval approval 
                             User.findById(form.owner, (err, usr) => {
                                 //Shouldn't be errors
-                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Provisional Approval for one of your forms", "Your email was provisionally approved bro!");
+                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "One of your forms has been provisionally approved", "A form you sent has been provisionally approved, please view it on http://localhost:4200");
                             });
 
                             return res.status(200).json({ success: true, msg: 'Provisionally Approved and email sent to owner' });
@@ -450,7 +450,7 @@ module.exports.formResponse = (req, res, next) => {
                             //email owner of form about provisional approval approval 
                             User.findById(form.owner, (err, usr) => {
                                 //Shouldn't be errors
-                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "Rejection for a form for one of your forms", "You got rejected bro! :(");
+                                mailer.sendEmail(usr.number + "@student.uwa.edu.au", "One of your forms has been rejected", "A form you submitted has been rejected, to check comments, view: http://localhost:4200/");
                             });
                             return res.status(200).json({ success: true, msg: 'Rejected and email sent to owner' });
                         }
