@@ -44,16 +44,14 @@
 
     <div class="mt-3 mb-5">
       <h1>Form submitted as a {{approvalView.submitter}} from the {{approvalView.school}}</h1>
-      <div *ngFor="let answer of approvalView.answers; index as i">
-        <div class="card mb-2">
-          <div class="card-body">
-            <p>Question: {{approvalView.questionSet.questionList[i].text}}</p>
-            <p>Answer: {{answer.answer}}</p>
-            <p>Enter comments below: </p>
-            <input type="text" class="form-control" name="comment{{i}}" required [(ngModel)]="approvalView.comments[i]">
-          </div>
-        </div>
-      </div>
+
+      <app-dynamic-form class="w-100"
+      [qset_id]="qset_id"
+      [questions]="questions"
+      [comments]="comments"
+      [display_only]="true"
+      [allow_comments]="true"
+      ></app-dynamic-form>
 
 
       <div class="m-3">

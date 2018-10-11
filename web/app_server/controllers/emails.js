@@ -59,13 +59,13 @@ module.exports.addEmail = (req, res, next) => {
 
 //Updates user information in database
 module.exports.updateEmail = (req, res, next) => {
-    // if (req.user == undefined || !req.user.isIT) {
-    //     stat = req.user == undefined ? 401 : 403
-    //     return sendJsonResponse(res, stat, {
-    //         success: false,
-    //         msg: "Forbidden"
-    //     });
-    // }
+    // CHECK IF ADMIN
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            msg: "Forbidden"
+        });
+    }
 
     Email.findById(req.body._id, function (err, email) {
         if (err) {
@@ -87,12 +87,13 @@ module.exports.updateEmail = (req, res, next) => {
 
 //Delete Email from database
 module.exports.removeEmail = (req, res, next) => {
-    // if (req.user == undefined || !req.user.isIT)
-    //     stat = req.user == undefined ? 401 : 403
-    // return sendJsonResponse(res, stat, {
-    //     success: false,
-    //     msg: "Forbidden"
-    // });
+    // CHECK IF ADMIN
+    if (!req.user) {
+        return res.status(401).json({
+            success: false,
+            msg: "Forbidden"
+        });
+    }
 
     Email.findById(req.body._id, function (err, email) {
 

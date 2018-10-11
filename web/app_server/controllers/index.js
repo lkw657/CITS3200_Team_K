@@ -57,11 +57,11 @@ module.exports.authenticate = (req, res, next) => {
 };
 
 module.exports.logOut = (req, res, next) => {
-	req.logout();
+    req.logout();
 	return res.json({
 			success: true,
 			msg: 'You are successfully logged out!'
-	});
+    });
 };
 
 
