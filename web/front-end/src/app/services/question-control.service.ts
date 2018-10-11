@@ -9,7 +9,7 @@ export class QuestionControlService {
 
   toFormGroup(questions: QuestionBase<any>[], display? : boolean, allow_comments? : boolean ) {
     let group: any = {};
-    if(display && !allow_comments){
+    if(display){
       for(let j = 0 ; j < questions.length; j++) {
         let question : any = questions[j];
         if(question.controlType === 'money_array'){
@@ -63,10 +63,7 @@ export class QuestionControlService {
                                                   : new FormControl(question.value || '');
         }
       });
-    } else if(allow_comments && !display) {
-
-      console.log("Hello");
-
+    } else if(allow_comments) {
       let comments : any[] = [];
       for(let j = 0 ; j < questions.length; j++) {
         let question : any = questions[j];
@@ -78,25 +75,25 @@ export class QuestionControlService {
 
             for(let i = 0 ; i < question.number ; i++ ){
               sum += parseInt(values[i]);
-              arrayofQuestions.push(new FormControl(values[i] || '0'));
+              arrayofQuestions.push(new FormControl({value: values[i] || '0', disabled: true}));
             }
 
-            arrayofQuestions.push(new FormControl( sum || '0' ));
+            arrayofQuestions.push(new FormControl( {value: sum || '0', disabled: true} ));
             group[question.key] = new FormArray(arrayofQuestions);
           } else {
             let arrayofQuestions = [];
             for(let i = 0 ; i < question.number ; i++ ){
-              arrayofQuestions.push(new FormControl('0'));
+              arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
             }
 
-            arrayofQuestions.push(new FormControl('0'));
+            arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
             group[question.key] = new FormArray(arrayofQuestions);
           }
         } else {
-          group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                                  : new FormControl(question.value || '');
+          group[question.key] = question.required ? new FormControl({value: question.value || '', disabled: true}, Validators.required)
+                                                  : new FormControl({value: question.value || '', disabled: true});
         }
-        comments.push(new FormControl("comment" + j));
+        comments.push(new FormControl());
       }
 
       group[Object.keys(group).length + 1] = new FormArray(comments);

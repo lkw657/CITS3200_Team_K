@@ -255,6 +255,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.isLoaded = true;
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
+    console.log(this.questions);
   }
   
   createAnswerList(answers): Answer[] {
