@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { logging } from 'protractor';
 
 @Component({
@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   loggingIn = false;
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
     if (this.authService.getProfile().loggedIn) {
       this.router.navigate(['/home']);
     }
+    this.authService.redirectUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   //Submit button sends user info to backend for authentication
@@ -63,7 +65,7 @@ export class LoginComponent implements OnInit {
 
         localStorage.setItem('user', JSON.stringify(data.user));
         this.loggingIn = false;
-        this.router.navigate(['/home']);
+        this.router.navigateByUrl(this.authService.redirectUrl);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
