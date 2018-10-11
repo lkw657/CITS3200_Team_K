@@ -4,7 +4,7 @@
 </div>
 
 <div [hidden]=submitting>
-  <div *ngIf="!display_only && !resubmit">
+  <div *ngIf="!display_only && !resubmit && !allow_comments">
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <!-- School selector -->
       <div class="form-row">
