@@ -39,9 +39,11 @@ export class DynamicFormComponent implements OnInit {
     private questionService: QuestionService ) { }
 
   ngOnInit() {
-    if(this.display_only){
+    if(this.display_only) {
       this.form = this.qcs.toFormGroup(this.questions, this.display_only);
       this.form.valueChanges.subscribe( (data) => { console.log(data);} )
+    } else if (this.allow_comments) {
+      this.form = this.qcs.toFormGroup(this.questions, this.display_only , this.allow_comments);
     } else {
       this.form = this.qcs.toFormGroup(this.questions);
     }
