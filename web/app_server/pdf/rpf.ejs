@@ -1,0 +1,111 @@
+<html>
+
+<head>
+    <style>
+        body {
+            /* padding: 50px; */
+            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+        }
+
+        a {
+            color: #00B7FF;
+        }
+
+        .form_heading {
+            color: black;
+            font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+            font-size: 12pt;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .main_intro {
+            color: black;
+            font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+            font-size: 9pt;
+        }
+
+        .question {
+            font-weight: bold;
+            font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+            font-size: 9pt;
+        }
+
+        .answer {
+            font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+            font-size: 9pt;
+        }
+
+        #submit_heading {
+            color: black;
+            font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+
+        #heading {
+            font-size: 14pt;
+        }
+
+        #submitting_form {
+            color: black;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img src="<%= dir %>image1.jpg" alt="" style="display: block; margin:auto;width: 481px;height: 46px;">
+
+
+    <h2 class="form_heading" id="faculty">FACULTY OF ENGINEERING AND MATHEMATICAL SCIENCES</h2>
+
+    <h1 class="form_heading" id="heading">RESEARCH PRIORITIES FUND REQUEST FORM</h1>
+
+    <p class="main_intro">The Research Priorities Fund (RPF) is intended to provide a source of cash support to
+        applicants normally seeking external funds on a competitive basis, or for support of other research priorities
+        including fixed term strategic appointments. This will normally be restricted to cases where University
+        co-investment will strengthen the University's case for obtaining access to external funds such as where
+        University contributions are a specific requirement of an external funding scheme or in one-off circumstances
+        where it can be demonstrated that a University cash commitment will provide the leverage necessary to attract
+        external funding.</p>
+
+    <br><br>
+    <% for(var i=0; i < QA.length; i++) {%>
+    <% if(QA[i].title) {%>
+    <h3>
+        <%= QA[i].title %>
+    </h3>
+    <% } %>
+    <p class="question">
+
+        <%= QA[i].question %>
+    </p>
+
+    <p class="answer">
+        <%= QA[i].answer %>
+    </p>
+
+    <br>
+
+    <% } %>
+    <br>
+    <br>
+    <br>
+
+    Form By: <%= owner.fname %> <%= owner.lname %> (<%= owner.number %>)
+    <br>
+    <br>
+    Approvals:
+    <br>
+    <% for(var i=0; i < approvers.length; i++) {%>
+        <%= approvers[i].role %> : <%= approvers[i].name %> (<%= approvers[i].number %>) -- <%= approvers[i].date %><br>
+    <% } %>
+</body>
+
+</html>

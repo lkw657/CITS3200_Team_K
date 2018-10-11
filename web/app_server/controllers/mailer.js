@@ -78,7 +78,6 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
 
 module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, backupForm, previouslyrejected) => {
 
-
     Email.findOne({ role: roleToSend }, (err, email) => {
         if (err) {
             console.log(err);
@@ -285,7 +284,7 @@ module.exports.rejectFormAccess = (req, res, next) => {
                             var role;
 
                             if (form.status == 'Awaiting HoS') {
-                                role = form.school+' HoS';
+                                role = form.school + ' HoS';
 
                             }
                             else if (form.status == 'Awaiting AD(R)') {
@@ -335,6 +334,211 @@ module.exports.listAllMail = (req, res, next) => {
             sendJsonResponse(res, 200, mails);
         }
     })
+}
+
+//********************** PDF CREATION STUFF **********************
+
+module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
+    Email.findOne({ role: "final" }, (err, email) => {
+        if (err) {
+            console.log(err);
+            if (backupForm) {
+                revertForm(backupForm);
+            }
+            if (res)
+                return res.status(400).json({ success: false, msg: "Something went wrong!" });
+            return;
+        }
+        else if (!email) {
+            console.log("No Such Email in DB");
+            if (backupForm) {
+                revertForm(backupForm);
+                console.log(roleToSend);
+            }
+            if (res)
+                return res.status(400).json({ success: false, msg: "Could not find email" });
+            return;
+        }
+
+        var mail = new Mail();
+        mail.type = "pdf";
+        mail.formID = form._id;
+        mail.generateSecret((secret) => {
+            mail.secret = secret;
+            mail.save((err, mail) => {
+                if (err) {
+                    console.log(err);
+                    if (backupForm) {
+                        revertForm(backupForm);
+                    }
+                    if (res)
+                        return res.status(400).json({ success: false, msg: "Failed to mail" });
+                    return;
+                }
+                else {
+                    User.findOne({ _id: form.owner }, "fname lname number", function (err, user) {
+                        if (err || !user) {
+                            if (res)
+                                return res.status(400).json({ success: false, msg: "Failed to mail" });
+                        }
+                        else {
+                            var subject = `PDF of RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
+                            var html = email.emailContent + '<br>';
+                            html += `Here is your access link: http://localhost:3000/mail/pdf/${mail._id}/${secret}`;
+
+                            module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
+
+                        }
+                    });
+                }
+            });
+        });
+    });
+}
+
+var pdf = require('html-pdf');
+var ejs = require('ejs');
+var path = require('path');
+
+// /mailID/secret
+module.exports.pdfForm = (req, res, next) => {
+
+    console.log(req.params);
+
+    if (!req.params.mailID) {
+        return res.status(403).json({
+            success: false,
+            msg: "No mailID"
+        });
+    }
+    if (!req.params.secret) {
+        return res.status(403).json({
+            success: false,
+            msg: "No secret"
+        });
+    }
+
+
+    Mail.findById(req.params.mailID, (err, mail) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+                success: false,
+                msg: "forbidden"
+            });
+        }
+        else if (!mail) {
+            return res.status(400).json({
+                success: false,
+                msg: "no such mail"
+            });
+        }
+        else {
+            if (mail.status == "done") {
+                return res.status(400).json({
+                    success: false,
+                    msg: "Link already used"
+                });
+            }
+            else if (mail.secret == req.params.secret && mail.type == 'pdf') {
+
+                //SendPDF
+                Form.findById(mail.formID, "owner approvedBy questionSet answers school submitter dates")
+                    .populate({ path: "owner", select: "fname lname number" })
+                    .populate({ path: "questionSet" })
+                    .populate({ path: "answers" })
+                    .populate({ path: 'approvedBy.id', select: "fname lname number" })
+                    .exec((err, form) => {
+
+                        QA = [];
+                        form.answers.forEach((o, i) => {
+                            // if(form.questionSet.questionList[i].formName=='central')
+                            QA.push({
+                                question: form.questionSet.questionList[i].text,
+                                title: form.questionSet.questionList[i].title,
+                                answer: form.answers[i].answer
+                            })
+                        });
+
+                        approvers = []
+                        form.approvedBy.forEach((o, i) => {
+                            approvers.push({
+                                name: form.approvedBy[i].id.fname + " " + form.approvedBy[i].id.lname,
+                                number: form.approvedBy[i].id.number,
+                                role: form.approvedBy[i].role,
+                                date: form.dates[i + 1]
+                            });
+                        })
+                        data = {
+                            QA: QA,
+                            approvers: approvers,
+                            owner: form.owner,
+                            dir: `file://${__dirname}/../pdf/`
+                        };
+
+
+                        let filePath = `${__dirname}/../pdf/rpf.ejs`;
+                        path.format(path.parse(filePath));
+
+                        let renderingOptions = {
+                            client: true,
+                            rmWhitespace: true
+                        };
+                        ejs.renderFile(
+                            filePath,
+                            data,
+                            renderingOptions,
+                            (err, html) => {
+                                if (err) {
+                                    return res.status(400).json({
+                                        success: false,
+                                        msg: err
+                                    });
+                                }
+                                else {
+                                    //do something with html
+                                    var options = {
+                                        format: 'A4',
+                                        border: '3mm',
+                                        "border": {
+                                            "top": "1in",            // default is 0, units: mm, cm, in, px
+                                            "right": "1in",
+                                            "bottom": "1in",
+                                            "left": "1in"
+                                        },
+                                    };
+                                    pdf.create(html, options).toStream(function (err, stream) {
+
+                                        res.setHeader("Content-disposition", "inline; filename=report.pdf");
+                                        res.setHeader("Content-Type", "application/pdf");
+                                        stream.pipe(res);
+                                    });
+
+
+                                }
+                            }
+                        );
+
+                    });
+
+            }
+            else {
+                return res.status(403).json({
+                    success: false,
+                    msg: "Forbidden"
+                });
+            }
+        }
+    });
+    /*
+    
+        
+    
+        */
+
+
+
+
 }
 
 var sendJsonResponse = (res, status, content) => {

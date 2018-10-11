@@ -353,8 +353,8 @@ module.exports.formResponse = (req, res, next) => {
                     //send an email to who??
                     if (form.status == 'Fully Approved') {
 
-                        return res.status(200).json({ success: true, msg: 'Form approved but no PDF email sent' });
-
+                        // return res.status(200).json({ success: true, msg: 'Form approved but no PDF email sent' });
+                        mailer.sendPDFAccessEmail(form, res, 'Approved and email sent', backupForm);
                     }
                     else {
                         //email person
