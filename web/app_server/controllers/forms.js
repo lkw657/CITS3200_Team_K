@@ -377,10 +377,12 @@ module.exports.formResponse = (req, res, next) => {
                 form.status = 'Provisionally Approved';
 
                 if (req.body.comments) {
-                    // TODO ask david
+
+                    req.body.comments.forEach((o, i) => req.body.comments[i].commenter = form.allocatedStaff)
                     form.comments = req.body.comments;
+
                     form.dates.push(new Date());
-                    allocatedStaff = null;
+                    form.allocatedStaff = null;
 
                     form.save((err, form) => {
                         if (err) {
@@ -431,7 +433,7 @@ module.exports.formResponse = (req, res, next) => {
                     form.status = 'Rejected'
                     form.comments = req.body.comments;
                     form.dates.push(new Date());
-                    allocatedStaff = null;
+                    form.allocatedStaff = null;
 
                     form.save((err, form) => {
                         if (err) {
