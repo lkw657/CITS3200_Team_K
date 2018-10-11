@@ -28,4 +28,8 @@
       </div>
     </div>
   </div>
+  <div *ngIf="question.allowComments" [formArrayName]="this.getCount()">
+    <p class="mt-2 mb-2">Enter comments below: </p>
+    <input type="text" class="form-control" [formControlName]="question.order" required>
+  </div>
 </div>

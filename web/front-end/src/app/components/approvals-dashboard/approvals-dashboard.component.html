@@ -53,46 +53,43 @@
         </div>
       </div>
 
-      <div class="mt-3 mb-5">
-        <h1>Form submitted as a {{approvalView.submitter}} from the {{approvalView.school}}</h1>
-        <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [comments]="comments" [display_only]="true" [allow_comments]="true"></app-dynamic-form>
-        <button (click)="check()">Check</button>
+      <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [allow_comments]="true"></app-dynamic-form>
+      <button (click)="check()">Check</button>
 
-        <div class="m-3">
-          <div class="btn-group">
-            <button type="button" class="btn btn-success btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Approve as
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', false)">{{role}}</a>
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', true)">Acting {{role}}</a>
-            </div>
+      <div class="m-3">
+        <div class="btn-group">
+          <button type="button" class="btn btn-success btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Approve as
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', true)">Acting {{role}}</a>
           </div>
-
-          <div class="btn-group">
-            <button type="button" class="btn btn-warning btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Provisionally Approve as
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', false)">{{role}}</a>
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', true)">Acting {{role}}</a>
-            </div>
-          </div>
-
-          <div class="btn-group">
-            <button type="button" class="btn btn-danger btn-w2 float-left p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Reject as
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', false)">{{role}}</a>
-              <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', true)">Acting {{role}}</a>
-            </div>
-          </div>
-
         </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-warning btn-w2 float-left mr-5 p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Provisionally Approve as
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', true)">Acting {{role}}</a>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-danger btn-w2 float-left p-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            Reject as
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', true)">Acting {{role}}</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

@@ -207,7 +207,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            allowComments: true
           })
         );
       } else if (q['type'] == 'text') {
@@ -218,7 +219,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            allowComments : true
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -229,7 +231,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            allowComments : true
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -242,7 +245,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             order: q.order,
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
-            disabled: true
+            disabled: true,
+            allowComments : true
           })
         );
       }
@@ -268,6 +272,6 @@ export class ApprovalsDashboardComponent implements OnInit {
   }
 
   check(){
-    console.log(this.dform.comments);
+    console.log(this.dform.form.controls[Object.keys(this.dform.form).length + 1].value);
   }
 }

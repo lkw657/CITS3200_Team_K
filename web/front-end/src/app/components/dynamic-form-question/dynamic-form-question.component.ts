@@ -19,6 +19,10 @@ export class DynamicFormQuestionComponent {
       return new Array(i);
   }
 
+  getCount(){
+    return Object.keys(this.form).length + 1;
+  }
+
   calcTotal(field: string) {
     let array : FormArray = this.form.controls[field] as FormArray;
     let sum : number = 0;
