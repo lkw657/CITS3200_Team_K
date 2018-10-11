@@ -436,7 +436,10 @@ module.exports.formResponse = (req, res, next) => {
 
                 if (req.body.comments) {
                     form.status = 'Rejected'
+                    
+                    req.body.comments.forEach((o, i) => req.body.comments[i].commenter = form.allocatedStaff)
                     form.comments = req.body.comments;
+
                     form.dates.push(new Date());
                     form.allocatedStaff = null;
 
