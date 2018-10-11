@@ -24,7 +24,7 @@ export class QuestionControlService {
           }
 
           arrayofQuestions.push(new FormControl( {value: sum || '0', disabled: true }));
-          console.log(arrayofQuestions);
+
           group[question.key] = new FormArray(arrayofQuestions);
 
         } else if ( question.controlType != 'money_array' ) {

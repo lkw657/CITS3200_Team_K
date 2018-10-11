@@ -50,7 +50,7 @@
   </form>
 </div>
 
-<div class="display_only" *ngIf="display_only && !resubmit">
+<div class="display_only" *ngIf="display_only && !resubmit &&!allow_comments">
   <form [formGroup]="form">
     <div *ngFor="let question of questions; index as i" class="form-row mt-3">
       <app-question class="w-100" 
@@ -61,7 +61,7 @@
   </form>
 </div>
 
-<div class="resubmit" *ngIf="resubmit && !display_only">
+<div class="resubmit" *ngIf="resubmit && !display_only && !allow_comments">
   <form [formGroup]="form">
     <div *ngFor="let question of questions; index as i" class="form-row mt-3">
       <app-question class="w-100" 
@@ -71,3 +71,15 @@
     </div>
   </form>
 </div>
+
+<div class="display_only" *ngIf="allow_comments && display_only">
+    <form [formGroup]="form">
+      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+        <app-question class="w-100" 
+                      [question]="question" 
+                      [form]="form" disabled></app-question>
+        <p class="mt-2 mb-2">Enter comments below: </p>
+        <input type="text" class="form-control" name="comment{{i}}" required>
+      </div>
+    </form>
+  </div>

@@ -5,6 +5,8 @@ import { QuestionService } from '../../services/question.service';
 import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
 
+import { AfterViewInit, ViewChild } from '@angular/core';
+
 import { QuestionBase } from '../../classes/question-base';
 import { Answer } from '../../classes/answer';
 
@@ -12,6 +14,7 @@ import { TextboxQuestion } from '../../classes/question-textbox';
 import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
 import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
+import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 
 @Component({
   selector: 'app-approvals-dashboard',
@@ -39,6 +42,9 @@ export class ApprovalsDashboardComponent implements OnInit {
   isLoaded = false;
   qset_id: string = '';
   comments: any[] = [];
+
+  @ViewChild(DynamicFormComponent)
+  private dform: DynamicFormComponent;
 
   constructor(
     private router: Router,
@@ -254,5 +260,9 @@ export class ApprovalsDashboardComponent implements OnInit {
       );
     }
     return aObjs;
+  }
+
+  check(){
+    console.log(this.dform.comments);
   }
 }
