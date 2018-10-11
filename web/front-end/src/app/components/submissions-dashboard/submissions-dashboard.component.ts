@@ -172,12 +172,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.submissionView = form;
 
     this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
-
-    //DEVELOPMENT ONLY - TO BE DELETED
-    this.submissionView.comments = [
-      { order: 1, text: "Please don't try to kill yourself" },
-      { order: 5, text: "I don't have that much money :(" }
-    ];
+    console.log(this.submissionView);
     this.comments = this.submissionView.comments;
 
   }
@@ -249,11 +244,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
     this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
-    console.log(this.questions);
-
-    //DEVELOPMENT ONLY - TO BE DELETED
-    this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
-  }
+ }
 
   // Goes back to history dashboard
   backToHistory() {
