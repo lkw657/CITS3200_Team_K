@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { baseURI } from '../../config';
 import { DashboardService } from '../../services/dashboard.service';
+import { FlashMessagesService } from "angular2-flash-messages";
 
 
 @Component({
@@ -14,11 +14,11 @@ import { DashboardService } from '../../services/dashboard.service';
 export class VerifyComponent implements OnInit {
 
   constructor(
-    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private dashboardService: DashboardService,
-    private http: HttpClient
+    private http: HttpClient,
+    private flashMessage: FlashMessagesService
   ) { }
 
   secret: string = '';
@@ -34,7 +34,10 @@ export class VerifyComponent implements OnInit {
         this.refreshApprovals();
         this.router.navigate(['/approvalsDashboard']);
       },
-      (err) => console.log(err)
+      (err) => {
+        this.router.navigate(['/approvalsDashboard']);
+        this.flashMessage.show('This form does not exist!', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
+      }
     );
   }
 
@@ -47,7 +50,10 @@ export class VerifyComponent implements OnInit {
         this.refreshApprovals();
         this.router.navigate(['/approvalsDashboard']);
       },
-      (err) => console.log(err)
+      (err) => {
+        this.router.navigate(['/approvalsDashboard']);
+        this.flashMessage.show(err.error.msg, { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
+      }
     );
     this.verifying = false;
   }

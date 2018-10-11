@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ViewChild } from '@angular/core';
 import { QuestionService } from '../../services/question.service';
 
 import { QuestionBase } from '../../classes/question-base';
@@ -7,7 +6,6 @@ import { TextboxQuestion } from '../../classes/question-textbox';
 import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
 import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
-import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 
 
 @Component({
