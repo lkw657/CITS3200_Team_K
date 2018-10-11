@@ -59,6 +59,10 @@ export class SubmissionsDashboardComponent implements AfterViewInit {
     this.refreshSubmissions();
   }
 
+  ngAfterViewInit() {
+    console.log("Initalization Done");
+  }
+
   refreshSubmissions() {
     // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
