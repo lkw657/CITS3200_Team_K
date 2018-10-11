@@ -26,7 +26,8 @@ function revertForm(backupForm) {
     console.log("reverting");
     Form.findOneAndUpdate({ _id: backupForm._id }, backupForm, (err, form) => {
         if (err) {
-            console.log("SOmething is seriously fucked");
+            console.log("Something has gone really wrong!");
+            console.log(err)
         }
     });
 }

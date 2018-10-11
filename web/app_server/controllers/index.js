@@ -142,12 +142,3 @@ module.exports.approvals = (req, res, next) => {
         });
     });
 }
-// This isn't actually called since I told the express generator not to use templates
-// I'm not entirely sure why it generated this funciton
-module.exports.index = function(req, res, next) {
-    console.log(req.user)
-    if (req.user) {
-        return res.render('index', { title: 'Express - Hello '+req.user.fname});
-    }
-    return res.render('index', { title: 'Express' });
-}
