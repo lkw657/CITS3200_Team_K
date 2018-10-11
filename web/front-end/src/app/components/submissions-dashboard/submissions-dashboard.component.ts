@@ -22,7 +22,7 @@ import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
   templateUrl: './submissions-dashboard.component.html',
   styleUrls: ['./submissions-dashboard.component.css']
 })
-export class SubmissionsDashboardComponent implements AfterViewInit {
+export class SubmissionsDashboardComponent implements OnInit {
 
   // View Objects
   userSubmissions: any;
@@ -57,10 +57,6 @@ export class SubmissionsDashboardComponent implements AfterViewInit {
 
   ngOnInit() {
     this.refreshSubmissions();
-  }
-
-  ngAfterViewInit() {
-    console.log("Initalization Done");
   }
 
   refreshSubmissions() {
