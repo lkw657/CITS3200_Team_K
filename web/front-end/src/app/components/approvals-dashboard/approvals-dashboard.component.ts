@@ -42,6 +42,8 @@ export class ApprovalsDashboardComponent implements OnInit {
   isLoaded = false;
   qset_id: string = '';
   comments: any[] = [];
+  appsLoaded = false;
+  submitting = false;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -58,14 +60,17 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.refreshApprovals();
   }
 
-  // Resfreshes approvals when Dashboard is loaded
+  // Refreshes approvals when Dashboard is loaded
   refreshApprovals() {
+    this.appsLoaded = false;
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
+      this.appsLoaded = true;
     },
       err => {
         console.log(err);
+        this.router.navigate(['/home']);
         return false;
       });
   }
@@ -95,7 +100,7 @@ export class ApprovalsDashboardComponent implements OnInit {
 
   // Resubmits form for approval
   submitForm(comments, response, acting) {
-    console.log(response);
+    this.submitting = true;
     let commentArray = [];
     // Create approval object with new comments and response
     for (let i in comments) {
@@ -108,11 +113,10 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.approval.acting = acting;
     this.approval.form_id = this.approvalView._id;
 
-    console.log(this.approval);
-
     this.questionService.formResponse(this.approval).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.submitting = false;
         this.refreshApprovals();
         this.showAllApprovals = true;
         this.showSingleApproval = false;
@@ -121,6 +125,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     },
       err => {
         this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.submitting = false;
         window.scrollTo(0, 0);
       }
     );

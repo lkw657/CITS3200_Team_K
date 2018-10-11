@@ -1,4 +1,9 @@
-<div class="mb-5">
+<div [hidden]="subsLoaded">
+    <h2>Loading Submissions...</h2>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar> 
+</div>
+
+<div [hidden]="!subsLoaded" class="mb-5 p-1">
     <!-- Dashboard display for all user's submitted forms -->
     <div *ngIf="showAllSubmissions">
       <div class="row">

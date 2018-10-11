@@ -16,6 +16,9 @@ export class HomeComponent implements OnInit {
   userApprovals: any;
   userSubmissions: any;
 
+  subsLoaded = false;
+  appsLoaded = false;
+
   constructor(
     private router: Router,
     private flashMessage: FlashMessagesService,
@@ -40,6 +43,7 @@ export class HomeComponent implements OnInit {
     // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
       this.userSubmissions = data.submissions;
+      this.subsLoaded = true;
     },
       err => {
         this.flashMessage.show("An Error has Occurred - Please try again later!", { cssClass: 'align-top alert alert-danger', timeout: 5000 });
@@ -53,6 +57,7 @@ export class HomeComponent implements OnInit {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
+      this.appsLoaded = true;
     },
       err => {
         console.log(err);

@@ -18,6 +18,8 @@ export class EditQuestionsComponent implements OnInit {
 
   questionList: any;
   currentQuestion: any;
+  questionsLoaded = false;
+  updating = false;
 
   // What should be displayed
   displayAll: boolean = true;
@@ -26,13 +28,20 @@ export class EditQuestionsComponent implements OnInit {
   displayNew: boolean = false;
 
   ngOnInit() {
+    this.getAllQuestions();
+  }
+
+  getAllQuestions() {
+    this.questionsLoaded = false;
     // Get questions to show admin
     this.dashboardService.getAllQuestions().subscribe(res => {
       var questionSet = res['questionSet'];
       this.questionList = questionSet.questionList;
+      this.questionsLoaded = true;
     },
       err => {
         console.log(err);
+        this.router.navigate(['/home']);
         return false;
       });
   }
@@ -43,7 +52,7 @@ export class EditQuestionsComponent implements OnInit {
     this.currentQuestion = question;
 
     let type = this.currentQuestion.type.split("_")[0] + "_" + this.currentQuestion.type.split("_")[1];
-    if(type=="money_array") {
+    if (type == "money_array") {
       this.currentQuestion.array = this.currentQuestion.type.split("_")[2];
       this.currentQuestion.type = type;
     }
@@ -63,7 +72,7 @@ export class EditQuestionsComponent implements OnInit {
 
   // This will hide all content besides the delete screen.
   showNew() {
-    
+
     // Creates blank question
     this.currentQuestion = {
       title: '',
@@ -116,9 +125,10 @@ export class EditQuestionsComponent implements OnInit {
 
   // Update Question set database through the backend
   saveNewQuestionSet() {
+    this.updating = true;
     for (let i = 0; i < this.questionList.length; i++) {
       this.questionList[i].order = i;
-      if(this.questionList[i].array > 0) {
+      if (this.questionList[i].array > 0) {
         this.questionList[i].type = this.questionList[i].type + "_" + this.questionList[i].array
         this.questionList[i].array = undefined
       }
@@ -127,10 +137,12 @@ export class EditQuestionsComponent implements OnInit {
     this.dashboardService.updateQuestionSet(this.questionList).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.updating=false;
         this.router.navigate(['/home']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.updating=false;
         this.router.navigate(['/editQuestions']);
       }
     });

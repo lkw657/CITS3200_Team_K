@@ -11,6 +11,7 @@ import { FlashMessagesService } from 'angular2-flash-messages';
 export class NavbarComponent implements OnInit { 
 
   user: any;
+  loggingOut = false;
 
   constructor(
     private authService: AuthService,
@@ -22,16 +23,19 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogoutClick() {
+    this.loggingOut = true;
     this.user = this.authService.getProfile();
     localStorage.clear();
     this.authService.logoutUser(this.user).subscribe(data => {  
       if (data.success) {
+        this.loggingOut = false;
         this.router.navigate(['']);
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         window.scrollTo(0, 0);
       }
     },
       err => {
+        this.loggingOut = false;
         this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
         window.scrollTo(0, 0);
       }
