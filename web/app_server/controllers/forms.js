@@ -363,25 +363,28 @@ module.exports.formResponse = (req, res, next) => {
                 });
             }
             else if (req.body.response == 'Provisionally Approved') {
-
-                if (form.status == 'Awaiting HoS') {
-                    form.rejectionRole = actingString + 'HoS';
+ 
+                if (!req.body.comments) {
+                    return res.status(400).json({ success: false, msg: 'No comments' });
                 }
-                else if (form.status == 'Awaiting AD(R)') {
-                    form.rejectionRole = actingString + 'AD(R)';
-                }
-                else if (form.status == 'Awaiting PVC-ED') {
-                    form.rejectionRole = actingString + 'PVC-ED';
-                }
-                else {
-                    //Something is broken
-                    return res.status(400).json({ success: false, msg: 'Bad form status' });
+                else if (req.body.comments.length != 0) {
 
-                }
+                    if (form.status == 'Awaiting HoS') {
+                        form.rejectionRole = actingString + 'HoS';
+                    }
+                    else if (form.status == 'Awaiting AD(R)') {
+                        form.rejectionRole = actingString + 'AD(R)';
+                    }
+                    else if (form.status == 'Awaiting PVC-ED') {
+                        form.rejectionRole = actingString + 'PVC-ED';
+                    }
+                    else {
+                        //Something is broken
+                        return res.status(400).json({ success: false, msg: 'Bad form status' });
+                    }
 
-                form.status = 'Provisionally Approved';
+                    form.status = 'Provisionally Approved';
 
-                if (req.body.comments) {
 
                     req.body.comments.forEach((o, i) => req.body.comments[i].commenter = form.allocatedStaff)
                     form.comments = req.body.comments;
@@ -419,24 +422,26 @@ module.exports.formResponse = (req, res, next) => {
             }
             else if (req.body.response == 'Rejected') {
 
-                if (form.status == 'Awaiting HoS') {
-                    form.rejectionRole = actingString + 'HoS';
+                if (!req.body.comments) {
+                    return res.status(400).json({ success: false, msg: 'No comments' });
                 }
-                else if (form.status == 'Awaiting AD(R)') {
-                    form.rejectionRole = actingString + 'AD(R)';
-                }
-                else if (form.status == 'Awaiting PVC-ED') {
-                    form.rejectionRole = actingString + 'PVD-ED';
-                }
-                else {
-                    //Something is broken
-                    return res.status(400).json({ success: false, msg: 'Bad form status' });
+                if (req.body.comments.length != 0) {
 
-                }
-
-                if (req.body.comments) {
+                    if (form.status == 'Awaiting HoS') {
+                        form.rejectionRole = actingString + 'HoS';
+                    }
+                    else if (form.status == 'Awaiting AD(R)') {
+                        form.rejectionRole = actingString + 'AD(R)';
+                    }
+                    else if (form.status == 'Awaiting PVC-ED') {
+                        form.rejectionRole = actingString + 'PVD-ED';
+                    }
+                    else {
+                        //Something is broken
+                        return res.status(400).json({ success: false, msg: 'Bad form status' });
+                    }
                     form.status = 'Rejected'
-                    
+
                     req.body.comments.forEach((o, i) => req.body.comments[i].commenter = form.allocatedStaff)
                     form.comments = req.body.comments;
 
