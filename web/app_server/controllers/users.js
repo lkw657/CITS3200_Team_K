@@ -51,12 +51,14 @@ module.exports.updateUser = (req, res, next) => {
 
 //Delete User from database
 module.exports.removeUser = (req, res, next) => {
-  if (req.user == undefined || !req.user.isIT)
+  if (req.user == undefined || !req.user.isIT) {
     stat = req.user == undefined ? 401 : 403
-  return sendJsonResponse(res, stat, {
-    success: false,
-    msg: "Forbidden"
-  });
+    return sendJsonResponse(res, stat, {
+      success: false,
+      msg: "Forbidden"
+    });
+  }
+  
   User.findById(req.body._id, function (err, user) {
 
     if (err) {
