@@ -54,7 +54,6 @@
       </div>
 
       <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="false" [allow_comments]="true" [approver]="role" [submitter]="submitter" [school]="school"></app-dynamic-form>
-      <button (click)="check()">Check</button>
 
       <div class="m-3">
         <div class="btn-group">
@@ -63,8 +62,8 @@
             Approve as
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', false)">{{role}}</a>
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Approved', true)">Acting {{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Approved', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Approved', true)">Acting {{role}}</a>
           </div>
         </div>
 
@@ -74,8 +73,8 @@
             Provisionally Approve as
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', false)">{{role}}</a>
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Provisionally Approved', true)">Acting {{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Provisionally Approved', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Provisionally Approved', true)">Acting {{role}}</a>
           </div>
         </div>
 
@@ -85,8 +84,8 @@
             Reject as
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', false)">{{role}}</a>
-            <a class="dropdown-item" (click)="submitForm(approvalView.comments, 'Rejected', true)">Acting {{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Rejected', false)">{{role}}</a>
+            <a class="dropdown-item" (click)="submitForm('Rejected', true)">Acting {{role}}</a>
           </div>
         </div>
 
