@@ -93,6 +93,7 @@ module.exports.submissions = (req, res, next) => {
                 status: req.user.submissions[i].status,
                 answers: req.user.submissions[i].answers,
                 history: req.user.submissions[i].history,
+                comments: req.user.submissions[i].comments,
                 sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length-1].toLocaleString('en-AU')
             });
@@ -132,6 +133,8 @@ module.exports.approvals = (req, res, next) => {
                 submitter: req.user.approvals[i].submitter,
                 status: req.user.approvals[i].status,
                 answers: req.user.approvals[i].answers,
+                history: req.user.approvals[i].history,
+                comments: req.user.approvals[i].comments,
                 sub_date: req.user.approvals[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length-1].toLocaleString('en-AU')
             });
