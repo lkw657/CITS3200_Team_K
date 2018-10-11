@@ -68,7 +68,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
-      console.log(this.userApprovals);
       this.appsLoaded = true;
     },
       err => {
@@ -104,12 +103,14 @@ export class ApprovalsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
-  submitForm(comments, response, acting) {
+  submitForm(response, acting) {
     this.submitting = true;
     let commentArray = [];
     // Create approval object with new comments and response
-    for (let i in comments) {
-      commentArray.push({ order: i, text: comments[i] });
+    for (let i in this.dform.form.controls[Object.keys(this.dform.form).length + 1].value) {
+      if (this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] != null) {
+        commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] });
+      }
     }
 
     // Create approval object to be sent to back end
@@ -226,7 +227,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments : true,
+            allowComments: true,
             form_name: q.formName
           })
         );
@@ -239,7 +240,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments : true,
+            allowComments: true,
             form_name: q.formName
           })
         );
@@ -254,7 +255,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            allowComments : true,
+            allowComments: true,
             form_name: q.formName
           })
         );
@@ -267,7 +268,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     console.log(this.questions);
     console.log(qObjs);
   }
-  
+
   createAnswerList(answers): Answer[] {
     this.answers = answers;
     let aObjs: Answer[] = [];
@@ -280,9 +281,5 @@ export class ApprovalsDashboardComponent implements OnInit {
       );
     }
     return aObjs;
-  }
-
-  check(){
-    console.log(this.dform.form.controls[Object.keys(this.dform.form).length + 1].value);
   }
 }
