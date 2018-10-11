@@ -64,9 +64,6 @@ export class QuestionControlService {
         }
       });
     } else if(allow_comments && !display) {
-
-      console.log("Hello");
-
       let comments : any[] = [];
       for(let j = 0 ; j < questions.length; j++) {
         let question : any = questions[j];
@@ -78,23 +75,23 @@ export class QuestionControlService {
 
             for(let i = 0 ; i < question.number ; i++ ){
               sum += parseInt(values[i]);
-              arrayofQuestions.push(new FormControl(values[i] || '0'));
+              arrayofQuestions.push(new FormControl({value: values[i] || '0', disabled: true}));
             }
 
-            arrayofQuestions.push(new FormControl( sum || '0' ));
+            arrayofQuestions.push(new FormControl( {value: sum || '0', disabled: true} ));
             group[question.key] = new FormArray(arrayofQuestions);
           } else {
             let arrayofQuestions = [];
             for(let i = 0 ; i < question.number ; i++ ){
-              arrayofQuestions.push(new FormControl('0'));
+              arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
             }
 
-            arrayofQuestions.push(new FormControl('0'));
+            arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
             group[question.key] = new FormArray(arrayofQuestions);
           }
         } else {
-          group[question.key] = question.required ? new FormControl(question.value || '', Validators.required)
-                                                  : new FormControl(question.value || '');
+          group[question.key] = question.required ? new FormControl({value: question.value || '', disabled: true}, Validators.required)
+                                                  : new FormControl({value: question.value || '', disabled: true});
         }
         comments.push(new FormControl("comment" + j));
       }

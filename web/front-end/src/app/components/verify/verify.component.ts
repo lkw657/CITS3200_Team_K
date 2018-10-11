@@ -23,12 +23,16 @@ export class VerifyComponent implements OnInit {
   mailID : string = '';
 
   onAccept(){
-    this.http.post(baseURI + '/mail/verifyFormAccess', {'mailID': this.mailID, 'secret': this.secret}).subscribe(
-      (data) => {
-        console.log(data)
-        this.router.navigate(['/home']);},
-      (err) => console.log(err)
-    );
+    if(this.authService.loggedIn()){
+      this.http.post(baseURI + '/mail/verifyFormAccess', {'mailID': this.mailID, 'secret': this.secret}).subscribe(
+        (data) => {
+          console.log(data)
+          this.router.navigate(['/home']);},
+        (err) => console.log(err)
+      );
+    } else {
+      console.log("Not Logged In");
+    }
   }
 
   onReject(){

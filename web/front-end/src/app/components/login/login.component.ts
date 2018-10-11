@@ -59,7 +59,11 @@ export class LoginComponent implements OnInit {
         }
 
         localStorage.setItem('user', JSON.stringify(data.user));
-        this.router.navigate(['/home']);
+        if(this.authService.redirectUrl === ""){
+          this.router.navigate(['/home']);
+        } else {
+          this.router.navigate([this.authService.redirectUrl]);
+        }
       }
 
       //Returns to login and displays error message if any errors thrown from backend
