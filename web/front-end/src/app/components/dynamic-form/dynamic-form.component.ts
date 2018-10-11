@@ -25,6 +25,7 @@ export class DynamicFormComponent implements OnInit {
   @Input() display_only : boolean = false;
   @Input() resubmit : boolean = false;
   @Input() allow_comments : boolean = false;
+  @Input() approver : String = '';
 
   form: FormGroup;
   school: String;
@@ -49,6 +50,7 @@ export class DynamicFormComponent implements OnInit {
     } else {
       this.form = this.qcs.toFormGroup(this.questions);
     }
+
   }
 
   findspecificComment(order: number){
