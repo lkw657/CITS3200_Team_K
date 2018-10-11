@@ -43,6 +43,7 @@ export class SubmissionsDashboardComponent implements AfterViewInit {
   isLoaded = false;
   qset_id: string = '';
   comments: any[] = [];
+  subsLoaded = false;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -67,6 +68,7 @@ export class SubmissionsDashboardComponent implements AfterViewInit {
     // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
       this.userSubmissions = data.submissions;
+      this.subsLoaded = true;
     },
       err => {
         this.flashMessage.show("An Error has Occurred - Please try again later!", { cssClass: 'align-top alert alert-danger', timeout: 5000 });

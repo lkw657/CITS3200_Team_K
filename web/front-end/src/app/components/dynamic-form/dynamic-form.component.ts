@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 })
 export class DynamicFormComponent implements OnInit {
 
+  submitting = false;
+
   @Input() questions: QuestionBase<any>[] = [];
   @Input() qset_id : string = '';
   @Input() comments : any[] = [];
@@ -71,13 +73,16 @@ export class DynamicFormComponent implements OnInit {
 
     console.log(this.submission.answers);
 
+    this.submitting = true;
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
+        this.submitting = false;
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/submissionsDashboard']);
       }
     },
     err => {
+      this.submitting = false;
       this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       window.scrollTo(0, 0);
     }

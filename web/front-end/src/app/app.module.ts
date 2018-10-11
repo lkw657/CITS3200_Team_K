@@ -36,21 +36,24 @@ import { httpInterceptorProviders } from './http-interceptors/index';
 import { AuthGuard } from './guards/auth.guard';
 
 import { DragulaModule } from 'ng2-dragula';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent, canActivate:[AuthGuard]},
-  { path: 'submission', component: SubmissionComponent, canActivate:[AuthGuard]},
-  { path: 'editUsers', component: EditUsersComponent, canActivate:[AuthGuard]},
-  { path: 'editQuestions', component: EditQuestionsComponent, canActivate:[AuthGuard]},
-  { path: 'editEmails', component: EditEmailsComponent, canActivate:[AuthGuard]},
-  { path: 'verify/:mailID/:secret', component: VerifyComponent, canActivate:[AuthGuard]},
-  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate:[AuthGuard]},
-  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate:[AuthGuard]},
-  { path: '**', component: NotFoundComponent}
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'submission', component: SubmissionComponent, canActivate: [AuthGuard] },
+  { path: 'editUsers', component: EditUsersComponent, canActivate: [AuthGuard] },
+  { path: 'editQuestions', component: EditQuestionsComponent, canActivate: [AuthGuard] },
+  { path: 'editEmails', component: EditEmailsComponent, canActivate: [AuthGuard] },
+  { path: 'verify/:mailID/:secret', component: VerifyComponent, canActivate: [AuthGuard] },
+  { path: 'submissionsDashboard', component: SubmissionsDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'approvalsDashboard', component: ApprovalsDashboardComponent, canActivate: [AuthGuard] },
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
@@ -79,7 +82,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     FlashMessagesModule.forRoot(),
     ReactiveFormsModule,
-    DragulaModule.forRoot()
+    DragulaModule.forRoot(),
+    MatProgressBarModule
   ],
   providers: [
     ValidateService,

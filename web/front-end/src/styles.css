@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 /* in-flight clone */
+
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 .gu-mirror {
     position: fixed !important;
     margin: 0 !important;

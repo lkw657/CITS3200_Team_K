@@ -18,6 +18,8 @@ export class EditEmailsComponent implements OnInit {
 
   allEmails: Object;
   currentEmail: Object;
+  emailsLoaded = false;
+  updating = false;
 
   // What should be displayed
   displayAll: boolean = true;
@@ -30,12 +32,15 @@ export class EditEmailsComponent implements OnInit {
   }
 
   getEmails() {
+    this.emailsLoaded = false;
     // Get users to show admin
     this.dashboardService.getAllEmails().subscribe(allEmails => {
       this.allEmails = allEmails;
+      this.emailsLoaded = true;
     },
       err => {
         console.log(err);
+        this.router.navigate(['/home']);
         return false;
       });
   }
@@ -81,9 +86,11 @@ export class EditEmailsComponent implements OnInit {
 
   // Update Email database through the backend
   onEmailEdit() {
+    this.updating = true;
     this.dashboardService.updateEmail(this.currentEmail).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.updating = false;
         this.getEmails();
         this.displayAll = true;
         this.displayEdit = false;
@@ -91,6 +98,7 @@ export class EditEmailsComponent implements OnInit {
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.updating = false;
         window.scrollTo(0, 0);
       }
     });
@@ -99,10 +107,11 @@ export class EditEmailsComponent implements OnInit {
 
   // Adds new email to DB
   saveNewEmail() {
-
+    this.updating = true;
     this.dashboardService.newEmail(this.currentEmail).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.updating = false;
         this.getEmails();
         this.displayAll = true;
         this.displayNew = false;
@@ -110,6 +119,7 @@ export class EditEmailsComponent implements OnInit {
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.updating = false;
         window.scrollTo(0, 0);
       }
     });
@@ -117,9 +127,11 @@ export class EditEmailsComponent implements OnInit {
 
   // Delete email from database
   deleteEmail() {
+    this.updating = true;
     window.scrollTo(0, 0);
     this.dashboardService.removeEmail(this.currentEmail).subscribe(data => {
       if (data.success) {
+        this.updating = false;
         this.getEmails();
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.displayAll = true;
@@ -127,6 +139,7 @@ export class EditEmailsComponent implements OnInit {
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 3000 });
+        this.updating = false;
         window.scrollTo(0, 0);
       }
     });
