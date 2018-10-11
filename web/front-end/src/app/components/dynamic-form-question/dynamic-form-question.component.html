@@ -7,7 +7,7 @@
     <input type="date" class="form-control" *ngSwitchCase="'date'" [formControlName]="question.key" [id]="question.key" >
     <input type="text" class="form-control" *ngSwitchCase="'text'" [formControlName]="question.key" [id]="question.key" >
     <div *ngIf="question.controlType=='money_array'">
-      <div class="row" [formArrayName]="question.key">
+      <div class="row no-gutters" [formArrayName]="question.key">
         <div class="col" *ngFor="let in of counter(question.number) ; let i = index">
           <label>Year {{i+1}}</label>
           <input type="text" class="form-control" *ngSwitchCase="'money_array'" 
