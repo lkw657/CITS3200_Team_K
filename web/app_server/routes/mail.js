@@ -5,6 +5,8 @@ var router = express.Router();
 /* */
 router.post('/verifyFormAccess', ctrlMail.verifyFormAccess);
 
+router.post('/rejectFormAccess', ctrlMail.rejectFormAccess);
+
 /*Debugging purposes*/
 router.get('/list', ctrlMail.listAllMail);
 

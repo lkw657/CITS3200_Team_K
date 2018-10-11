@@ -51,31 +51,31 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
         }
         else {
             console.log(info);
-            if(res && backupForm){
+            if (res && backupForm) {
                 // Pop of approvals array of allocated staff
 
-                if(backupForm.allocatedStaff){
-                    User.findById(backupForm.allocatedStaff, (err, staff)=>{
+                if (backupForm.allocatedStaff) {
+                    User.findById(backupForm.allocatedStaff, (err, staff) => {
                         //delete
 
                         staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
                         console.log(staff);
-                        staff.save( (err, staff)=>{
+                        staff.save((err, staff) => {
                             res.status(200).json({ success: true, msg: successMessage });
                         });
                     });
                 }
-                else{
+                else {
                     return res.status(200).json({ success: true, msg: successMessage });
                 }
             }
-            
+
         }
     });
 
 };
 
-module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, backupForm) => {
+module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, backupForm, previouslyrejected) => {
 
 
     Email.findOne({ role: roleToSend }, (err, email) => {
@@ -98,7 +98,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                 return res.status(400).json({ success: false, msg: "Could not find email" });
             return;
         }
-    
+
         var mail = new Mail();
         mail.type = "form-access";
         mail.formID = form._id;
@@ -115,11 +115,23 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                     return;
                 }
                 else {
-                    var subject = "Access for Form";
-                    var html = email.emailContent + '<br>';
-                    html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
+                    User.findOne({ _id: form.owner }, "fname lname number", function (err, user) {
+                        if (err || !user) {
+                            if (res)
+                                return res.status(400).json({ success: false, msg: "Failed to mail" });
+                        }
+                        else {
+                            var subject = `Access for RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
+                            var html = email.emailContent + '<br>';
+                            if (previouslyrejected) {
+                                html += "The person this was sent to was previously rejected<br>"
+                            }
+                            html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
 
-                    module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
+                            module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
+
+                        }
+                    });
                 }
             });
         });
@@ -209,6 +221,102 @@ module.exports.verifyFormAccess = (req, res, next) => {
             }
         }
     })
+}
+
+module.exports.rejectFormAccess = (req, res, next) => {
+    console.log(req.body);
+    console.log(req.user);
+
+    if (!req.body.mailID) {
+        return res.status(403).json({
+            success: false,
+            msg: "No mailID"
+        });
+    }
+    if (!req.body.secret) {
+        return res.status(403).json({
+            success: false,
+            msg: "No secret"
+        });
+    }
+    if (!req.user) {
+        return res.status(403).json({
+            success: false,
+            msg: "Invalid user"
+        });
+    }
+
+
+    Mail.findById(req.body.mailID, (err, mail) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({
+                success: false,
+                msg: "forbidden"
+            });
+        }
+        else if (!mail) {
+            return res.status(400).json({
+                success: false,
+                msg: "no such mail"
+            });
+        }
+        else {
+            if (mail.status == "done") {
+                return res.status(400).json({
+                    success: false,
+                    msg: "Link already used"
+                });
+            }
+            else if (mail.secret == req.body.secret && mail.type == 'form-access') {
+                //Deactivate email
+                mail.status = "done";
+                mail.save((err, mail) => {
+                    if (err || !mail) {
+                        return res.status(403).json({
+                            success: false,
+                            msg: err
+                        });
+                    }
+                    else {
+                        // Send email again
+                        Form.findById(mail.formID, (err, form) => {
+                            var role;
+
+                            if (form.status == 'Awaiting HoS') {
+                                if (form.submitter == 'AD(R)') {
+                                    role = 'PVC-ED';
+                                }
+                                else {
+                                    role = 'AD(R)';
+                                }
+                            }
+                            else if (form.status == 'Awaiting AD(R)') {
+                                role = 'PVC-ED';
+
+                            }
+                            else if (form.status == 'Awaiting PVC-ED') {
+                                role = 'final';
+                            }
+                            sendFormAccessEmail(form, role, null, null, null);
+                        })
+
+
+                        return res.status(200).json({
+                            success: true,
+                            msg: "Success"
+                        });
+                    }
+                })
+            }
+            else {
+                return res.status(403).json({
+                    success: false,
+                    msg: "Forbidden"
+                });
+            }
+        }
+    });
 }
 
 module.exports.listAllMail = (req, res, next) => {
