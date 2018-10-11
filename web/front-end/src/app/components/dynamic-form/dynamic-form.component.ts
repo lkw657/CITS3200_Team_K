@@ -52,7 +52,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   findspecificComment(order: number){
-    if( this.comments.find(x => x.order === order) != undefined ){
+    if( this.comments!= undefined && this.comments.find(x => x.order === order) != undefined ){
       return this.comments.find(x => x.order === order).text;
     }
   }
@@ -72,8 +72,6 @@ export class DynamicFormComponent implements OnInit {
     this.submission.school = this.school;
     this.submission.submitter = this.submitter;
     this.submission.qset_id = this.qset_id;
-
-    console.log(this.submission.answers);
 
     this.submitting = true;
     this.questionService.newSubmission(this.submission).subscribe(data => {

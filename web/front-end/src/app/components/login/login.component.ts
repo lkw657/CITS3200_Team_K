@@ -48,21 +48,6 @@ export class LoginComponent implements OnInit {
           });
         data.user.loggedIn = true;
 
-        // DEVELOPMENT ONLY - REMOVE
-        if (data.user.role == "researcher") {
-          data.user.forms = [
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-          ];
-        } else if (data.user.role == "staff") {
-          data.user.forms = [
-            { created_date: "01/08/2018", owner: "Approved" },
-            { created_date: "01/08/2018", owner: "Approved" },
-            { created_date: "01/08/2018", owner: "Approved" },
-          ];
-        }
-
         localStorage.setItem('user', JSON.stringify(data.user));
         this.loggingIn = false;
         this.router.navigateByUrl(this.authService.redirectUrl);

@@ -97,7 +97,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.role = this.approvalView.status.split(" ")[1];
     this.school = this.approvalView.school;
     this.submitter = this.approvalView.submitter;
-
+    console.log(this.approvalView);
     this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
     //this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
@@ -165,10 +165,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-
-    //DEVELOPMENT ONLY - TO BE DELETED
-    this.historicalSubmissionView.comments = [{ order: 1, text: "Q2 - Here is a HISTORICAL comment" }, { order: 5, text: "Q6 - Here is another HISTORICAL comment" }]
-
   }
 
   // Goes back to history dashboard 

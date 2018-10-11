@@ -90,13 +90,18 @@ module.exports.addForm = (req, res, next) => {
                         form.answers = req.body.answers;
                         // form.dates = ['Sat Sep 15 2018 21:59:29 GMT+0800 (Australian Western Standard Time)'];
                         form.dates = [new Date()];
+                        form.comments = [];
+
 
                         form.school = req.body.school;
 
                         if (req.body.history) {
                             form.history = req.body.history;
                         }
-
+                        else {
+                            form.history = [];
+                        }
+                        console.log(form);
                         form.save((err, form) => {
                             if (err) {
                                 return res.status(400).json({
