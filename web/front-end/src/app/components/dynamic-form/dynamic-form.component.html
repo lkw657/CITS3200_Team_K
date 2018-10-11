@@ -75,6 +75,9 @@
   </div>
 
   <div class="allow_comments" *ngIf="!display_only && !resubmit && allow_comments">
+    <div class="border-bottom border-top border-primary pt-3 pb-3">
+      <h1>Form submitted as a {{submitter}} from the {{school}}</h1>
+    </div>
     <form [formGroup]="form">
       <div *ngFor="let question of questions; index as i" class="form-row mt-3">
         <app-question [hidden]="approver=='PVC-ED' && question.form_name=='faculty'" class="w-100" [question]="question" [form]="form" disabled></app-question>

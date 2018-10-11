@@ -26,12 +26,10 @@ export class DynamicFormComponent implements OnInit {
   @Input() resubmit : boolean = false;
   @Input() allow_comments : boolean = false;
   @Input() approver : String = '';
+  @Input() submitter : String = '';
+  @Input() school : String = '';
 
   form: FormGroup;
-  school: String;
-  submitter: String;
-  school_display: String;
-  submitter_display: String;
   submission: any = {};
   payload = '';
 
