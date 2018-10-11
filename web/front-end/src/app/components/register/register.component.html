@@ -1,4 +1,9 @@
-<div class="outer">
+<div [hidden]="!submitting">
+  <h2>Registering...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="submitting" class="mb-5">
   <!-- User Registration Form -->
   <h2 class="page-header mb-4 mt-4">Register</h2>
   <form (submit)="onRegisterSubmit()">

@@ -1,4 +1,9 @@
-<div class="mb-5">
+<div [hidden]="subsLoaded && appsLoaded">
+    <h2>Loading Dashboard...</h2>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar> 
+</div>
+
+<div [hidden]="!subsLoaded || !appsLoaded" class="mb-5">
 
   <!-- IT View -->
   <div *ngIf=user.isIT>

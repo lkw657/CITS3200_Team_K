@@ -1,6 +1,13 @@
 <app-navbar></app-navbar>
 
 <div class="container">
+  <div [hidden]="!status.loggingOut">
+    <h2>Logging Out...</h2>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<div [hidden]="status.loggingOut" class="container">
   <flash-messages></flash-messages>
   <router-outlet></router-outlet>
 </div>

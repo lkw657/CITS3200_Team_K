@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
 import { Router } from "@angular/router";
+import { logging } from 'protractor';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { Router } from "@angular/router";
 export class LoginComponent implements OnInit {
   number: String;
   password: String;
+  loggingIn = false;
 
   constructor(
     private authService: AuthService,
@@ -26,6 +28,7 @@ export class LoginComponent implements OnInit {
 
   //Submit button sends user info to backend for authentication
   onLoginSubmit() {
+    this.loggingIn = true;
     const login = {
       number: this.number,
       password: this.password
@@ -59,11 +62,8 @@ export class LoginComponent implements OnInit {
         }
 
         localStorage.setItem('user', JSON.stringify(data.user));
-        if(this.authService.redirectUrl === ""){
-          this.router.navigate(['/home']);
-        } else {
-          this.router.navigate([this.authService.redirectUrl]);
-        }
+        this.loggingIn = false;
+        this.router.navigate(['/home']);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
@@ -73,6 +73,7 @@ export class LoginComponent implements OnInit {
             cssClass: 'alert-danger',
             timeout: 3000
           });
+          this.loggingIn = false;
         this.router.navigate(['/']);
       }
     });

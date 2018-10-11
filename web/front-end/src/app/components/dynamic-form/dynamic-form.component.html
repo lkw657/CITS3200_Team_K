@@ -1,83 +1,84 @@
-<div *ngIf="!display_only && !resubmit && !allow_comments">
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    <!-- School selector -->
-    <div class="form-row">
-      <div *ngIf=!school>
-        <p class="mr-2 top-text">I am from the:</p>
-        <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('School of Engineering')">
-        <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')">
-        <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')">
-      </div>
-    </div>
+<div [hidden]="!submitting">
+  <h2>Submitting your form...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
 
-    <!-- Role selector -->
-    <div class="form-row">
-      <div *ngIf="school && !submitter">
-        <p class="mr-2 top-text">I am filling this form in as a:</p>
-        <p class="btn btn-lg btn-secondary disabled mb-2 mr-2">{{school}}</p>
-        <span class="mr-2">:</span>
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="HoS" (click)="selectRole('HoS')">
-        <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
+<div [hidden]=submitting>
+  <div *ngIf="!display_only && !resubmit">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <!-- School selector -->
+      <div class="form-row">
+        <div *ngIf=!school>
+          <p class="mr-2 top-text">I am from the:</p>
+          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('School of Engineering')">
+          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')">
+          <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')">
+        </div>
       </div>
 
-      <!-- School/Role display -->
+      <!-- Role selector -->
+      <div class="form-row">
+        <div *ngIf="school && !submitter">
+          <p class="mr-2 top-text">I am filling this form in as a:</p>
+          <p class="btn btn-lg btn-secondary disabled mb-2 mr-2">{{school}}</p>
+          <span class="mr-2">:</span>
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="HoS" (click)="selectRole('HoS')">
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
+        </div>
+
+        <!-- School/Role display -->
+        <div *ngIf="submitter && school">
+          <div>
+            <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{school}}</p>
+            <span class="mr-2">:</span>
+            <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="school=undefined">
+          </div>
+          <div>
+            <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter}}</p>
+            <span class="mr-2">:</span>
+            <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submitter=undefined">
+          </div>
+        </div>
+      </div>
+
+      <!-- Displays all question and relevant answer fields -->
       <div *ngIf="submitter && school">
-        <div>
-          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{school}}</p>
-          <span class="mr-2">:</span>
-          <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="school=undefined">
+        <div *ngFor="let question of questions" class="form-row mt-3">
+          <app-question class="w-100" [question]="question" [form]="form"></app-question>
         </div>
-        <div>
-          <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter}}</p>
-          <span class="mr-2">:</span>
-          <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submitter=undefined">
+
+        <div class="form-row mt-3">
+          <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !school || !submitter">Submit</button>
         </div>
       </div>
-    </div>
 
-    <!-- Displays all question and relevant answer fields -->
-    <div *ngIf="submitter && school">
-      <div *ngFor="let question of questions" class="form-row mt-3">
-        <app-question class="w-100" [question]="question" [form]="form"></app-question>
+    </form>
+  </div>
+
+  <div class="display_only" *ngIf="display_only && !resubmit && !allow_comments">
+    <form [formGroup]="form">
+      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+        <app-question class="w-100" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
+    </form>
+  </div>
 
-      <div class="form-row mt-3">
-        <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !school || !submitter">Submit</button>
+  <div class="resubmit" *ngIf="!display_only && resubmit && !allow_comments">
+    <form [formGroup]="form">
+      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+        <app-question class="w-100" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
-    </div>
+    </form>
+  </div>
 
-  </form>
-</div>
-
-<div class="display_only" *ngIf="display_only && !resubmit && !allow_comments">
-  <form [formGroup]="form">
-    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
-      <app-question class="w-100" 
-                    [question]="question" 
-                    [form]="form" disabled></app-question>
-      <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
-    </div>
-  </form>
-</div>
-
-<div class="resubmit" *ngIf="!display_only && resubmit && !allow_comments">
-  <form [formGroup]="form">
-    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
-      <app-question class="w-100" 
-                    [question]="question" 
-                    [form]="form" disabled></app-question>
-      <p *ngIf="findspecificComment(i)" class="w-100 comment">{{ findspecificComment(i) }}</p>
-    </div>
-  </form>
-</div>
-
-<div class="allow_comments" *ngIf="!display_only && !resubmit && allow_comments">
-  <form [formGroup]="form">
-    <div *ngFor="let question of questions; index as i" class="form-row mt-3">
-      <app-question class="w-100" 
-                    [question]="question" 
-                    [form]="form" disabled></app-question>
-    </div>
-  </form>
+  <div class="allow_comments" *ngIf="!display_only && !resubmit && allow_comments">
+    <form [formGroup]="form">
+      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+        <app-question class="w-100" [question]="question" [form]="form" disabled></app-question>
+      </div>
+    </form>
+  </div>
 </div>

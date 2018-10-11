@@ -24,14 +24,23 @@ export class EditUsersComponent implements OnInit {
   displayEdit: boolean = false;
   displayDelete: boolean = false;
 
+  usersLoaded = false;
+  updating = false;
+
   ngOnInit() {
+    this.getAllUsers();
+  }
+
+  getAllUsers() {
+    this.usersLoaded = false;
     // Get users to show admin
     this.dashboardService.getAllUsers().subscribe(allUsers => {
       this.allUsers = allUsers;
-      console.log(allUsers);
+      this.usersLoaded = true;
     },
       err => {
         console.log(err);
+        this.router.navigate(['/home']);
         return false;
       });
   }
@@ -61,13 +70,16 @@ export class EditUsersComponent implements OnInit {
 
   // Update User database through the backend
   onUserEdit() {
+    this.updating = true;
     this.dashboardService.updateUser(this.currentUser).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.updating = false;
         this.router.navigate(['/editUsers']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.updating = false;
         this.router.navigate(['/editUsers']);
       }
     });
@@ -78,25 +90,19 @@ export class EditUsersComponent implements OnInit {
 
   // Delete user from database
   deleteUser() {
+    this.updating = true;
     window.scrollTo(0, 0);
     this.dashboardService.removeUser(this.currentUser).subscribe(data => {
       if (data.success) {
-        // Get users to show admin
-        this.dashboardService.getAllUsers().subscribe(allUsers => {
-          this.allUsers = allUsers;
-          this.displayAll = true;
-          this.displayDelete = false;
-          window.scrollTo(0, 0);
-        },
-          err => {
-            console.log(err);
-            return false;
-          });
+        this.updating = false;
+        this.getAllUsers();
+        this.showAll();
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/editUsers']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 3000 });
+        this.updating = false;
         this.router.navigate(['/editUsers']);
       }
     });

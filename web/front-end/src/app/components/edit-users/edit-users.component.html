@@ -1,82 +1,95 @@
-<!-- displays all users -->
-<div *ngIf="displayAll">
-  <div *ngFor="let user of allUsers">
-    <div class="card mb-2">
-      <div class="card-body">
-        <p>First Name: {{user.fname}}</p>
-        <p>Last Name: {{user.lname}}</p>
-        <p>Number: {{user.number}}</p>
-        <p>IT user: {{user.isIT}}</p>
-        <button class="btn btn-success mb-2 mr-2" (click)="showEdit(user)" title="Edit">
-          <i class="fas fa-pencil-alt"></i>
-        </button>
-        <button class="btn btn-danger mb-2" (click)="showDelete(user)" title="Delete">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+<div [hidden]="usersLoaded">
+  <h2>Loading Users...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="!updating">
+  <h2>Updating Users...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="!usersLoaded || updating" class="mb-5">
+  <!-- displays all users -->
+  <div *ngIf="displayAll">
+    <div *ngFor="let user of allUsers">
+      <div class="card mb-2">
+        <div class="card-body">
+          <p>First Name: {{user.fname}}</p>
+          <p>Last Name: {{user.lname}}</p>
+          <p>Number: {{user.number}}</p>
+          <p>IT user: {{user.isIT}}</p>
+          <button class="btn btn-success mb-2 mr-2" (click)="showEdit(user)" title="Edit">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn btn-danger mb-2" (click)="showDelete(user)" title="Delete">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Display the edit user form -->
-<div *ngIf="displayEdit">
-  <div class="card">
-    <div class="card-body">
-      <form (submit)="onUserEdit()">
-
-        <div class="form-group">
-          <label>First Name:</label>
-          <input type="text" class="form-control" name="fname" required [(ngModel)]="currentUser.fname">
-        </div>
-
-        <div class="form-group">
-          <label>Last Name:</label>
-          <input type="text" class="form-control" name="lname" [(ngModel)]="currentUser.lname">
-        </div>
-
-        <div class="form-group">
-          <label>Number:</label>
-          <input type="text" onkeyup="this.value=this.value.replace(/[^\d]/,'')" maxlength="8" class="form-control" name="number" min="2" [(ngModel)]="currentUser.number">
-        </div>
-
-        <div class="form-group">
-          <label>User is member of IT:</label>
-          <select class="form-control" name="isIT" required [(ngModel)]="currentUser.isIT">
-            <option>true</option>
-            <option>false</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-success btn-block">Submit edits</button>
-        <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Display the delete user form -->
-<div *ngIf="displayDelete">
+  <!-- Display the edit user form -->
+  <div *ngIf="displayEdit">
     <div class="card">
       <div class="card-body">
-  
+        <form (submit)="onUserEdit()">
+
+          <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" class="form-control" name="fname" required [(ngModel)]="currentUser.fname">
+          </div>
+
+          <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" class="form-control" name="lname" [(ngModel)]="currentUser.lname">
+          </div>
+
+          <div class="form-group">
+            <label>Number:</label>
+            <input type="text" onkeyup="this.value=this.value.replace(/[^\d]/,'')" maxlength="8" class="form-control" name="number" min="2"
+              [(ngModel)]="currentUser.number">
+          </div>
+
+          <div class="form-group">
+            <label>User is member of IT:</label>
+            <select class="form-control" name="isIT" required [(ngModel)]="currentUser.isIT">
+              <option>true</option>
+              <option>false</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-block">Submit edits</button>
+          <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Display the delete user form -->
+  <div *ngIf="displayDelete">
+    <div class="card">
+      <div class="card-body">
+
         <div class="form-group">
           First Name: {{currentUser.fname}}
         </div>
-  
+
         <div class="form-group">
           Last Name: {{currentUser.lname}}
         </div>
-  
+
         <div class="form-group">
           Number: {{currentUser.number}}
         </div>
-  
+
         <div class="form-group">
           User is member of IT: {{currentUser.isIT}}
         </div>
-  
+
         <button type="button" (click)="deleteUser()" class="btn btn-success btn-block">Confirm Deletion</button>
         <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel Deletion</button>
       </div>
     </div>
   </div>
+</div>

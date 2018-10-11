@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { baseURI } from '../../config';
+import { DashboardService } from '../../services/dashboard.service';
 
 
 @Component({
@@ -16,31 +17,45 @@ export class VerifyComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
+    private dashboardService: DashboardService,
     private http: HttpClient
   ) { }
 
-  secret : string = '';
-  mailID : string = '';
+  secret: string = '';
+  mailID: string = '';
+  verifying = false;
 
-  onAccept(){
-    if(this.authService.loggedIn()){
-      this.http.post(baseURI + '/mail/verifyFormAccess', {'mailID': this.mailID, 'secret': this.secret}).subscribe(
-        (data) => {
-          console.log(data)
-          this.router.navigate(['/home']);},
-        (err) => console.log(err)
-      );
-    } else {
-      console.log("Not Logged In");
-    }
+  onAccept() {
+    this.verifying = true;
+    this.http.post(baseURI + '/mail/verifyFormAccess', { 'mailID': this.mailID, 'secret': this.secret }).subscribe(
+      (data) => {
+        this.verifying = false;
+        console.log(data)
+        this.refreshApprovals();
+        this.router.navigate(['/approvalsDashboard']);
+      },
+      (err) => console.log(err)
+    );
   }
 
-  onReject(){
+  onReject() {
+    this.verifying = true;
     console.log("Rejected!!");
+    this.verifying = false;
   }
 
   ngOnInit() {
     this.mailID = this.route.snapshot.paramMap.get('mailID');
     this.secret = this.route.snapshot.paramMap.get('secret');
+  }
+
+  // Resfreshes approvals when Dashboard is loaded
+  refreshApprovals() {
+    // Get forms awaiting approval by user
+    this.dashboardService.getUserApprovals().subscribe(data => {
+    },
+      err => {
+        return false;
+      });
   }
 }
