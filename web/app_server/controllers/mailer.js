@@ -124,7 +124,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                             var subject = `Access for RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
                             var html = email.emailContent + '<br>';
                             if (previouslyrejected) {
-                                html += "The person this was sent to was previously rejected<br>"
+                                html += "The person this was sent to previously rejected responsibility for this form.<br>"
                             }
                             html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
 
@@ -284,21 +284,18 @@ module.exports.rejectFormAccess = (req, res, next) => {
                             var role;
 
                             if (form.status == 'Awaiting HoS') {
-                                if (form.submitter == 'AD(R)') {
-                                    role = 'PVC-ED';
-                                }
-                                else {
-                                    role = 'AD(R)';
-                                }
+                                role = form.school+' HoS';
+
                             }
                             else if (form.status == 'Awaiting AD(R)') {
-                                role = 'PVC-ED';
+                                role = 'AD(R)';
 
                             }
                             else if (form.status == 'Awaiting PVC-ED') {
-                                role = 'final';
+                                role = 'PVC-ED';
                             }
-                            sendFormAccessEmail(form, role, null, null, null);
+                            // form, roleToSend, res, successMessage, backupForm, previouslyrejected
+                            module.exports.sendFormAccessEmail(form, role, null, null, null, true);
                         })
 
 
