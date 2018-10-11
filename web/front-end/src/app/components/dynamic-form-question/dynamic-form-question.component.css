@@ -1,3 +1,14 @@
 .questionlabel{
     font-weight: bold;
 }
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.no-gutters > .col, .no-gutters > [class*="col-"] {
+    padding-right: 5px ;
+    padding-left: 0;
+}
+    

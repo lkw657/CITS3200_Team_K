@@ -39,6 +39,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { PdfPageComponent } from './pdf-page/pdf-page.component';
 
 
 
@@ -72,7 +73,8 @@ const routes: Routes = [
     VerifyComponent,
     SubmissionsDashboardComponent,
     ApprovalsDashboardComponent,
-    EditEmailsComponent
+    EditEmailsComponent,
+    PdfPageComponent
   ],
   imports: [
     BrowserModule,
