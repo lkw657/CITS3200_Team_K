@@ -5,6 +5,17 @@ import { QuestionService } from '../../services/question.service';
 import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
 
+import { AfterViewInit, ViewChild } from '@angular/core';
+
+import { QuestionBase } from '../../classes/question-base';
+import { Answer } from '../../classes/answer';
+
+import { TextboxQuestion } from '../../classes/question-textbox';
+import { TextQuestion } from '../../classes/question-text';
+import { MoneyQuestion } from '../../classes/question-money';
+import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
+import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
+
 @Component({
   selector: 'app-approvals-dashboard',
   templateUrl: './approvals-dashboard.component.html',
@@ -25,6 +36,15 @@ export class ApprovalsDashboardComponent implements OnInit {
   showSingleApproval = false;
   showHistory = false;
   showHistoricalSubmission = false;
+
+  questions: any = [];
+  answers: Answer[] = [];
+  isLoaded = false;
+  qset_id: string = '';
+  comments: any[] = [];
+
+  @ViewChild(DynamicFormComponent)
+  private dform: DynamicFormComponent;
 
   constructor(
     private router: Router,
@@ -68,7 +88,9 @@ export class ApprovalsDashboardComponent implements OnInit {
 
     this.approvalView = form;
     this.role = this.approvalView.status.split(" ")[1];
-    this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
+
+    this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
+    //this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
 
   // Resubmits form for approval
@@ -162,5 +184,85 @@ export class ApprovalsDashboardComponent implements OnInit {
         return comments[i].text;
       };
     }
+  }
+
+  createQuestionList(questionSet, ans) {
+    let answers = this.createAnswerList(ans);
+
+    this.questions = questionSet['questionList'];
+    let qObjs: QuestionBase<any>[] = [];
+
+    for (let i = 0; i < this.questions.length; i++) {
+      let q = this.questions[i];
+      if (q['type'] == 'textarea') {
+        qObjs.push(
+          new TextboxQuestion({
+            key: i + 1,
+            label: q.text,
+            value: answers[i].answer,
+            required: true,
+            order: q.order,
+            disabled: true
+          })
+        );
+      } else if (q['type'] == 'text') {
+        qObjs.push(
+          new TextQuestion({
+            key: i + 1,
+            label: q.text,
+            value: answers[i].answer,
+            required: true,
+            order: q.order,
+            disabled: true
+          })
+        );
+      } else if (q['type'] == 'money_single') {
+        qObjs.push(
+          new MoneyQuestion({
+            key: i + 1,
+            label: q.text,
+            value: answers[i].answer,
+            required: true,
+            order: q.order,
+            disabled: true
+          })
+        );
+      } else if (q['type'].indexOf("money_array") == 0) {
+        let number_of_fields = 0;
+        qObjs.push(
+          new MoneyArrayQuestion({
+            key: i + 1,
+            label: q.text,
+            required: true,
+            order: q.order,
+            value: answers[i].answer,
+            number: parseInt(q['type'].substring(q['type'].length - 1)),
+            disabled: true
+          })
+        );
+      }
+    }
+
+    this.isLoaded = true;
+    this.questions = qObjs.sort((a, b) => a.order - b.order);
+    this.qset_id = this.questions['_id'];
+  }
+  
+  createAnswerList(answers): Answer[] {
+    this.answers = answers;
+    let aObjs: Answer[] = [];
+    for (let i = 0; i < answers.length; i++) {
+      aObjs.push(
+        new Answer({
+          order: answers[i]['order'],
+          answer: answers[i]['answer']
+        })
+      );
+    }
+    return aObjs;
+  }
+
+  check(){
+    console.log(this.dform.comments);
   }
 }
