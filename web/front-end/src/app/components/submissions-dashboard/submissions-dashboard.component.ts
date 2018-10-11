@@ -5,6 +5,8 @@ import { QuestionService } from '../../services/question.service';
 import { FlashMessagesService } from "angular2-flash-messages";
 import { Router } from '@angular/router';
 
+import { AfterViewInit, ViewChild } from '@angular/core';
+
 import { QuestionBase } from '../../classes/question-base';
 import { Answer } from '../../classes/answer';
 
@@ -12,6 +14,7 @@ import { TextboxQuestion } from '../../classes/question-textbox';
 import { TextQuestion } from '../../classes/question-text';
 import { MoneyQuestion } from '../../classes/question-money';
 import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
+import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
 
 
 @Component({
@@ -19,7 +22,7 @@ import { MoneyArrayQuestion } from '../../classes/question_moneyarray';
   templateUrl: './submissions-dashboard.component.html',
   styleUrls: ['./submissions-dashboard.component.css']
 })
-export class SubmissionsDashboardComponent implements OnInit {
+export class SubmissionsDashboardComponent implements AfterViewInit {
 
   // View Objects
   userSubmissions: any;
@@ -40,6 +43,9 @@ export class SubmissionsDashboardComponent implements OnInit {
   isLoaded = false;
   qset_id: string = '';
   comments: any[] = [];
+
+  @ViewChild(DynamicFormComponent)
+  private dform: DynamicFormComponent;
 
   constructor(
     private router: Router,
@@ -183,7 +189,8 @@ export class SubmissionsDashboardComponent implements OnInit {
   resubmit() {
     // Create new submission
     this.submission.parent_id = this.submissionView._id;
-    this.submission.answers = this.submissionView.answers.map(a => a.answer);
+    this.submission.answers = Object.values(this.dform.form.value);
+    //this.submission.answers = this.submission.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
 
