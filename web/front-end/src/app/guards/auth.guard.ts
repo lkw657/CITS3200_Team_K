@@ -16,9 +16,7 @@ export class AuthGuard implements CanActivate{
     if(this.authService.loggedIn()){
       return true;
     } else {
-      this.authService.redirectUrl = state.url;
-      this.router.navigate(['/']);
-
+      this.router.navigate(['/'], { queryParams: { returnUrl: state.url }});
       this.flashMessage.show('Please login to access page', { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       return false;
     }

@@ -7,6 +7,7 @@ export class QuestionBase<T> {
     controlType: string;
     disabled : boolean;
     allowComments: boolean;
+    form_name : string;
 
     constructor(paras: {
         value? : T,
@@ -16,7 +17,8 @@ export class QuestionBase<T> {
         order?: number,
         controlType?: string,
         disabled? : boolean,
-        allowComments? : boolean
+        allowComments? : boolean,
+        form_name? : string
     } = {}){
         this.value = paras.value;
         this.key = paras.key || '';
@@ -26,5 +28,6 @@ export class QuestionBase<T> {
         this.controlType = paras.controlType || '';
         this.disabled = paras.disabled || false;
         this.allowComments = paras.allowComments || false;
+        this.form_name = paras.form_name || '';
     }
 }

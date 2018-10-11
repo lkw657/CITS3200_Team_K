@@ -208,7 +208,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true
+            allowComments: true,
+            form_name: q.formName
           })
         );
       } else if (q['type'] == 'text') {
@@ -220,7 +221,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments : true
+            allowComments : true,
+            form_name: q.formName
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -232,7 +234,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments : true
+            allowComments : true,
+            form_name: q.formName
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -246,7 +249,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            allowComments : true
+            allowComments : true,
+            form_name: q.formName
           })
         );
       }
@@ -255,6 +259,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.isLoaded = true;
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
+    console.log(qObjs);
   }
   
   createAnswerList(answers): Answer[] {

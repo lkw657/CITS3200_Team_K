@@ -99,7 +99,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            form_name: q.formName
           })
         );
       } else if (q['type'] == 'text') {
@@ -110,7 +111,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            form_name: q.formName
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -121,7 +123,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             value: answers[i].answer,
             required: true,
             order: q.order,
-            disabled: true
+            disabled: true,
+            form_name: q.formName
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -134,7 +137,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             order: q.order,
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
-            disabled: true
+            disabled: true,
+            form_name: q.formName
           })
         );
       }
