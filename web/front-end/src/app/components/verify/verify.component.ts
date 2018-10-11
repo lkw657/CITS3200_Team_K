@@ -40,7 +40,15 @@ export class VerifyComponent implements OnInit {
 
   onReject() {
     this.verifying = true;
-    console.log("Rejected!!");
+    this.http.post(baseURI + '/mail/rejectFormAccess', { 'mailID': this.mailID, 'secret': this.secret }).subscribe(
+      (data) => {
+        this.verifying = false;
+        console.log(data)
+        this.refreshApprovals();
+        this.router.navigate(['/approvalsDashboard']);
+      },
+      (err) => console.log(err)
+    );
     this.verifying = false;
   }
 
@@ -49,7 +57,7 @@ export class VerifyComponent implements OnInit {
     this.secret = this.route.snapshot.paramMap.get('secret');
   }
 
-  // Resfreshes approvals when Dashboard is loaded
+  // Refreshes approvals when Dashboard is loaded
   refreshApprovals() {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
