@@ -30,6 +30,8 @@ export class ApprovalsDashboardComponent implements OnInit {
   approval: any = {};
   formHistory: any;
   role: String;
+  submitter: String;
+  school: String;
 
   // View Selectors
   showAllApprovals = true;
@@ -66,6 +68,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     // Get forms awaiting approval by user
     this.dashboardService.getUserApprovals().subscribe(data => {
       this.userApprovals = data.approvals;
+      console.log(this.userApprovals);
       this.appsLoaded = true;
     },
       err => {
@@ -93,6 +96,8 @@ export class ApprovalsDashboardComponent implements OnInit {
 
     this.approvalView = form;
     this.role = this.approvalView.status.split(" ")[1];
+    this.school = this.approvalView.school;
+    this.submitter = this.approvalView.submitter;
 
     this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
     //this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
@@ -259,6 +264,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.isLoaded = true;
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
+    console.log(this.questions);
     console.log(qObjs);
   }
   
