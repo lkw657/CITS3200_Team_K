@@ -19,9 +19,9 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // if (this.authService.getProfile().loggedIn) {
-    //   this.router.navigate(['/home']);
-    // }
+    if (this.authService.getProfile().loggedIn) {
+      this.router.navigate(['/home']);
+    }
   }
 
   //Submit button sends user info to backend for authentication
