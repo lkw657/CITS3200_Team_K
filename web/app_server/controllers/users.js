@@ -10,7 +10,7 @@ module.exports.listAll = (req, res, next) => {
       msg: "Forbidden"
     });
   }
-  User.find({}, '', (err, users) => {
+  User.find({}, 'fname lname number isIT', (err, users) => {
     if (err)
       return res.json({
 	success: false,

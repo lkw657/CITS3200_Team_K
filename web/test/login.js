@@ -20,7 +20,6 @@ function test(name, send, shouldReceive) {
         request.post(endpoint, {form:send}, (err, res, body) => {
             if (err) done(err);
             if (shouldReceive.success) {
-                assert.equal(res.statusCode, 200, "Did not get 200 OK \n"+body);
                 // make sure a cookie is set
                 assert.property(res.headers, 'set-cookie');
             }
@@ -34,8 +33,9 @@ function test(name, send, shouldReceive) {
 }
 
 describe('Login', () => {
-    beforeEach((done) => {
+    beforeEach(function (done) {
         /* Delete the collection and add a researcher and staff user for testing */
+        this.timeout(4000);
         User.remove({}, (err) => {
             User.register(User.create('researcher', 'user','12345678'),
                           'abcdefghijkl', (err) => done(err));
