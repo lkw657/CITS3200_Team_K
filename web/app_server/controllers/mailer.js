@@ -395,9 +395,10 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
     });
 }
 
-var pdf = require('html-pdf');
+
 var ejs = require('ejs');
 var path = require('path');
+var wkhtmltopdf = require('wkhtmltopdf');
 
 // /mailID/secret
 module.exports.pdfForm = (req, res, next) => {
@@ -519,20 +520,17 @@ module.exports.pdfForm = (req, res, next) => {
                                                 "left": "1in"
                                             },
                                         };
-                                        pdf.create(html, options).toStream(function (err, stream) {
-                                            if (err) {
-                                                return res.status(400).json({
-                                                    success: false,
-                                                    msg: err
-                                                });
-                                            }
-                                            else {
 
-                                                res.setHeader("Content-disposition", "inline; filename=report.pdf");
-                                                res.setHeader("Content-Type", "application/pdf");
-                                                stream.pipe(res);
-                                            }
-                                        });
+                                        var wkhtmltopdf = require('wkhtmltopdf');
+
+                                        wkhtmltopdf(html)
+                                            .pipe(res);
+
+
+
+
+
+
 
 
                                     }
