@@ -35,4 +35,11 @@ export class DynamicFormQuestionComponent {
     }
     array.controls[array.controls.length - 1].setValue(sum);
   }
+
+  removeLeadingZeroes(field : string){
+    let fieldc : FormControl = this.form.controls[field] as FormControl;
+    console.log(fieldc);
+    fieldc.patchValue(parseInt(fieldc.value));
+  }
+
 }
