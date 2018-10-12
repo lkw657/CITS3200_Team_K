@@ -91,7 +91,6 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
             console.log("No Such Email in DB");
             if (backupForm) {
                 revertForm(backupForm);
-                console.log(roleToSend);
             }
             if (res)
                 return res.status(400).json({ success: false, msg: "Could not find email" });
@@ -146,9 +145,6 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
 
 //req.user._id
 module.exports.verifyFormAccess = (req, res, next) => {
-
-    console.log(req.body);
-    console.log(req.user);
 
     if (!req.body.mailID) {
         return res.status(403).json({
@@ -223,8 +219,6 @@ module.exports.verifyFormAccess = (req, res, next) => {
 }
 
 module.exports.rejectFormAccess = (req, res, next) => {
-    console.log(req.body);
-    console.log(req.user);
 
     if (!req.body.mailID) {
         return res.status(403).json({
@@ -352,7 +346,6 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
             console.log("No Such Email in DB");
             if (backupForm) {
                 revertForm(backupForm);
-                console.log(roleToSend);
             }
             if (res)
                 return res.status(400).json({ success: false, msg: "Could not find email" });
@@ -402,7 +395,6 @@ var path = require('path');
 // /mailID/secret
 module.exports.pdfForm = (req, res, next) => {
 
-    console.log(req.params);
 
     if (!req.params.mailID) {
         return res.status(403).json({
@@ -449,74 +441,93 @@ module.exports.pdfForm = (req, res, next) => {
                     .populate({ path: 'approvedBy.id', select: "fname lname number" })
                     .exec((err, form) => {
 
-                        QA = [];
-                        form.answers.forEach((o, i) => {
-                            if (form.questionSet.questionList[i].formName == 'central')
-                                QA.push({
-                                    question: form.questionSet.questionList[i].text,
-                                    title: form.questionSet.questionList[i].title,
-                                    answer: form.answers[i].answer
-                                })
-                        });
-
-                        approvers = []
-                        form.approvedBy.forEach((o, i) => {
-                            approvers.push({
-                                name: form.approvedBy[i].id.fname + " " + form.approvedBy[i].id.lname,
-                                number: form.approvedBy[i].id.number,
-                                role: form.approvedBy[i].role,
-                                date: form.dates[i + 1]
+                        if (err) {
+                            console.log(err);
+                            return res.status(400).json({
+                                success: false,
+                                msg: "Something went wrong"
                             });
-                        })
-                        data = {
-                            QA: QA,
-                            approvers: approvers,
-                            owner: form.owner,
-                            dir: `file://${__dirname}/../pdf/`
-                        };
+
+                        }
+                        else if (!form) {
+                            console.log(err);
+                            return res.status(400).json({
+                                success: false,
+                                msg: "No form found"
+                            });
+                        }
+
+                        else {
+
+                            QA = [];
+                            form.answers.forEach((o, i) => {
+                                if (form.questionSet.questionList[i].formName == 'central')
+                                    QA.push({
+                                        question: form.questionSet.questionList[i].text,
+                                        title: form.questionSet.questionList[i].title,
+                                        answer: form.answers[i].answer
+                                    })
+                            });
+
+                            approvers = []
+                            form.approvedBy.forEach((o, i) => {
+                                approvers.push({
+                                    name: form.approvedBy[i].id.fname + " " + form.approvedBy[i].id.lname,
+                                    number: form.approvedBy[i].id.number,
+                                    role: form.approvedBy[i].role,
+                                    date: form.dates[i + 1]
+                                });
+                            })
+                            data = {
+                                QA: QA,
+                                approvers: approvers,
+                                owner: form.owner,
+                                dir: `file://${__dirname}/../pdf/`
+                            };
 
 
-                        let filePath = `${__dirname}/../pdf/rpf.ejs`;
-                        path.format(path.parse(filePath));
+                            let filePath = `${__dirname}/../pdf/rpf.ejs`;
+                            path.format(path.parse(filePath));
 
-                        let renderingOptions = {
-                            client: true,
-                            rmWhitespace: true
-                        };
-                        ejs.renderFile(
-                            filePath,
-                            data,
-                            renderingOptions,
-                            (err, html) => {
-                                if (err) {
-                                    return res.status(400).json({
-                                        success: false,
-                                        msg: err
-                                    });
+                            let renderingOptions = {
+                                client: true,
+                                rmWhitespace: true
+                            };
+                            ejs.renderFile(
+                                filePath,
+                                data,
+                                renderingOptions,
+                                (err, html) => {
+                                    if (err) {
+                                        return res.status(400).json({
+                                            success: false,
+                                            msg: err
+                                        });
+                                    }
+                                    else {
+                                        //do something with html
+                                        var options = {
+                                            format: 'A4',
+                                            border: '3mm',
+                                            "border": {
+                                                "top": "1in",            // default is 0, units: mm, cm, in, px
+                                                "right": "1in",
+                                                "bottom": "1in",
+                                                "left": "1in"
+                                            },
+                                        };
+                                        pdf.create(html, options).toStream(function (err, stream) {
+
+                                            res.setHeader("Content-disposition", "inline; filename=report.pdf");
+                                            res.setHeader("Content-Type", "application/pdf");
+                                            stream.pipe(res);
+                                        });
+
+
+                                    }
                                 }
-                                else {
-                                    //do something with html
-                                    var options = {
-                                        format: 'A4',
-                                        border: '3mm',
-                                        "border": {
-                                            "top": "1in",            // default is 0, units: mm, cm, in, px
-                                            "right": "1in",
-                                            "bottom": "1in",
-                                            "left": "1in"
-                                        },
-                                    };
-                                    pdf.create(html, options).toStream(function (err, stream) {
-
-                                        res.setHeader("Content-disposition", "inline; filename=report.pdf");
-                                        res.setHeader("Content-Type", "application/pdf");
-                                        stream.pipe(res);
-                                    });
-
-
-                                }
-                            }
-                        );
+                            );
+                        }
 
                     });
 
