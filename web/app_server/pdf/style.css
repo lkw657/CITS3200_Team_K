@@ -1,0 +1,48 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.form_heading{
+  color: black;
+  font-family:  'Calibri', 'Trebuchet MS', sans-serif;
+  font-size: 12pt;
+  text-align: center;
+  font-weight: bold;
+}
+
+.main_intro{
+  color: black;
+  font-family:  'Calibri', 'Trebuchet MS', sans-serif;
+  font-size: 11pt;
+}
+
+
+#submit_heading {
+  color: black;
+  font-family:  'Calibri', 'Trebuchet MS', sans-serif;
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+#heading{
+  font-size: 14pt;
+}
+
+#submitting_form{
+  color: black;
+  font-weight: bold;
+}
+
+textarea{
+  width: 100%;
+}
+
+img{
+  width: 602px;
+  height: 58px;
+}
