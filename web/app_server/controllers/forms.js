@@ -356,7 +356,7 @@ module.exports.formResponse = (req, res, next) => {
                 if (!req.body.comments) {
                     return res.status(400).json({ success: false, msg: "Sorry you can't Approve with comments, please select Provisionally Approve or remove comments" });
                 }
-                else if (req.body.comments.length != 0) {
+                else if (req.body.comments.length == 0) {
                     return res.status(400).json({ success: false, msg: "Sorry you can't Approve with comments, please select Provisionally Approve or remove comments" });
                 }
                 else {
