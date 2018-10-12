@@ -7,7 +7,7 @@ require('./app_server/models/db');
 var QuestionSet = require('./app_server/models/questionSets').questionSetSchema;
 var User  = require('./app_server/models/users').User;
 var Form  = require('./app_server/models/forms').Form;
-var Email = require('./app_server/models/mails').mailSchema;
+var Email = require('./app_server/models/emails').emailSchema;
 
 /*
 function readSync(question, silent=false) {
