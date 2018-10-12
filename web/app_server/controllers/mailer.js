@@ -520,10 +520,18 @@ module.exports.pdfForm = (req, res, next) => {
                                             },
                                         };
                                         pdf.create(html, options).toStream(function (err, stream) {
+                                            if (err) {
+                                                return res.status(400).json({
+                                                    success: false,
+                                                    msg: err
+                                                });
+                                            }
+                                            else {
 
-                                            res.setHeader("Content-disposition", "inline; filename=report.pdf");
-                                            res.setHeader("Content-Type", "application/pdf");
-                                            stream.pipe(res);
+                                                res.setHeader("Content-disposition", "inline; filename=report.pdf");
+                                                res.setHeader("Content-Type", "application/pdf");
+                                                stream.pipe(res);
+                                            }
                                         });
 
 
