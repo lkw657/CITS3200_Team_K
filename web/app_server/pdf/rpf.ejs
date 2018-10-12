@@ -36,6 +36,10 @@
             font-size: 9pt;
         }
 
+        .boxed {
+            border: 1px solid green;
+        }
+
         #submit_heading {
             color: black;
             font-family: 'Calibri', 'Trebuchet MS', sans-serif;
@@ -97,14 +101,14 @@
     <br>
     <br>
 
-    Name of Applicant:
+    <b>Name of Applicant:</b>
     <br>
     <%= owner.fname %>
     <%= owner.lname %> (
     <%= owner.number %>)
     <br>
     <br>
-    Approvals:
+    <b>Approvals:</b>
     <br>
     <% for(var i=0; i < approvers.length; i++) {%>
     <%= approvers[i].role %> :
@@ -112,6 +116,49 @@
     <%= approvers[i].number %>) --
     <%= approvers[i].date %><br><br>
     <% } %>
+    <br><br>
+
+    <style>
+        .cn {
+            display: table-cell;
+            width: 600px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .inner {
+            display: inline-block;
+            width: 300px;
+        }
+    </style>
+    <div class="cn">
+        <div class="inner"><b>PLEASE FORWARD THE COMPLETED FORM TO<br>DIRECTOR, OFFICE OF RESEARCH ENTERPRISE, M459</b></div>
+    </div>
+    <br>
+
+    <div class="cn">
+        <div class="inner" style="width: 433px;">
+
+            <div class="boxed">
+                <div class="inner">
+                    Office use only
+                </div>
+
+                <br>
+                <div style="text-align: left">
+                    <input type="checkbox" name="option" value="immediate"> Approved for immediate allocation:
+                    ______________________ Date: ____________
+                    <br><br>
+                    <input type="checkbox" name="option" value="external">Approved for pending external allocation:
+                    _______________ Date: ____________
+                </div>
+                <br><br>
+                Robyn Owens (DVC Research) / Campbell Thomson (Director, Office of Research Enterprise)
+            </div>
+        </div>
+    </div>
+
+
 </body>
 
 </html>
