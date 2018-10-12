@@ -60,7 +60,6 @@ module.exports.sendEmail = (to, subject, html, res, successMessage, backupForm) 
                         //delete
 
                         staff.approvals = staff.approvals.filter(item => JSON.stringify(item) != JSON.stringify(backupForm._id));
-                        console.log(staff);
                         staff.save((err, staff) => {
                             res.status(200).json({ success: true, msg: successMessage });
                         });
@@ -452,12 +451,12 @@ module.exports.pdfForm = (req, res, next) => {
 
                         QA = [];
                         form.answers.forEach((o, i) => {
-                            // if(form.questionSet.questionList[i].formName=='central')
-                            QA.push({
-                                question: form.questionSet.questionList[i].text,
-                                title: form.questionSet.questionList[i].title,
-                                answer: form.answers[i].answer
-                            })
+                            if (form.questionSet.questionList[i].formName == 'central')
+                                QA.push({
+                                    question: form.questionSet.questionList[i].text,
+                                    title: form.questionSet.questionList[i].title,
+                                    answer: form.answers[i].answer
+                                })
                         });
 
                         approvers = []

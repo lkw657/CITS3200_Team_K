@@ -4,7 +4,7 @@
     <style>
         body {
             /* padding: 50px; */
-            font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+            font: 9px "Lucida Grande", Helvetica, Arial, sans-serif;
         }
 
         a {
@@ -62,18 +62,17 @@
 
     <img src="<%= dir %>image1.jpg" alt="" style="display: block; margin:auto;width: 481px;height: 46px;">
 
+    <h1 class="form_heading" id="heading">Request for Research Priorities Funds</h1>
 
-    <h2 class="form_heading" id="faculty">FACULTY OF ENGINEERING AND MATHEMATICAL SCIENCES</h2>
+    <p class="main_intro">Allocations from the Research Priorities Fund (RPF) will normally be restricted to cases
+        where University co-investment will strengthen the University's case for obtaining access to external funds.
+        This is most likely to arise in situations where University contributions are a specific requirement of an
+        external funding scheme or in one-off circumstances where it can be demonstrated that a University cash
+        commitment will provide the leverage necessary to attract external funding.
+        <br><br>
+        Please complete the following:
+    </p>
 
-    <h1 class="form_heading" id="heading">RESEARCH PRIORITIES FUND REQUEST FORM</h1>
-
-    <p class="main_intro">The Research Priorities Fund (RPF) is intended to provide a source of cash support to
-        applicants normally seeking external funds on a competitive basis, or for support of other research priorities
-        including fixed term strategic appointments. This will normally be restricted to cases where University
-        co-investment will strengthen the University's case for obtaining access to external funds such as where
-        University contributions are a specific requirement of an external funding scheme or in one-off circumstances
-        where it can be demonstrated that a University cash commitment will provide the leverage necessary to attract
-        external funding.</p>
 
     <br><br>
     <% for(var i=0; i < QA.length; i++) {%>
@@ -84,7 +83,7 @@
     <% } %>
     <p class="question">
 
-        <%= QA[i].question %>
+        <%= QA[i].question %>:
     </p>
 
     <p class="answer">
@@ -98,13 +97,20 @@
     <br>
     <br>
 
-    Form By: <%= owner.fname %> <%= owner.lname %> (<%= owner.number %>)
+    Name of Applicant:
+    <br>
+    <%= owner.fname %>
+    <%= owner.lname %> (
+    <%= owner.number %>)
     <br>
     <br>
     Approvals:
     <br>
     <% for(var i=0; i < approvers.length; i++) {%>
-        <%= approvers[i].role %> : <%= approvers[i].name %> (<%= approvers[i].number %>) -- <%= approvers[i].date %><br>
+    <%= approvers[i].role %> :
+    <%= approvers[i].name %> (
+    <%= approvers[i].number %>) --
+    <%= approvers[i].date %><br><br>
     <% } %>
 </body>
 
