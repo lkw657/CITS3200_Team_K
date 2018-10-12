@@ -125,7 +125,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                             if (previouslyrejected) {
                                 html += "The person this was sent to previously rejected responsibility for this form.<br>"
                             }
-                            html += `Here is your access link: http://localhost:4200/verify/${mail._id}/${secret}`;
+                            html += `Here is your access link: ${process.env.FRONTEND_URL}verify/${mail._id}/${secret}`;
 
                             module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
 
@@ -383,7 +383,7 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
                         else {
                             var subject = `PDF of RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
                             var html = email.emailContent + '<br>';
-                            html += `Here is your access link: http://localhost:3000/mail/pdf/${mail._id}/${secret}`;
+                            html += `Here is your access link: ${process.env.BACKEND_URL}mail/pdf/${mail._id}/${secret}`;
 
                             module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
 
