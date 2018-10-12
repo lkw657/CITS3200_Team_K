@@ -2,8 +2,9 @@ var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
 module.exports.addQuestionSet = (req, res, next) => {
-    if (!req.user) {
-        return res.status(401).json({
+    if (req.user == undefined || !req.user.isIT) {
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "Forbidden"
         });
@@ -13,7 +14,12 @@ module.exports.addQuestionSet = (req, res, next) => {
         return res.json({ success: false, msg: 'Missing Data' });
     }
     //Find the question set with the highest version.
-    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset) {
+    QuestionSet.find({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).limit(1).exec(function (err, qsets) {
+        var qset = qsets[0];
+        if (err) {
+            console.log(err);
+            return res.json({success:false, msg:""});
+        }
         var questionSet = new QuestionSet(); //The question set to be saved.
         //If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
         if (qset) {
