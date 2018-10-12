@@ -122,7 +122,7 @@ module.exports.addForm = (req, res, next) => {
                         else {
                             form.history = [];
                         }
-                        
+
                         form.save((err, form) => {
                             if (err) {
                                 return res.status(400).json({
@@ -243,7 +243,7 @@ module.exports.resubmitForm = (req, res, next) => {
         else {
             new_form.status = 'Awaiting HoS';
         }
-        
+
 
         new_form.save((err, new_form) => {
             if (err) {
@@ -354,10 +354,9 @@ module.exports.formResponse = (req, res, next) => {
                 var role;
 
                 if (!req.body.comments) {
-                    return res.status(400).json({ success: false, msg: "Sorry you can't Approve with comments, please select Provisionally Approve or remove comments" });
-                }
-                else if (req.body.comments.length != 0) {
-                    return res.status(400).json({ success: false, msg: "Sorry you can't Approve with comments, please select Provisionally Approve or remove comments" });
+                    if (req.body.comments.length != 0) {
+                        return res.status(400).json({ success: false, msg: "Sorry you can't Approve with comments, please select Provisionally Approve or remove comments" });
+                    }
                 }
                 else {
 
@@ -563,7 +562,7 @@ module.exports.listAll = (req, res, next) => {
                 success: false,
                 msg: "Forbidden"
             });
-            
+
         }
         else {
             sendJsonResponse(res, 200, forms);
