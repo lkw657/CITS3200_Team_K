@@ -104,12 +104,13 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.submitting = true;
     let commentArray = [];
     // Create approval object with new comments and response
-    for (let i in this.dform.form.controls[Object.keys(this.dform.form).length + 1].value) {
-      if (this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] != null) {
-        commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] });
+    let numFormControls = this.dform.form.controls[Object.keys(this.dform.form.controls).length].length;
+    for ( var i = 0 ; i < numFormControls ; i++ ){
+      if( this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] != null ){
+        commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] });
       }
     }
-
+    
     // Create approval object to be sent to back end
     this.approval.comments = commentArray;
     this.approval.response = response;
