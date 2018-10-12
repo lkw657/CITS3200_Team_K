@@ -53,7 +53,6 @@ export class ApprovalsDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private flashMessage: FlashMessagesService,
-    private authService: AuthService,
     private dashboardService: DashboardService,
     private questionService: QuestionService
   ) { }
@@ -97,9 +96,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.role = this.approvalView.status.split(" ")[1];
     this.school = this.approvalView.school;
     this.submitter = this.approvalView.submitter;
-    console.log(this.approvalView);
     this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
-    //this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
 
   // Resubmits form for approval
@@ -262,8 +259,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.isLoaded = true;
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
-    console.log(this.questions);
-    console.log(qObjs);
   }
 
   createAnswerList(answers): Answer[] {
