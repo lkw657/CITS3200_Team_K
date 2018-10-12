@@ -29,7 +29,7 @@ async function run() {
     var qsets = await QuestionSet.find().catch((err) => console.log(err));
     if (qsets.length != 0 && process.env['DESTROY'] !== 'true') {
         console.log("Database already exists, not initialising")
-        console.log("If clearing the database was intentional rerun with \"DEBUG='true' node initdb.js\"");
+        console.log("If clearing the database was intentional rerun with \"DESTROY='true' node initdb.js\"");
         process.exit(0)
     }
     console.log("Initialising database");
