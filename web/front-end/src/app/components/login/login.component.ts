@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { AuthService } from '../../services/auth.service';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+import { logging } from 'protractor';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +12,10 @@ import { Router } from "@angular/router";
 export class LoginComponent implements OnInit {
   number: String;
   password: String;
+  loggingIn = false;
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService
@@ -22,10 +25,12 @@ export class LoginComponent implements OnInit {
     if (this.authService.getProfile().loggedIn) {
       this.router.navigate(['/home']);
     }
+    this.authService.redirectUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   //Submit button sends user info to backend for authentication
   onLoginSubmit() {
+    this.loggingIn = true;
     const login = {
       number: this.number,
       password: this.password
@@ -43,23 +48,9 @@ export class LoginComponent implements OnInit {
           });
         data.user.loggedIn = true;
 
-        // DEVELOPMENT ONLY - REMOVE
-        if (data.user.role == "researcher") {
-          data.user.forms = [
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-            { created_date: "01/08/2018", status: "Approved", comments: { commenter: "James", comment: "Its too much money!!" } },
-          ];
-        } else if (data.user.role == "staff") {
-          data.user.forms = [
-            { created_date: "01/08/2018", owner: "Approved" },
-            { created_date: "01/08/2018", owner: "Approved" },
-            { created_date: "01/08/2018", owner: "Approved" },
-          ];
-        }
-
         localStorage.setItem('user', JSON.stringify(data.user));
-        this.router.navigate(['/home']);
+        this.loggingIn = false;
+        this.router.navigateByUrl(this.authService.redirectUrl);
       }
 
       //Returns to login and displays error message if any errors thrown from backend
@@ -69,6 +60,7 @@ export class LoginComponent implements OnInit {
             cssClass: 'alert-danger',
             timeout: 3000
           });
+          this.loggingIn = false;
         this.router.navigate(['/']);
       }
     });

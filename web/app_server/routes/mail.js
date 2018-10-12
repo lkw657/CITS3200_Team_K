@@ -5,6 +5,10 @@ var router = express.Router();
 /* */
 router.post('/verifyFormAccess', ctrlMail.verifyFormAccess);
 
+router.post('/rejectFormAccess', ctrlMail.rejectFormAccess);
+
+router.get('/pdf/:mailID/:secret', ctrlMail.pdfForm);
+
 /*Debugging purposes*/
 router.get('/list', ctrlMail.listAllMail);
 

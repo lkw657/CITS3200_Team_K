@@ -19,6 +19,7 @@ export class RegisterComponent implements OnInit {
   number: String;
   password: String;
   password2: String;
+  submitting = false;
 
   constructor(
     private validateService: ValidateService,
@@ -42,30 +43,36 @@ export class RegisterComponent implements OnInit {
     
     //Required Fields
     if (!this.validateService.validateRegister(user)) {
+      window.scrollTo(0, 0);
       this.flashMessage.show('Please fill in all fields', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
       return false;
     }
 
     //Ensure password complexity
     if (!this.validateService.passwordComplex(user.password)) {
+      window.scrollTo(0, 0);
       this.flashMessage.show('Password must consist of at least 8 characters including an upper and lowercase letter and a number', { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       return false;
     }
 
     //Ensure password match
     if (!this.validateService.passwordsMatch(user.password, user.password2)) {
+      window.scrollTo(0, 0);
       this.flashMessage.show('Passwords do not match', { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       return false;
     }
 
+    this.submitting = true;
     //Register User
     this.authService.registerUser(user).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.submitting = false;
         this.router.navigate(['/']);
       }
       else {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-danger', timeout: 3000 });
+        this.submitting = false;
         this.router.navigate(['/register']);
       }
     });

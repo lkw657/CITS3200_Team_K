@@ -7,6 +7,7 @@ import { baseURI } from '../config';
 })
 export class AuthService {
   user: any;
+  redirectUrl : string;
 
   constructor(
     private http: HttpClient

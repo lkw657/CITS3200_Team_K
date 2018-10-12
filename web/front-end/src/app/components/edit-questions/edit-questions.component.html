@@ -1,4 +1,14 @@
-<div *ngIf="displayAll">
+<div [hidden]="questionsLoaded">
+  <h2>Loading Questions...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="!updating">
+  <h2>Updating Question Set...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="!questionsLoaded || updating" *ngIf="displayAll">
 
   <button class="btn btn-block btn-success mt-3 p-4" (click)="saveNewQuestionSet()">Submit Edited Question Set</button>
   <a [routerLink]="['/home']" class="btn btn-block btn-danger mt-3 p-4 mb-3">Cancel</a>

@@ -9,8 +9,8 @@ var approvedBySchema = new mongoose.Schema(
 
 var commentSchema = new mongoose.Schema(
     {
-        questionNumber: {type: Number, required: true},	//Title of the question
-        comment: {type: String, required: true},	//Body text for the question
+        order: {type: Number, required: true},	//Title of the question
+        text: {type: String, required: true},	//Body text for the question
         commenter: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
     }
 );

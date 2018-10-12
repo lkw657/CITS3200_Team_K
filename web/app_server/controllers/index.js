@@ -56,11 +56,11 @@ module.exports.authenticate = (req, res, next) => {
 };
 
 module.exports.logOut = (req, res, next) => {
-	req.logout();
+    req.logout();
 	return res.json({
 			success: true,
 			msg: 'You are successfully logged out!'
-	});
+    });
 };
 
 
@@ -92,6 +92,7 @@ module.exports.submissions = (req, res, next) => {
                 status: req.user.submissions[i].status,
                 answers: req.user.submissions[i].answers,
                 history: req.user.submissions[i].history,
+                comments: req.user.submissions[i].comments,
                 sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length-1].toLocaleString('en-AU')
             });
@@ -131,6 +132,8 @@ module.exports.approvals = (req, res, next) => {
                 submitter: req.user.approvals[i].submitter,
                 status: req.user.approvals[i].status,
                 answers: req.user.approvals[i].answers,
+                history: req.user.approvals[i].history,
+                comments: req.user.approvals[i].comments,
                 sub_date: req.user.approvals[i].dates[0].toLocaleString('en-AU'),
                 action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length-1].toLocaleString('en-AU')
             });
@@ -140,13 +143,4 @@ module.exports.approvals = (req, res, next) => {
             approvals: approvals
         });
     });
-}
-// This isn't actually called since I told the express generator not to use templates
-// I'm not entirely sure why it generated this funciton
-module.exports.index = function(req, res, next) {
-    console.log(req.user)
-    if (req.user) {
-        return res.render('index', { title: 'Express - Hello '+req.user.fname});
-    }
-    return res.render('index', { title: 'Express' });
 }

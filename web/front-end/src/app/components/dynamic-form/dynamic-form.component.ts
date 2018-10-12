@@ -17,17 +17,19 @@ import { Router } from '@angular/router';
 })
 export class DynamicFormComponent implements OnInit {
 
+  submitting = false;
+
   @Input() questions: QuestionBase<any>[] = [];
   @Input() qset_id : string = '';
   @Input() comments : any[] = [];
   @Input() display_only : boolean = false;
   @Input() resubmit : boolean = false;
+  @Input() allow_comments : boolean = false;
+  @Input() approver : String = '';
+  @Input() submitter : String = '';
+  @Input() school : String = '';
 
   form: FormGroup;
-  school: String;
-  submitter: String;
-  school_display: String;
-  submitter_display: String;
   submission: any = {};
   payload = '';
 
@@ -38,16 +40,19 @@ export class DynamicFormComponent implements OnInit {
     private questionService: QuestionService ) { }
 
   ngOnInit() {
-    if(this.display_only){
-      this.form = this.qcs.toFormGroup(this.questions, this.display_only);
+    if(this.display_only) {
+      this.form = this.qcs.toFormGroup(this.questions, true);
       this.form.valueChanges.subscribe( (data) => { console.log(data);} )
+    } else if (this.allow_comments) {
+      this.form = this.qcs.toFormGroup(this.questions, false , true);
     } else {
       this.form = this.qcs.toFormGroup(this.questions);
     }
+
   }
 
   findspecificComment(order: number){
-    if( this.comments.find(x => x.order === order) != undefined ){
+    if( this.comments!= undefined && this.comments.find(x => x.order === order) != undefined ){
       return this.comments.find(x => x.order === order).text;
     }
   }
@@ -68,15 +73,16 @@ export class DynamicFormComponent implements OnInit {
     this.submission.submitter = this.submitter;
     this.submission.qset_id = this.qset_id;
 
-    console.log(this.submission.answers);
-
+    this.submitting = true;
     this.questionService.newSubmission(this.submission).subscribe(data => {
       if (data.success) {
+        this.submitting = false;
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.router.navigate(['/submissionsDashboard']);
       }
     },
     err => {
+      this.submitting = false;
       this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
       window.scrollTo(0, 0);
     }

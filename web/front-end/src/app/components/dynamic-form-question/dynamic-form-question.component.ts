@@ -19,6 +19,10 @@ export class DynamicFormQuestionComponent {
       return new Array(i);
   }
 
+  getCount(){
+    return Object.keys(this.form).length + 1;
+  }
+
   calcTotal(field: string) {
     let array : FormArray = this.form.controls[field] as FormArray;
     let sum : number = 0;
@@ -27,7 +31,15 @@ export class DynamicFormQuestionComponent {
       if(!isNaN(num)){ 
         sum = sum + num;
       }
+      array.controls[i].patchValue(num);
     }
     array.controls[array.controls.length - 1].setValue(sum);
   }
+
+  removeLeadingZeroes(field : string){
+    let fieldc : FormControl = this.form.controls[field] as FormControl;
+    console.log(fieldc);
+    fieldc.patchValue(parseInt(fieldc.value));
+  }
+
 }
