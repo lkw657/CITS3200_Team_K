@@ -44,6 +44,7 @@ export class SubmissionsDashboardComponent implements OnInit {
   qset_id: string = '';
   comments: any[] = [];
   subsLoaded = false;
+  resubmitting = false;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -162,7 +163,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     }
     return aObjs;
   }
-  
+
   // Shows a single submission when View Form is clicked
   showSubmission(form) {
     window.scrollTo(0, 0);
@@ -188,19 +189,18 @@ export class SubmissionsDashboardComponent implements OnInit {
   // Resubmits form for approval
 
   resubmit() {
+    this.resubmitting = true;
     // Create new submission
     this.submission.parent_id = this.submissionView._id;
     this.submission.answers = Object.values(this.dform.form.value);
-    //this.submission.answers = this.submission.answers.map(a => a.answer);
     this.submission.school = this.submissionView.school;
     this.submission.submitter = this.submissionView.submitter;
-
-    console.log(this.submission);
 
     //Sends updated form for resubmission
     this.questionService.resubmit(this.submission).subscribe(data => {
       if (data.success) {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
+        this.resubmitting = false;
         this.refreshSubmissions();
         this.resolveComments = false;
         this.showAllSubmissions = true;
@@ -209,6 +209,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     },
       err => {
         this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.resubmitting = false;
         window.scrollTo(0, 0);
       }
     );
@@ -244,7 +245,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
     this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
- }
+  }
 
   // Goes back to history dashboard
   backToHistory() {

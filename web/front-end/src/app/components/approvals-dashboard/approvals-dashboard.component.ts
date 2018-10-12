@@ -124,6 +124,7 @@ export class ApprovalsDashboardComponent implements OnInit {
         this.flashMessage.show(data.msg, { cssClass: 'align-top alert alert-success', timeout: 3000 });
         this.submitting = false;
         this.refreshApprovals();
+        this.refreshApprovals();
         this.showAllApprovals = true;
         this.showSingleApproval = false;
         window.scrollTo(0, 0);
