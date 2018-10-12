@@ -31,6 +31,7 @@ export class DynamicFormQuestionComponent {
       if(!isNaN(num)){ 
         sum = sum + num;
       }
+      array.controls[i].patchValue(num);
     }
     array.controls[array.controls.length - 1].setValue(sum);
   }
