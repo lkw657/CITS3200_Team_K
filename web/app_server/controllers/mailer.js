@@ -509,30 +509,11 @@ module.exports.pdfForm = (req, res, next) => {
                                         });
                                     }
                                     else {
-                                        //do something with html
-                                        var options = {
-                                            format: 'A4',
-                                            border: '3mm',
-                                            "border": {
-                                                "top": "1in",            // default is 0, units: mm, cm, in, px
-                                                "right": "1in",
-                                                "bottom": "1in",
-                                                "left": "1in"
-                                            },
-                                        };
 
                                         var wkhtmltopdf = require('wkhtmltopdf');
 
                                         wkhtmltopdf(html)
                                             .pipe(res);
-
-
-
-
-
-
-
-
                                     }
                                 }
                             );
