@@ -513,14 +513,13 @@ module.exports.pdfForm = (req, res, next) => {
                                             format: 'A4',
                                             border: '3mm',
                                             "border": {
-                                                "top": "1in",            // default is 0, units: mm, cm, in, px
+                                                "top": "0",            // default is 0, units: mm, cm, in, px
                                                 "right": "1in",
                                                 "bottom": "1in",
                                                 "left": "1in"
                                             },
                                         };
                                         pdf.create(html, options).toStream(function (err, stream) {
-
                                             res.setHeader("Content-disposition", "inline; filename=report.pdf");
                                             res.setHeader("Content-Type", "application/pdf");
                                             stream.pipe(res);
