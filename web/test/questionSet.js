@@ -33,7 +33,7 @@ var qset1 = {
 }
 
 // To try to add in tests
-var qset2 = [
+var qlist2 = [
     {
         formName: "faculty",
         order: 0,
@@ -47,6 +47,8 @@ var qset2 = [
         type: "textarea"
     }
 ]
+
+var qset2 = {version: 1, questionList: qlist2}
 
 // Chai's deep equal will compare _id on one with the non existant _id on the other
 function cmpSets(set1, set2) {
@@ -76,17 +78,21 @@ function cmpSetList(sets1, sets2) {
  * name: name of test
  * send: json object to send to the server
  * shouldReceive: json object that should be received from the server */
-function test(name, shouldReceive, statusCode, login) {
+function test(name, shouldReceive, statusCode, login, route) {
     it(name, function (done) {
         var j = request.jar();
         request.post(endpointPrefix+'/authenticate', {json:true, form:login, jar:j}, function () {
-           request.get(endpointPrefix + '/db/questionSet', {json:true, jar:j}, function (err, res, body) { 
-               assert.equal(res.statusCode, statusCode, "Did not get expected status");
-               if (shouldReceive.success)
-                   cmpSetList(body, shouldReceive);
+            request.get(endpointPrefix + route, {json:true, jar:j}, function (err, res, body) { 
+                assert.equal(res.statusCode, statusCode, "Did not get expected status");
+                if (shouldReceive.success) {
+                    if (route === '/db/questionSet')
+                        cmpSetList(body, shouldReceive);
+                    else
+                        cmpSets(body.questionSet, shouldReceive.questionSet);
+                }
                 else
-                   assert.deepEqual(body, shouldReceive, "Response doesn't match");
-               done();
+                    assert.deepEqual(body, shouldReceive, "Response doesn't match");
+                done();
             });
         });
     });
@@ -115,58 +121,69 @@ function testUpdate(name, toAdd, shouldReceive, statusCode, login) {
 }
 
 describe('QuestionSet', () => {
-    //TODO latest
-    //TODO id
-        beforeEach(function (done) {
-                this.timeout(4000);
-                User.remove({}, (err) => {
+    // Don't use beforeEach
+    // want to keep questionSet changes between tests
+    before(function (done) {
+            this.timeout(4000);
+            User.deleteMany({}, (err) => {
+                if (err) done(err);
+                else
+                util.makeUser('Admin', 'Admin', '00000000', 'foo', true, () => {
                     if (err) done(err);
                     else
-                    util.makeUser('Admin', 'Admin', '00000000', 'foo', true, () => {
+                    util.makeUser('Johnny', 'User', '12345678', 'foo', false, () => {
                         if (err) done(err);
                         else
-                        util.makeUser('Johnny', 'User', '12345678', 'foo', false, () => {
+                        QuestionSet.deleteMany({}, (err) => {
                             if (err) done(err);
                             else
-                            QuestionSet.remove({}, (err) => {
+                            new QuestionSet(qset1).save((err, qset) => {
                                 if (err) done(err);
-                                else
-                                new QuestionSet(qset1).save((err, qset) => {
-                                    if (err) done(err);
-                                    else {
-                                        module.qset1Model = qset;
-                                        done();
-                                    }
-                                });
+                                else {
+                                    module.qset1Model = qset;
+                                    done();
+                                }
                             });
                         });
                     });
                 });
-        });
+            });
+    });
 
     describe("list all", () => {
         test("Not logged in",
-            {success: false, msg: 'Forbidden'}, 401);
+            {success: false, msg: 'Forbidden'}, 401, {}, '/db/questionSet');
 
         test("Logged in",
             {success: true, questionSets: [qset1]},
             200,
-            {number:'12345678', password:'foo'});
+            {number:'12345678', password:'foo'}, '/db/questionSet');
     });
 
     describe("Update", () => {
-        testUpdate("Not logged in", qset2,
+        testUpdate("Not logged in", qlist2,
             {success: false, msg: 'Forbidden'}, 401);
 
-        testUpdate("Not IT", qset2,
+        testUpdate("Not IT", qlist2,
             {success: false, msg: 'Forbidden'},
             403,
             {number:'12345678', password:'foo'});
 
-        testUpdate("IT", qset2,
+        testUpdate("IT", qlist2,
             {success: true, msg: 'Question Set updated!'},
             200,
             {number:'00000000', password:'foo'});
 
+    });
+
+    describe("Latest", () => {
+        test("Not logged in",
+            {success: false, msg: 'Forbidden'}, 401, {}, '/db/questionSet/latest');
+
+        test("Logged in",
+            {success: true, questionSet: qset2},
+            200,
+            {number:'12345678', password:'foo'},
+            '/db/questionSet/latest');
     });
 });

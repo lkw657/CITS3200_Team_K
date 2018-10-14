@@ -22,7 +22,7 @@ mongoose.connection.on('disconnected', function() {
     console.log('Mongoose disconnected');
 });
 
-mongoose.connect(dbURI);
+mongoose.connect(dbURI, {useNewUrlParser: true});
 
 gracefulShutdown = function (msg, callback) {
     mongoose.connection.close(function () {

@@ -34,7 +34,7 @@ describe('User list', () => {
 
         beforeEach(function (done) {
             this.timeout(4000);
-                User.remove({}, (err) => {
+                User.deleteMany({}, (err) => {
                     if (err) done(err);
                     util.makeUser('Admin', 'Admin', '00000000', 'foo', true, () => {
                         if (err) done(err);

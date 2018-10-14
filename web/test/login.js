@@ -36,7 +36,7 @@ describe('Login', () => {
     beforeEach(function (done) {
         /* Delete the collection and add a researcher and staff user for testing */
         this.timeout(4000);
-        User.remove({}, (err) => {
+        User.deleteMany({}, (err) => {
             User.register(User.create('researcher', 'user','12345678'),
                           'abcdefghijkl', (err) => done(err));
         });

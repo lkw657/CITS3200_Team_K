@@ -7,7 +7,12 @@ var Mail = mailModel.mailSchema;
 
 //Lists all emails
 module.exports.listAllEmails = (req, res, next) => {
-
+    if (req.user == undefined) {
+        return res.status(401).json({
+            success: false,
+            msg: "Forbidden"
+        });
+    }
     Email.find({}, (err, mails) => {
         if (!mails) {
             return sendJsonResponse(res, 403, {
@@ -31,8 +36,9 @@ module.exports.listAllEmails = (req, res, next) => {
 //req.body.email
 module.exports.addEmail = (req, res, next) => {
     // CHECK IF ADMIN
-    if (!req.user) {
-        return res.status(401).json({
+    if (req.user == undefined || !req.user.isIT) {
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "Forbidden"
         });
@@ -60,8 +66,9 @@ module.exports.addEmail = (req, res, next) => {
 //Updates user information in database
 module.exports.updateEmail = (req, res, next) => {
     // CHECK IF ADMIN
-    if (!req.user) {
-        return res.status(401).json({
+    if (req.user == undefined || !req.user.isIT) {
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "Forbidden"
         });
@@ -88,8 +95,9 @@ module.exports.updateEmail = (req, res, next) => {
 //Delete Email from database
 module.exports.removeEmail = (req, res, next) => {
     // CHECK IF ADMIN
-    if (!req.user) {
-        return res.status(401).json({
+    if (req.user == undefined || !req.user.isIT) {
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "Forbidden"
         });

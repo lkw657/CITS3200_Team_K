@@ -17,17 +17,20 @@ let endpoint = 'http://' + ip + ':' + port + '/register'
  * created: whether the user should be added to the database */ 
 function test(name, send, shouldReceive, created) {
     it(name, (done) => {
-        request.post(endpoint, {form:send}, (err, response, body) => {
-            if (err) done(err);
-            assert.deepEqual(JSON.parse(body), shouldReceive, "Response doesn't match");
-            User.find({}, (err, users) => {
-                if (err) done(err);
-                // should only be 1 or 0 as collection is wiped before each test
-                if (created)
-                    assert.lengthOf(users, 1, "User was not created");
-                else
-                    assert.lengthOf(users, 0, "User was created");
-                done();
+        User.countDocuments((err, initialUsers) => {
+            if (err) return done(err);
+            request.post(endpoint, {form:send}, (err, response, body) => {
+                if (err) return done(err);
+                assert.deepEqual(JSON.parse(body), shouldReceive, "Response doesn't match");
+                User.countDocuments({}, (err, count) => {
+                    if (err) return done(err);
+                    // should only be 1 or 0 as collection is wiped before each test
+                    if (created)
+                        assert.equal(count, initialUsers+1, "User was not created");
+                    else
+                        assert.equal(count, initialUsers, "User was created");
+                    done();
+                });
             });
         });
     });
@@ -36,7 +39,7 @@ function test(name, send, shouldReceive, created) {
 describe('Registration', function(){
 
     beforeEach((done) => {
-        User.remove({}, done);
+        User.deleteMany({}, done);
     });
 
     test("Valid researcher",
