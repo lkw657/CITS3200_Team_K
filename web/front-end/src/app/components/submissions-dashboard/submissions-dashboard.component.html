@@ -48,7 +48,7 @@
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   <div *ngIf="showSingleSubmission && isLoaded">
     <div class="row mb-5">
-      <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
+      <div *ngIf="submissionView.comments && submissionView.status=='Provisionally Approved'" class="col-sm">
         <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
           (click)="resolve()">
       </div>
@@ -58,7 +58,7 @@
         <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showSubmissions()">
       </div>
     </div>
-    <h4 class="form-title">Form submitted as a {{submissionView.submitter}} from the {{submissionView.school}}</h4>
+    <h4 class="form-row">Form submitted as a {{submissionView.submitter}} from the {{submissionView.school}}</h4>
     <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [comments]="comments"></app-dynamic-form>
   </div>
 

@@ -10,5 +10,6 @@ router.post('/register', ctrlIndex.register)
 //Dashboard API
 router.get('/submissions', ctrlIndex.submissions);
 router.get('/approvals', ctrlIndex.approvals);
+router.post('/formHistory', ctrlIndex.formHistory);
 
 module.exports = router;

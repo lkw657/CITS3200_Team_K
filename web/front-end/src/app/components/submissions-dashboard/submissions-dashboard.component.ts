@@ -173,7 +173,6 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.submissionView = form;
 
     this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
-    console.log(this.submissionView);
     this.comments = this.submissionView.comments;
 
   }
@@ -240,11 +239,13 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   // Displays a single historical form
   showHistoricSubmission(form) {
+    console.log(form);
     this.historicalSubmissionView = form;
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.comments = this.historicalSubmissionView['comments'];
   }
 
   // Goes back to history dashboard

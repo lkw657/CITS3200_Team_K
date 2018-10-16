@@ -46,6 +46,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   comments: any[] = [];
   appsLoaded = false;
   submitting = false;
+  historyLoaded = true;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -143,11 +144,18 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
 
     this.formHistory = [];
-    for (let i in this.userApprovals) {
-      if (history.includes(this.userApprovals[i]._id)) {
-        this.formHistory.push(this.userApprovals[i]);
-      }
-    }
+    this.historyLoaded = false;
+    // Get history for form
+    this.dashboardService.getFormHistory(history).subscribe(data => {
+      this.formHistory = data.history;
+      this.historyLoaded = true;
+    },
+      err => {
+        this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.historyLoaded = false;
+        window.scrollTo(0, 0);
+      });
+      
   }
 
   // Goes back to single form display and clears history array
@@ -164,6 +172,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.comments = this.historicalSubmissionView['comments'];
   }
 
   // Goes back to history dashboard 
@@ -209,7 +219,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -222,7 +231,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -235,12 +243,10 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
-        let number_of_fields = 0;
         qObjs.push(
           new MoneyArrayQuestion({
             key: i + 1,
@@ -250,7 +256,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
