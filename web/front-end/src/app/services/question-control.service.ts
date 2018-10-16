@@ -55,7 +55,6 @@ export class QuestionControlService {
             }
 
             arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
-            console.log(arrayofQuestions);
             group[question.key] = new FormArray(arrayofQuestions);
           }
         } else {
