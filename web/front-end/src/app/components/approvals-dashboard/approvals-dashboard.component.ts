@@ -46,6 +46,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   comments: any[] = [];
   appsLoaded = false;
   submitting = false;
+  historyLoaded = true;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -143,11 +144,18 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
 
     this.formHistory = [];
-    for (let i in this.userApprovals) {
-      if (history.includes(this.userApprovals[i]._id)) {
-        this.formHistory.push(this.userApprovals[i]);
-      }
-    }
+    this.historyLoaded = false;
+    // Get history for form
+    this.dashboardService.getFormHistory(history).subscribe(data => {
+      this.formHistory = data.history;
+      this.historyLoaded = true;
+    },
+      err => {
+        this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.historyLoaded = false;
+        window.scrollTo(0, 0);
+      });
+      
   }
 
   // Goes back to single form display and clears history array
@@ -160,10 +168,13 @@ export class ApprovalsDashboardComponent implements OnInit {
 
   // Displays a single historical form
   showHistoricSubmission(form) {
+    console.log(form);
     this.historicalSubmissionView = form;
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
+    //Why approvalView and not historicalSubmissionView?
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.approvalView['answers']);
   }
 
   // Goes back to history dashboard 

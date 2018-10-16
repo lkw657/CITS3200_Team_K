@@ -48,7 +48,7 @@
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   <div *ngIf="showSingleSubmission && isLoaded">
     <div class="row mb-5">
-      <div *ngIf="submissionView.comments && submissionView.status!='Resubmitted'" class="col-sm">
+      <div *ngIf="submissionView.comments && submissionView.status=='Provisionally Approved'" class="col-sm">
         <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
           (click)="resolve()">
       </div>

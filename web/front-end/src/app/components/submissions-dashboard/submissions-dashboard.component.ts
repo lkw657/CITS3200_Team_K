@@ -173,7 +173,6 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.submissionView = form;
 
     this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
-    console.log(this.submissionView);
     this.comments = this.submissionView.comments;
 
   }
@@ -240,6 +239,7 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   // Displays a single historical form
   showHistoricSubmission(form) {
+    console.log(form);
     this.historicalSubmissionView = form;
     this.showHistory = false;
     this.showHistoricalSubmission = true;
