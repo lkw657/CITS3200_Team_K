@@ -46,7 +46,6 @@ export class QuestionControlService {
             }
 
             arrayofQuestions.push(new FormControl( sum || '0' ));
-            console.log(arrayofQuestions);
             group[question.key] = new FormArray(arrayofQuestions);
           } else {
             let arrayofQuestions = [];
@@ -55,7 +54,6 @@ export class QuestionControlService {
             }
 
             arrayofQuestions.push(new FormControl({value: '0', disabled: true}));
-            console.log(arrayofQuestions);
             group[question.key] = new FormArray(arrayofQuestions);
           }
         } else {
@@ -98,7 +96,6 @@ export class QuestionControlService {
 
       group[Object.keys(group).length + 1] = new FormArray(comments);
     }
-    console.log(group);
     return new FormGroup(group);
   }
 }

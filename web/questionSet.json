@@ -58,25 +58,25 @@
         },
         {
             "title": "",
-            "text": "Please address Research Excellence",
+            "text": "Please address selection criteria: Research Excellence",
             "type": "textarea",
             "formName": "central"
         },
         {
             "title": "",
-            "text": "Please address Alignment with Faculty and University Priorities",
+            "text": "Please address selection criteria: Alignment with Faculty and University Priorities",
             "type": "textarea",
             "formName": "central"
         },
         {
             "title": "",
-            "text": "Please address Leverage (at least 1:4)",
+            "text": "Please address selection criteria: Leverage (at least 1:4)",
             "type": "textarea",
             "formName": "central"
         },
         {
             "title": "",
-            "text": "Please address Impact and Collaboration",
+            "text": "Please address selection criteria: Impact and Collaboration",
             "type": "textarea",
             "formName": "central"
         },
