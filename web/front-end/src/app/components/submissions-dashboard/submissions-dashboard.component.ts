@@ -244,7 +244,8 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.submissionView['answers']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.comments = this.historicalSubmissionView['comments'];
   }
 
   // Goes back to history dashboard

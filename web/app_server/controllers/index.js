@@ -162,16 +162,16 @@ module.exports.formHistory = (req, res, next) => {
         });
     else {
         historicalForms = [];
-        for (var i = 0; i < req.body.length; i++) {
+        for (let i = 0; i < req.body.length; i++) {
             Form.findOne({ _id: req.body }, (err, form) => {
                 if (err) {
-                    console.log(err);
+                    console.log('form error');
                     return res.status(400).json({ success: false, msg: "Something went wrong getting form history!" });
                 }
                 else {
                     QuestionSet.findOne({ _id: form.questionSet }, (err, qset) => {
                         if (err) {
-                            console.log(err);
+                            console.log('qset error');
                             return res.status(400).json({ success: false, msg: "Something went wrong getting form history!" });
                         }
                         else {
@@ -187,8 +187,7 @@ module.exports.formHistory = (req, res, next) => {
                                 sub_date: form.dates[0].toLocaleString('en-AU'),
                                 action_date: form.dates[form.dates.length - 1].toLocaleString('en-AU')
                             });
-                            if (i = req.body.length) {
-                                console.log('SENDING!');
+                            if (i == req.body.length-1) {
                                 return res.status(200).json({
                                     success: true,
                                     history: historicalForms

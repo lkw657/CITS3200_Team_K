@@ -168,13 +168,11 @@ export class ApprovalsDashboardComponent implements OnInit {
 
   // Displays a single historical form
   showHistoricSubmission(form) {
-    console.log(form);
     this.historicalSubmissionView = form;
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    //Why approvalView and not historicalSubmissionView?
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.approvalView['answers']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
     this.comments = this.historicalSubmissionView['comments'];
   }
 
