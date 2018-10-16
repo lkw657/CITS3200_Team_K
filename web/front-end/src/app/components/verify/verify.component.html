@@ -5,15 +5,15 @@
 
 <div [hidden]="verifying" class="mb-5">
     <h3 class="permission mb-5 mt-5">
-        Please accept or reject based on whether or not you take responsibility for this RPF.
+            Do you have authority to approve RPF forms?
     </h3>
 
     <div class="row">
         <div class="col">
-            <button (click)="onAccept()" class="btn btn-block btn-success p-3">Accept</button>
+            <button (click)="onAccept()" class="btn btn-block btn-success p-3">Yes</button>
         </div>
         <div class="col">
-            <button (click)="onReject()" class="btn btn-block btn-danger p-3">Reject</button>
+            <button (click)="onReject()" class="btn btn-block btn-danger p-3">No</button>
         </div>
     </div>
 </div>

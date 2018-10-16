@@ -30,7 +30,7 @@ export class VerifyComponent implements OnInit {
     this.http.post(baseURI + '/mail/verifyFormAccess', { 'mailID': this.mailID, 'secret': this.secret }).subscribe(
       (data) => {
         this.verifying = false;
-        console.log(data)
+        this.refreshApprovals();
         this.refreshApprovals();
         this.router.navigate(['/approvalsDashboard']);
       },
