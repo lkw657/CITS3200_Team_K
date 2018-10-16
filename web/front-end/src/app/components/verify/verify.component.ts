@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { baseURI } from '../../config';
 import { DashboardService } from '../../services/dashboard.service';
 import { FlashMessagesService } from "angular2-flash-messages";
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { FlashMessagesService } from "angular2-flash-messages";
 export class VerifyComponent implements OnInit {
 
   constructor(
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private dashboardService: DashboardService,
@@ -24,6 +26,7 @@ export class VerifyComponent implements OnInit {
   secret: string = '';
   mailID: string = '';
   verifying = false;
+  user: any;
 
   onAccept() {
     this.verifying = true;
@@ -61,6 +64,7 @@ export class VerifyComponent implements OnInit {
   ngOnInit() {
     this.mailID = this.route.snapshot.paramMap.get('mailID');
     this.secret = this.route.snapshot.paramMap.get('secret');
+    this.user = this.authService.getProfile();
   }
 
   // Refreshes approvals when Dashboard is loaded
