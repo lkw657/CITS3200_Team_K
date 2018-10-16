@@ -175,6 +175,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
     //Why approvalView and not historicalSubmissionView?
     this.createQuestionList(this.historicalSubmissionView['questionSet'], this.approvalView['answers']);
+    this.comments = this.historicalSubmissionView['comments'];
   }
 
   // Goes back to history dashboard 
@@ -220,7 +221,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -233,7 +233,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -246,12 +245,10 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
-        let number_of_fields = 0;
         qObjs.push(
           new MoneyArrayQuestion({
             key: i + 1,
@@ -261,7 +258,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
