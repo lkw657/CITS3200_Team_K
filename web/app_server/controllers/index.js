@@ -177,11 +177,6 @@ module.exports.formHistory = (req, res, next) => {
                         else {
                             historicalForms.push({
                                 _id: form._id,
-                                owner: {
-                                    fname: form.fname,
-                                    lname: form.owner.lname,
-                                    number: form.owner.number
-                                },
                                 questionSet: qset,
                                 school: form.school,
                                 submitter: form.submitter,
