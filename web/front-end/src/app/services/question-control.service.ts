@@ -96,6 +96,7 @@ export class QuestionControlService {
 
       group[Object.keys(group).length + 1] = new FormArray(comments);
     }
+    console.log(group);
     return new FormGroup(group);
   }
 }

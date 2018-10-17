@@ -514,9 +514,9 @@ module.exports.pdfForm = (req, res, next) => {
                                             border: '3mm',
                                             "border": {
                                                 "top": "0",            // default is 0, units: mm, cm, in, px
-                                                "right": "1in",
-                                                "bottom": "1in",
-                                                "left": "1in"
+                                                "right": "0.8in",
+                                                "bottom": "0.8in",
+                                                "left": "0.8in"
                                             },
                                         };
                                         pdf.create(html, options).toStream(function (err, stream) {
@@ -542,9 +542,9 @@ module.exports.pdfForm = (req, res, next) => {
         }
     });
     /*
-    
-        
-    
+
+
+
         */
 
 
