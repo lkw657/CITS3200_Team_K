@@ -16,7 +16,6 @@
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "mocha": "^5.2.0",
-    "html-pdf": "^2.2.0",
     "mongoose": "^5.2.13",
     "mongoose-deep-populate": "^3.1.1",
     "mongoose-unique-validator": "^2.0.1",
@@ -31,6 +30,7 @@
     "request-promise-native": "^1.0.5",
     "rxjs": "^6.3.3",
     "underscore": "^1.9.1",
+    "wkhtmltopdf": "^0.3.4",
     "zone.js": "^0.8.26"
   }
 }
