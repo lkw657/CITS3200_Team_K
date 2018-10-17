@@ -31,8 +31,9 @@ userSchema.statics.create = (fname, lname, number) => {
         fname: fname,
         lname: lname,
         number: number,
-        forms: [],
-        isIT: 'false'
+        approvals: [],
+        submissions: [],
+        isIT: false
     });
 }
 
