@@ -14,13 +14,15 @@ mongoose.connection.on('conected', function() {
 
 mongoose.connection.on('error', function(err) {
     console.log('Mongoose connection error: ' + err);
+    console.log('retrying...');
+    mongoose.connect(dbURI);
 });
 
 mongoose.connection.on('disconnected', function() {
     console.log('Mongoose disconnected');
 });
 
-mongoose.connect(dbURI);
+mongoose.connect(dbURI, {useNewUrlParser: true});
 
 gracefulShutdown = function (msg, callback) {
     mongoose.connection.close(function () {

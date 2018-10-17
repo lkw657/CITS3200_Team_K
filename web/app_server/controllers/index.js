@@ -76,7 +76,7 @@ module.exports.submissions = (req, res, next) => {
         });
     User.deepPopulate(req.user, ['submissions', 'submissions.questionSet', 'submissions.owner'], (err) => {
         if (err)
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting submissions"
             });
@@ -119,7 +119,7 @@ module.exports.approvals = (req, res, next) => {
         });
     User.deepPopulate(req.user, ['approvals', 'approvals.questionSet', 'approvals.owner'], (err) => {
         if (err)
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting approvals"
             });

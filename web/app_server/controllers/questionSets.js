@@ -2,8 +2,9 @@ var questionSetModel = require('../models/questionSets');
 var QuestionSet = questionSetModel.questionSetSchema;
 
 module.exports.addQuestionSet = (req, res, next) => {
-    if (!req.user) {
-        return res.status(401).json({
+    if (req.user == undefined || !req.user.isIT) {
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "Forbidden"
         });
@@ -13,7 +14,12 @@ module.exports.addQuestionSet = (req, res, next) => {
         return res.json({ success: false, msg: 'Missing Data' });
     }
     //Find the question set with the highest version.
-    QuestionSet.findOne({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).then(function (qset) {
+    QuestionSet.find({}, { _id: 0, 'questionList._id': 0 }).sort({ version: -1 }).limit(1).exec(function (err, qsets) {
+        var qset = qsets[0];
+        if (err) {
+            console.log(err);
+            return res.json({success:false, msg:""});
+        }
         var questionSet = new QuestionSet(); //The question set to be saved.
         //If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
         if (qset) {
@@ -77,7 +83,7 @@ module.exports.listAll = (req, res, next) => {
     }
     QuestionSet.find({}, (err, qsets) => {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting all question lists"
             });
@@ -102,7 +108,7 @@ module.exports.questionSetId = (req, res, next) => {
     }
     QuestionSet.findById(req.params.id).then(function (qset, err) {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting question set by ID"
             });
@@ -126,7 +132,7 @@ module.exports.latestQuestionSet = (req, res, next) => {
     }
     QuestionSet.findOne({}, { 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 success: false,
                 msg: "Error getting latest question list"
             });
