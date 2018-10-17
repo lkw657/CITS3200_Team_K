@@ -16,7 +16,7 @@ module.exports.register = (req, res) => {
     if (req.body.password.length < 8) {
         return res.json({ success: false, msg: 'Passwords must be at least 8 characters long' });
     }
-    User.register(User.create(req.body.fname, req.body.lname, req.body.number),
+    User.register(User.create(req.body.fname, req.body.lname, req.body.number, req.body.email),
         req.body.password,
         (err, user) => {
             if (err) {
