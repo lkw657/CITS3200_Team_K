@@ -3,6 +3,10 @@
 
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
+.bg-primary{
+  background-color : #27348B !important;
+}
+
 .gu-mirror {
     position: fixed !important;
     margin: 0 !important;
