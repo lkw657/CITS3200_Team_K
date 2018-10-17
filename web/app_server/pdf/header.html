@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head><script>
+    function subst() {
+        var vars = {};
+        var query_strings_from_url = document.location.search.substring(1).split('&');
+        for (var query_string in query_strings_from_url) {
+            if (query_strings_from_url.hasOwnProperty(query_string)) {
+                var temp_var = query_strings_from_url[query_string].split('=', 2);
+                vars[temp_var[0]] = decodeURI(temp_var[1]);
+            }
+        }
+        console.log(parseInt(vars['page']))
+        if (parseInt(vars['page']) != 1) {
+            var content = document.createElement('p');
+            content.style='text-align: center;';
+            content.appendChild(document.createTextNode("PLACEHOLDER - REPLACE WITH IMAGE"));
+            document.getElementById("here").appendChild(content);
+        }
+    }
+    </script></head><body onload="subst()">
+        <div id="here"> </div>
+</body></html>
+

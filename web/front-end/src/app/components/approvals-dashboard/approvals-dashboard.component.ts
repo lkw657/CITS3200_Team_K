@@ -163,6 +163,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showSingleApproval = true;
     this.formHistory = undefined;
+    this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers'], true);
     window.scrollTo(0, 0);
   }
 
@@ -172,7 +173,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], true);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], false);
     this.comments = this.historicalSubmissionView['comments'];
   }
 
