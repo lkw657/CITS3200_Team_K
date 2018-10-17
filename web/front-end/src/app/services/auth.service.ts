@@ -37,6 +37,7 @@ export class AuthService {
     return user;
   }
 
+  //Checks if user object is in local storage
   loggedIn() {
     var user = JSON.parse(localStorage.getItem('user'));
     if (user == null) {

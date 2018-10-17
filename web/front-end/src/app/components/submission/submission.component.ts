@@ -46,7 +46,8 @@ export class SubmissionComponent implements OnInit {
                             key: i + 1,
                             label: q.text,
                             required: true,
-                            order: q.order
+                            order: q.order,
+                            form_name: q.formName
                         })
                     );
                 } else if (q['type'] == 'text') {
@@ -55,7 +56,8 @@ export class SubmissionComponent implements OnInit {
                             key: i + 1,
                             label: q.text,
                             required: true,
-                            order: q.order
+                            order: q.order,
+                            form_name: q.formName
                         })
                     );
                 } else if (q['type'] == 'money_single') {
@@ -64,7 +66,8 @@ export class SubmissionComponent implements OnInit {
                             key: i + 1,
                             label: q.text,
                             required: true,
-                            order: q.order
+                            order: q.order,
+                            form_name: q.formName
                         })
                     );
                 } else if (q['type'].indexOf("money_array") == 0) {
@@ -75,6 +78,7 @@ export class SubmissionComponent implements OnInit {
                             label: q.text,
                             required: true,
                             order: q.order,
+                            form_name: q.formName,
                             value: 0,
                             number: parseInt(q['type'].substring(q['type'].length - 1))
                         })

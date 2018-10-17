@@ -58,7 +58,25 @@
         },
         {
             "title": "",
-            "text": "Please address separately each of the following criteria\nResearch Excellence\nAlignment with Faculty and University Priorities\nLeverage (at least 1:4)\nImpact and Collaboration",
+            "text": "Please address selection criteria: Research Excellence",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Alignment with Faculty and University Priorities",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Leverage (at least 1:4)",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Impact and Collaboration",
             "type": "textarea",
             "formName": "central"
         },

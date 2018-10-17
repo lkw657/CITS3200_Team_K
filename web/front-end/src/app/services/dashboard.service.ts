@@ -71,6 +71,11 @@ export class DashboardService {
     return this.http.get<any>(baseURI + '/approvals');
   }
 
+  //Get forms history
+  getFormHistory(history) {
+    return this.http.post<any>(baseURI + '/formHistory', history);
+  }
+
   //Update Questions in database
   updateQuestionSet(questionList) {
     return this.http.post<any>(baseURI + '/db/questionSet', questionList);

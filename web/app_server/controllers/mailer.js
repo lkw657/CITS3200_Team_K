@@ -448,76 +448,88 @@ module.exports.pdfForm = (req, res, next) => {
                     .populate({ path: "answers" })
                     .populate({ path: 'approvedBy.id', select: "fname lname number" })
                     .exec((err, form) => {
-
-                        QA = [];
-                        form.answers.forEach((o, i) => {
-                            if (form.questionSet.questionList[i].formName == 'central')
-                                QA.push({
-                                    question: form.questionSet.questionList[i].text,
-                                    title: form.questionSet.questionList[i].title,
-                                    answer: form.answers[i].answer
-                                })
-                        });
-
-                        approvers = []
-                        form.approvedBy.forEach((o, i) => {
-                            approvers.push({
-                                name: form.approvedBy[i].id.fname + " " + form.approvedBy[i].id.lname,
-                                number: form.approvedBy[i].id.number,
-                                role: form.approvedBy[i].role,
-                                date: form.dates[i + 1]
+                        if (err) {
+                            return res.status(400).json({
+                                success: false,
+                                msg: "Something went wrong"
                             });
-                        })
-                        data = {
-                            QA: QA,
-                            approvers: approvers,
-                            owner: form.owner,
-                            dir: `file://${__dirname}/../pdf/`
-                        };
+                        }
+                        else if (!form) {
+                            return res.status(400).json({
+                                success: false,
+                                msg: "No Form Found"
+                            });
+                        }
+                        else {
+
+                            QA = [];
+                            form.answers.forEach((o, i) => {
+                                if (form.questionSet.questionList[i].formName == 'central')
+                                    QA.push({
+                                        question: form.questionSet.questionList[i].text,
+                                        title: form.questionSet.questionList[i].title,
+                                        answer: form.answers[i].answer
+                                    })
+                            });
+
+                            approvers = []
+                            form.approvedBy.forEach((o, i) => {
+                                approvers.push({
+                                    name: form.approvedBy[i].id.fname + " " + form.approvedBy[i].id.lname,
+                                    number: form.approvedBy[i].id.number,
+                                    role: form.approvedBy[i].role,
+                                    date: form.dates[i + 1]
+                                });
+                            })
+                            data = {
+                                QA: QA,
+                                approvers: approvers,
+                                owner: form.owner,
+                                dir: `file://${__dirname}/../pdf/`
+                            };
 
 
-                        let filePath = `${__dirname}/../pdf/rpf.ejs`;
-                        path.format(path.parse(filePath));
+                            let filePath = `${__dirname}/../pdf/rpf.ejs`;
+                            path.format(path.parse(filePath));
 
-                        let renderingOptions = {
-                            client: true,
-                            rmWhitespace: true
-                        };
-                        ejs.renderFile(
-                            filePath,
-                            data,
-                            renderingOptions,
-                            (err, html) => {
-                                if (err) {
-                                    return res.status(400).json({
-                                        success: false,
-                                        msg: err
-                                    });
+                            let renderingOptions = {
+                                client: true,
+                                rmWhitespace: true
+                            };
+                            ejs.renderFile(
+                                filePath,
+                                data,
+                                renderingOptions,
+                                (err, html) => {
+                                    if (err) {
+                                        return res.status(400).json({
+                                            success: false,
+                                            msg: err
+                                        });
+                                    }
+                                    else {
+                                        //do something with html
+                                        var options = {
+                                            format: 'A4',
+                                            border: '3mm',
+                                            "border": {
+                                                "top": "0",            // default is 0, units: mm, cm, in, px
+                                                "right": "1in",
+                                                "bottom": "1in",
+                                                "left": "1in"
+                                            },
+                                        };
+                                        pdf.create(html, options).toStream(function (err, stream) {
+                                            res.setHeader("Content-disposition", "inline; filename=report.pdf");
+                                            res.setHeader("Content-Type", "application/pdf");
+                                            stream.pipe(res);
+                                        });
+
+
+                                    }
                                 }
-                                else {
-                                    //do something with html
-                                    var options = {
-                                        format: 'A4',
-                                        border: '3mm',
-                                        "border": {
-                                            "top": "1in",            // default is 0, units: mm, cm, in, px
-                                            "right": "1in",
-                                            "bottom": "1in",
-                                            "left": "1in"
-                                        },
-                                    };
-                                    pdf.create(html, options).toStream(function (err, stream) {
-
-                                        res.setHeader("Content-disposition", "inline; filename=report.pdf");
-                                        res.setHeader("Content-Type", "application/pdf");
-                                        stream.pipe(res);
-                                    });
-
-
-                                }
-                            }
-                        );
-
+                            );
+                        }
                     });
 
             }

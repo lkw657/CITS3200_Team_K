@@ -46,6 +46,7 @@ export class ApprovalsDashboardComponent implements OnInit {
   comments: any[] = [];
   appsLoaded = false;
   submitting = false;
+  historyLoaded = true;
 
   @ViewChild(DynamicFormComponent)
   private dform: DynamicFormComponent;
@@ -53,7 +54,6 @@ export class ApprovalsDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private flashMessage: FlashMessagesService,
-    private authService: AuthService,
     private dashboardService: DashboardService,
     private questionService: QuestionService
   ) { }
@@ -97,9 +97,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.role = this.approvalView.status.split(" ")[1];
     this.school = this.approvalView.school;
     this.submitter = this.approvalView.submitter;
-    console.log(this.approvalView);
     this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
-    //this.approvalView.comments = Array(this.approvalView.questionSet.questionList.length);
   }
 
   // Resubmits form for approval
@@ -107,12 +105,13 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.submitting = true;
     let commentArray = [];
     // Create approval object with new comments and response
-    for (let i in this.dform.form.controls[Object.keys(this.dform.form).length + 1].value) {
-      if (this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] != null) {
-        commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form).length + 1].value[i] });
+    let numFormControls = this.dform.form.controls[Object.keys(this.dform.form.controls).length].value.length;
+    for ( var i = 0 ; i < numFormControls ; i++ ){
+      if( this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] != null ){
+        commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] });
       }
     }
-
+    
     // Create approval object to be sent to back end
     this.approval.comments = commentArray;
     this.approval.response = response;
@@ -145,11 +144,18 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
 
     this.formHistory = [];
-    for (let i in this.userApprovals) {
-      if (history.includes(this.userApprovals[i]._id)) {
-        this.formHistory.push(this.userApprovals[i]);
-      }
-    }
+    this.historyLoaded = false;
+    // Get history for form
+    this.dashboardService.getFormHistory(history).subscribe(data => {
+      this.formHistory = data.history;
+      this.historyLoaded = true;
+    },
+      err => {
+        this.flashMessage.show(err.error.msg, { cssClass: 'align-top alert alert-danger', timeout: 5000 });
+        this.historyLoaded = false;
+        window.scrollTo(0, 0);
+      });
+      
   }
 
   // Goes back to single form display and clears history array
@@ -166,6 +172,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.comments = this.historicalSubmissionView['comments'];
   }
 
   // Goes back to history dashboard 
@@ -173,25 +181,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = true;
     this.showHistoricalSubmission = false;
     window.scrollTo(0, 0);
-  }
-
-  //Finds which questions have comments
-  isCommented(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return true;
-      };
-    }
-    return false;
-  }
-
-  // Gets the correct comment for display
-  getComment(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return comments[i].text;
-      };
-    }
   }
 
   createQuestionList(questionSet, ans) {
@@ -211,7 +200,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -224,7 +212,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -237,12 +224,10 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
-        let number_of_fields = 0;
         qObjs.push(
           new MoneyArrayQuestion({
             key: i + 1,
@@ -252,7 +237,6 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            allowComments: true,
             form_name: q.formName
           })
         );
@@ -262,8 +246,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.isLoaded = true;
     this.questions = qObjs.sort((a, b) => a.order - b.order);
     this.qset_id = this.questions['_id'];
-    console.log(this.questions);
-    console.log(qObjs);
   }
 
   createAnswerList(answers): Answer[] {

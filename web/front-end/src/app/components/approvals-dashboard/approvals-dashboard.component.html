@@ -1,5 +1,11 @@
+<!-- LOADING SCREENS -->
 <div [hidden]="appsLoaded">
   <h2>Loading Approvals...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="historyLoaded">
+  <h2>Loading History...</h2>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 
@@ -52,7 +58,8 @@
         </div>
       </div>
 
-      <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="false" [allow_comments]="true" [approver]="role" [submitter]="submitter" [school]="school"></app-dynamic-form>
+      <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="false" [allow_comments]="true"
+        [approver]="role" [submitter]="submitter" [school]="school"></app-dynamic-form>
 
       <div class="m-3">
         <div class="btn-group">
@@ -93,7 +100,7 @@
   </div>
 
   <!-- SHOW FORM HISTORY -->
-  <div *ngIf=showHistory>
+  <div [hidden]=!historyLoaded *ngIf=showHistory>
     <div class="row">
       <div class="col-lg">
         <h1>History for form submitted on {{approvalView.sub_date}}</h1>
@@ -135,15 +142,7 @@
     </div>
     <div>
       <h1>Form submitted as a {{historicalSubmissionView.submitter}} from the {{historicalSubmissionView.school}}</h1>
-      <div *ngFor="let answer of historicalSubmissionView.answers; index as i">
-        <div class="card mb-2">
-          <div class="card-body">
-            <p>Question: {{historicalSubmissionView.questionSet.questionList[i].text}}</p>
-            <p>Answer: {{answer.answer}}</p>
-            <h4 *ngIf="isCommented(historicalSubmissionView.comments, answer.order)" class="text-danger">Comments: {{getComment(historicalSubmissionView.comments, answer.order)}}</h4>
-          </div>
-        </div>
-      </div>
+      <app-dynamic-form class="w-100" [qset_id]="qset_id" [questions]="questions" [display_only]="true" [comments]="comments"></app-dynamic-form>
     </div>
   </div>
 </div>
