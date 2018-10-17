@@ -40,6 +40,7 @@ module.exports.updateUser = (req, res, next) => {
     user.lname = req.body.lname;
     user.number = req.body.number;
     user.isIT = req.body.isIT;
+    user.email = req.body.email;
 
     user.save(function (err) {
       if (err) {

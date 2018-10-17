@@ -45,16 +45,16 @@
 
       <!-- Displays all question and relevant answer fields -->
       <div *ngIf="submitter && school">
-        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">EMS Research Priorities Fund - questions</h2>
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
         <div *ngFor="let question of questions" class="form-row">
           <app-question [hidden]="question.form_name=='central'" class="w-100" [question]="question" [form]="form"></app-question>
         </div>
 
-        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">UWA Research Priorities Fund - questions</h2>
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
         <div *ngFor="let question of questions" class="form-row">
           <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form"></app-question>
         </div>
-
+        <h3 class="text-danger mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">If you have any extra files for your submission please email to your Head of School</h3>
         <div class="form-row mt-3">
           <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !school || !submitter">Submit</button>
         </div>
@@ -66,13 +66,13 @@
   <!-- DISPLAY FORM BUT DON'T ALLOW COMMENTS - SUBMITTER -->
   <div class="display_only" *ngIf="display_only && !resubmit && !allow_comments">
     <form [formGroup]="form">
-      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">EMS Research Priorities Fund - questions</h2>
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
       <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='central'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='faculty'" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
 
-      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">UWA Research Priorities Fund - questions</h2>
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
       <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='faculty'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='central'" class="w-100 comment">{{ findspecificComment(i) }}</p>
@@ -84,13 +84,13 @@
   <div class="resubmit" *ngIf="!display_only && resubmit && !allow_comments">
     <form [formGroup]="form">
 
-      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">EMS Research Priorities Fund - questions</h2>
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
       <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='central'" class="w-100" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='faculty'" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
 
-      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">UWA Research Priorities Fund - questions</h2>
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
       <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='central'" class="w-100 comment">{{ findspecificComment(i) }}</p>
@@ -107,17 +107,15 @@
     <form [formGroup]="form">
 
       <div [hidden]="approver=='PVC-ED'">
-        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">EMS Research Priorities Fund - questions</h2>
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
         <div *ngFor="let question of questions; index as i" class="form-row">
-          <app-question [hidden]="question.form_name=='central'" class="w-100 mt-3" [question]="question" [form]="form"
-            disabled></app-question>
+          <app-question [hidden]="question.form_name=='central'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
         </div>
       </div>
 
-      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">UWA Research Priorities Fund - questions</h2>
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
       <div *ngFor="let question of questions; index as i" class="form-row">
-        <app-question [hidden]="question.form_name=='faculty'" class="w-100 mt-3" [question]="question" [form]="form"
-          disabled></app-question>
+        <app-question [hidden]="question.form_name=='faculty'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
       </div>
     </form>
   </div>

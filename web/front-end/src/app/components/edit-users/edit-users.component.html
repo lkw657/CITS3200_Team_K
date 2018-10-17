@@ -53,6 +53,11 @@
           </div>
 
           <div class="form-group">
+            <label>Email Address:</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="currentUser.email">
+          </div>
+
+          <div class="form-group">
             <label>User is member of IT:</label>
             <select class="form-control" name="isIT" required [(ngModel)]="currentUser.isIT">
               <option>true</option>
@@ -82,6 +87,10 @@
 
         <div class="form-group">
           Number: {{currentUser.number}}
+        </div>
+
+        <div class="form-group">
+          Email Address: {{currentUser.email}}
         </div>
 
         <div class="form-group">

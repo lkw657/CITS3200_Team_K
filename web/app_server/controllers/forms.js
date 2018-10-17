@@ -396,7 +396,7 @@ module.exports.formResponse = (req, res, next) => {
 
                     }
                     else if (form.status == 'Awaiting PVC-ED') {
-                        form.status = 'Fully Approved';
+                        form.status = 'Awaiting ORE Director';
 
                         var approver = form.allocatedStaff;
                         form.approvedBy.push({ role: actingString + 'PVC-ED', id: approver });
@@ -415,7 +415,7 @@ module.exports.formResponse = (req, res, next) => {
                             return res.status(400).json({ success: false, msg: 'Something went wrong saving the form' });
                         }
                         //send an email to who??
-                        if (form.status == 'Fully Approved') {
+                        if (form.status == 'Awaiting ORE Director') {
 
                             // return res.status(200).json({ success: true, msg: 'Form approved but no PDF email sent' });
                             mailer.sendPDFAccessEmail(form, res, 'Approved and email sent', backupForm);

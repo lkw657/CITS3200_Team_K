@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
   fname: String;
   lname: String;
   number: String;
+  email: String;
   password: String;
   password2: String;
   submitting = false;
@@ -34,6 +35,7 @@ export class RegisterComponent implements OnInit {
     const user = {
       fname: this.fname,
       lname: this.lname,
+      email: this.email,
       number: this.number,
       password: this.password,
       password2: this.password2

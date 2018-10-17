@@ -21,11 +21,12 @@ var userSchema = new mongoose.Schema(
         },
         submissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
         approvals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Form' }],
-        isIT: Boolean
+        isIT: Boolean,
+        email: {type: String, unique: true, required: true}
     }
 );
 
-userSchema.statics.create = (fname, lname, number) => {
+userSchema.statics.create = (fname, lname, number, email) => {
     // Don't save model, passport will do that
     return new module.exports.User({
         fname: fname,
@@ -33,7 +34,8 @@ userSchema.statics.create = (fname, lname, number) => {
         number: number,
         approvals: [],
         submissions: [],
-        isIT: false
+        isIT: false,
+        email: email
     });
 }
 
