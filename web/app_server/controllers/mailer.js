@@ -525,7 +525,7 @@ module.exports.pdfForm = (req, res, next) => {
 
                                         var wkhtmltopdf = require('wkhtmltopdf');
 
-                                        wkhtmltopdf(html, {pageSize:'A4', orientation:'Portrait', 'headerHtml':'file:///'+__dirname+'/../pdf/header.html'})
+                                        wkhtmltopdf(html, {marginBottom: "25mm", marginLeft: "25mm",marginRight: "25mm",  disableSmartShrinking: true, pageSize:'A4', orientation:'Portrait', 'headerHtml':__dirname+'/../pdf/header.html'})
                                             .pipe(res);
                                     }
                                 }
