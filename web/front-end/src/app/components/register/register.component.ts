@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
       password: this.password,
       password2: this.password2
     }
-    
+
     //Required Fields
     if (!this.validateService.validateRegister(user)) {
       window.scrollTo(0, 0);

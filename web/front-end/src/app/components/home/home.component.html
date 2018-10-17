@@ -18,7 +18,7 @@
   </div>
 
   <!-- Everyone else's view -->
-  <div *ngIf=!user.isIT>
+  <div *ngIf="!user.isIT&&appsLoaded&&subsLoaded">
 
     <!-- No submissions or approvals view -->
     <div *ngIf="!userSubmissions.length>0 && !userApprovals.length>0" class="row">

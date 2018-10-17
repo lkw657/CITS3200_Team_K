@@ -26,6 +26,7 @@ export class VerifyComponent implements OnInit {
   secret: string = '';
   mailID: string = '';
   verifying = false;
+  rejecting = false;
   user: any;
 
   onAccept() {
@@ -39,26 +40,28 @@ export class VerifyComponent implements OnInit {
       },
       (err) => {
         this.router.navigate(['/approvalsDashboard']);
+        this.verifying = false;
         this.flashMessage.show('This form does not exist!', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
       }
     );
   }
 
   onReject() {
-    this.verifying = true;
+    this.rejecting = true;
+
     this.http.post(baseURI + '/mail/rejectFormAccess', { 'mailID': this.mailID, 'secret': this.secret }).subscribe(
       (data) => {
-        this.verifying = false;
-        console.log(data)
+        this.rejecting = false;
+        this.refreshApprovals();
         this.refreshApprovals();
         this.router.navigate(['/approvalsDashboard']);
       },
       (err) => {
         this.router.navigate(['/approvalsDashboard']);
+        this.rejecting = false;
         this.flashMessage.show(err.error.msg, { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
       }
     );
-    this.verifying = false;
   }
 
   ngOnInit() {

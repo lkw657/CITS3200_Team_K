@@ -4,8 +4,8 @@ COPY . /www
 WORKDIR /www
 
 RUN npm install
-
-EXPOSE 3000
+RUN npm install -g mocha
 
 ENV PORT 3000
+ENV IP "web"
 ENTRYPOINT ["./entrypoint.sh"]

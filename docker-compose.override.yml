@@ -1,7 +1,11 @@
-version: "3.2"
+version: "2.0"
 
 services:
     web:
-        command: "true"
+        command: "debug"
         volumes:
             - ./web:/www
+    front:
+        command: "debug"
+        volumes:
+            - ./web/front-end:/front-end

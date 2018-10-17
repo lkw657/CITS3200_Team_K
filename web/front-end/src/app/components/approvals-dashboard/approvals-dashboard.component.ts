@@ -97,7 +97,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.role = this.approvalView.status.split(" ")[1];
     this.school = this.approvalView.school;
     this.submitter = this.approvalView.submitter;
-    this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers']);
+    this.createQuestionList(this.approvalView.questionSet, this.approvalView['answers'], true);
   }
 
   // Resubmits form for approval
@@ -111,7 +111,7 @@ export class ApprovalsDashboardComponent implements OnInit {
         commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] });
       }
     }
-    
+
     // Create approval object to be sent to back end
     this.approval.comments = commentArray;
     this.approval.response = response;
@@ -155,7 +155,7 @@ export class ApprovalsDashboardComponent implements OnInit {
         this.historyLoaded = false;
         window.scrollTo(0, 0);
       });
-      
+
   }
 
   // Goes back to single form display and clears history array
@@ -172,18 +172,18 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], true);
     this.comments = this.historicalSubmissionView['comments'];
   }
 
-  // Goes back to history dashboard 
+  // Goes back to history dashboard
   backToHistory() {
     this.showHistory = true;
     this.showHistoricalSubmission = false;
     window.scrollTo(0, 0);
   }
 
-  createQuestionList(questionSet, ans) {
+  createQuestionList(questionSet, ans, allowComm : boolean) {
     let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
@@ -200,7 +200,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments : allowComm
           })
         );
       } else if (q['type'] == 'text') {
@@ -212,7 +213,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments : allowComm
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -224,7 +226,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments : allowComm
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -237,7 +240,8 @@ export class ApprovalsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments : allowComm
           })
         );
       }

@@ -10,13 +10,14 @@ module.exports.listAll = (req, res, next) => {
       msg: "Forbidden"
     });
   }
-  User.find({}, '', (err, users) => {
+  User.find({}, 'fname lname number isIT', (err, users) => {
     if (err)
-      return sendJsonResponse(res, 400, {
+      return res.json({
+	success: false,
         error: err
       });
 
-    return sendJsonResponse(res, 200, users);
+    return res.json(users);
   });
 }
 

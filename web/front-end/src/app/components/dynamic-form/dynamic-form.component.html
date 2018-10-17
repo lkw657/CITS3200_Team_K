@@ -85,13 +85,13 @@
     <form [formGroup]="form">
 
       <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">EMS Research Priorities Fund - questions</h2>
-      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+      <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='central'" class="w-100" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='faculty'" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
 
       <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">UWA Research Priorities Fund - questions</h2>
-      <div *ngFor="let question of questions; index as i" class="form-row mt-3">
+      <div *ngFor="let question of questions; index as i" class="form-row">
         <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form" disabled></app-question>
         <p *ngIf="findspecificComment(i) && question.form_name=='central'" class="w-100 comment">{{ findspecificComment(i) }}</p>
       </div>
@@ -121,4 +121,3 @@
       </div>
     </form>
   </div>
-</div>
