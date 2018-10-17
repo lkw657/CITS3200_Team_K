@@ -84,7 +84,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                 revertForm(backupForm);
             }
             if (res)
-                return res.status(400).json({ success: false, msg: "Something went wrong!" });
+                return res.status(400).json({ success: false, msg: "Could not find email" });
             return;
         }
         else if (!email) {
@@ -117,7 +117,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                     User.findOne({ _id: form.owner }, "fname lname number", function (err, user) {
                         if (err || !user) {
                             if (res)
-                                return res.status(400).json({ success: false, msg: "Failed to mail" });
+                                return res.status(400).json({ success: false, msg: "Could not find user" });
                         }
                         else {
                             var subject = `Access for RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
@@ -165,7 +165,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
     if (!req.user) {
         return res.status(403).json({
             success: false,
-            msg: "Invalid user"
+            msg: "Could not find user"
         });
     }
 
@@ -175,13 +175,13 @@ module.exports.verifyFormAccess = (req, res, next) => {
             console.log(err);
             return res.status(400).json({
                 success: false,
-                msg: "forbidden"
+                msg: "You do not have permission to access this page"
             });
         }
         else if (!mail) {
             return res.status(400).json({
                 success: false,
-                msg: "no such mail"
+                msg: "No such mail"
             });
         }
         else {
@@ -215,7 +215,7 @@ module.exports.verifyFormAccess = (req, res, next) => {
             else {
                 return res.status(403).json({
                     success: false,
-                    msg: "Forbidden"
+                    msg: "You do not have permission to access this page"
                 });
             }
         }
@@ -241,7 +241,7 @@ module.exports.rejectFormAccess = (req, res, next) => {
     if (!req.user) {
         return res.status(403).json({
             success: false,
-            msg: "Invalid user"
+            msg: "Could not find user"
         });
     }
 
@@ -251,13 +251,13 @@ module.exports.rejectFormAccess = (req, res, next) => {
             console.log(err);
             return res.status(400).json({
                 success: false,
-                msg: "forbidden"
+                msg: "You do not have permission to access this page"
             });
         }
         else if (!mail) {
             return res.status(400).json({
                 success: false,
-                msg: "no such mail"
+                msg: "No such mail"
             });
         }
         else {
@@ -308,7 +308,7 @@ module.exports.rejectFormAccess = (req, res, next) => {
             else {
                 return res.status(403).json({
                     success: false,
-                    msg: "Forbidden"
+                    msg: "You do not have permission to access this page"
                 });
             }
         }
@@ -320,7 +320,7 @@ module.exports.listAllMail = (req, res, next) => {
         if (!mails) {
             return res.status(403).json({
                 success: false,
-                msg: "Forbidden"
+                msg: "You do not have permission to access this page"
             });
         }
         else if (err) {
@@ -345,7 +345,7 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
                 revertForm(backupForm);
             }
             if (res)
-                return res.status(400).json({ success: false, msg: "Something went wrong!" });
+                return res.status(400).json({ success: false, msg: "Email not found" });
             return;
         }
         else if (!email) {
@@ -355,7 +355,7 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
                 console.log(roleToSend);
             }
             if (res)
-                return res.status(400).json({ success: false, msg: "Could not find email" });
+                return res.status(400).json({ success: false, msg: "Email not found" });
             return;
         }
 
@@ -428,13 +428,13 @@ module.exports.pdfForm = (req, res, next) => {
             console.log(err);
             return res.status(400).json({
                 success: false,
-                msg: "forbidden"
+                msg: "You do not have permission to access this page"
             });
         }
         else if (!mail) {
             return res.status(400).json({
                 success: false,
-                msg: "no such mail"
+                msg: "No such mail"
             });
         }
         else {
@@ -456,13 +456,13 @@ module.exports.pdfForm = (req, res, next) => {
                         if (err) {
                             return res.status(400).json({
                                 success: false,
-                                msg: "Something went wrong"
+                                msg: "No such form"
                             });
                         }
                         else if (!form) {
                             return res.status(400).json({
                                 success: false,
-                                msg: "No Form Found"
+                                msg: "No such form"
                             });
                         }
                         else {
@@ -537,7 +537,7 @@ module.exports.pdfForm = (req, res, next) => {
             else {
                 return res.status(403).json({
                     success: false,
-                    msg: "Forbidden"
+                    msg: "You do not have permission to access this page"
                 });
             }
         }

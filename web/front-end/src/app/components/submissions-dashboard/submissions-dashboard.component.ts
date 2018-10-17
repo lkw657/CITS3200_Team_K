@@ -68,7 +68,6 @@ export class SubmissionsDashboardComponent implements OnInit {
       this.subsLoaded = true;
     },
       err => {
-        this.flashMessage.show("An Error has Occurred - Please try again later!", { cssClass: 'align-top alert alert-danger', timeout: 5000 });
         console.log(err);
         return false;
       });

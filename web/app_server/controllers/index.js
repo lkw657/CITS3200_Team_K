@@ -73,7 +73,7 @@ module.exports.submissions = (req, res, next) => {
     if (!req.user)
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     User.deepPopulate(req.user, ['submissions', 'submissions.questionSet', 'submissions.owner'], (err) => {
         if (err)
@@ -116,7 +116,7 @@ module.exports.approvals = (req, res, next) => {
     if (!req.user)
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     User.deepPopulate(req.user, ['approvals', 'approvals.questionSet', 'approvals.owner'], (err) => {
         if (err)
@@ -159,7 +159,7 @@ module.exports.formHistory = (req, res, next) => {
     if (!req.user)
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     else {
         historicalForms = [];
@@ -167,13 +167,13 @@ module.exports.formHistory = (req, res, next) => {
             Form.findOne({ _id: req.body }, (err, form) => {
                 if (err) {
                     console.log('form error');
-                    return res.status(400).json({ success: false, msg: "Something went wrong getting form history!" });
+                    return res.status(400).json({ success: false, msg: "Something went wrong getting form history" });
                 }
                 else {
                     QuestionSet.findOne({ _id: form.questionSet }, (err, qset) => {
                         if (err) {
                             console.log('qset error');
-                            return res.status(400).json({ success: false, msg: "Something went wrong getting form history!" });
+                            return res.status(400).json({ success: false, msg: "Something went wrong getting form history" });
                         }
                         else {
                             historicalForms.push({
