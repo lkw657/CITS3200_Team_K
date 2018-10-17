@@ -9,7 +9,7 @@ export class ValidateService {
 
   //Ensure all required user fields are present
   validateRegister(user) {
-    if (user.fname == undefined || user.lname == undefined || user.number == undefined || user.password == undefined) {
+    if (user.fname == undefined || user.lname == undefined || user.number == undefined || user.email == undefined || user.password == undefined) {
       return false;
     }
     else {
