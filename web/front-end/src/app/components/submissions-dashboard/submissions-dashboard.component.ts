@@ -231,6 +231,8 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showSingleSubmission = true;
     this.formHistory = undefined;
+    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
+    this.comments = this.submissionView.comments;
     window.scrollTo(0, 0);
   }
 
