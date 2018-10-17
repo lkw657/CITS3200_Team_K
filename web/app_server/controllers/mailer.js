@@ -400,6 +400,10 @@ var ejs = require('ejs');
 var path = require('path');
 var wkhtmltopdf = require('wkhtmltopdf');
 
+if (process.env.WKHTMLTOPDF) {
+    wkhtmltopdf.command = process.env.WKHTMLTOPDF;
+}
+
 // /mailID/secret
 module.exports.pdfForm = (req, res, next) => {
 
@@ -465,11 +469,20 @@ module.exports.pdfForm = (req, res, next) => {
 
                             QA = [];
                             form.answers.forEach((o, i) => {
+                                var temp;
+                                if(form.questionSet.questionList[i].type == "money_array_8"){
+                                    temp = form.answers[i].answer.split(",");
+                                }
+                                else{
+                                    temp = form.answers[i].answer;
+                                }
+                                
                                 if (form.questionSet.questionList[i].formName == 'central')
                                     QA.push({
                                         question: form.questionSet.questionList[i].text,
                                         title: form.questionSet.questionList[i].title,
-                                        answer: form.answers[i].answer
+                                        answer: temp,
+                                        type: form.questionSet.questionList[i].type
                                     })
                             });
 
@@ -486,7 +499,7 @@ module.exports.pdfForm = (req, res, next) => {
                                 QA: QA,
                                 approvers: approvers,
                                 owner: form.owner,
-                                dir: `file://${__dirname}/../pdf/`
+                                dir: `file:///${__dirname}/../pdf/`
                             };
 
 
@@ -512,7 +525,7 @@ module.exports.pdfForm = (req, res, next) => {
 
                                         var wkhtmltopdf = require('wkhtmltopdf');
 
-                                        wkhtmltopdf(html)
+                                        wkhtmltopdf(html, {marginBottom: "25mm", marginLeft: "25mm",marginRight: "25mm",  disableSmartShrinking: true, pageSize:'A4', orientation:'Portrait', 'headerHtml':__dirname+'/../pdf/header.html'})
                                             .pipe(res);
                                     }
                                 }
