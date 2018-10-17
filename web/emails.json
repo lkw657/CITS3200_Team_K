@@ -2,31 +2,31 @@
     {
         "role": "School of Engineering HoS",
         "email": "21728592@student.uwa.edu.au",
-        "emailContent":"EngHoS - You have been nominated as the HoS from the School of Engineering to approve the attached form"
+        "emailContent":"RPF pending for approval from the HoS from the School of Engineering "
     },
     {
         "role": "School of Physics, Mathematics and Computing HoS",
         "email": "21959462@student.uwa.edu.au",
-        "emailContent":"HoS - You have been nominated as the HoS from the School of School of Physics, Mathematics and Computing to approve the attached form"
+        "emailContent":"RPF pending for approval from the HoS from the School of Physics, Mathematics and Computing"
     },
     {
         "role": "Ocean Graduate School HoS",
         "email": "admin-ogs@noexist",
-        "emailContent":"You have been nominated as the HoS from the Ocean Graduate School to approve the attached form"
+        "emailContent":"RPF pending for approval from the HoS from the Ocean Graduate School"
     },
     {
         "role": "AD(R)",
         "email": "21728592@student.uwa.edu.au",
-        "emailContent": "AD(R) - You need to approve the attached form"
+        "emailContent": "RPF pending for approval from the AD(R)"
     },
     {
         "role": "PVC-ED",
         "email": "21728592@student.uwa.edu.au",
-        "emailContent": "PVC - ED You need to approve the attached form"
+        "emailContent": "RPF pending for approval from the PVC-ED"
     },
     {
         "role": "final",
         "email": "21728592@student.uwa.edu.au",
-        "emailContent": "Final - You need to approve the attached form"
+        "emailContent": "RPF pending for approval from the ORE Director"
     }
 ]
