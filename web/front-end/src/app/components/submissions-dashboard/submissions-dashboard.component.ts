@@ -177,7 +177,6 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   }
 
-
   // Shows the questions that have comments relating to them on Provisional Approval
   resolve() {
     window.scrollTo(0, 0);
@@ -186,7 +185,6 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Resubmits form for approval
-
   resubmit() {
     this.resubmitting = true;
     // Create new submission
@@ -215,7 +213,6 @@ export class SubmissionsDashboardComponent implements OnInit {
   }
 
   // Displays a dashboard of all historical forms attached to single form
-
   showFormHistory(history) {
     this.showHistory = true;
     this.showSingleSubmission = false;
@@ -239,7 +236,6 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   // Displays a single historical form
   showHistoricSubmission(form) {
-    console.log(form);
     this.historicalSubmissionView = form;
     this.showHistory = false;
     this.showHistoricalSubmission = true;
@@ -263,24 +259,5 @@ export class SubmissionsDashboardComponent implements OnInit {
   // Saves school into form
   selectSchool(school) {
     this.submissionView.school = school;
-  }
-
-  //Finds which questions have comments
-  isCommented(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return true;
-      };
-    }
-    return false;
-  }
-
-  // Gets the correct comment for display
-  getComment(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return comments[i].text;
-      };
-    }
   }
 }

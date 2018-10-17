@@ -31,6 +31,7 @@ export class EditQuestionsComponent implements OnInit {
     this.getAllQuestions();
   }
 
+  //Gets current Question Set from back end
   getAllQuestions() {
     this.questionsLoaded = false;
     // Get questions to show admin
@@ -70,7 +71,7 @@ export class EditQuestionsComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  // This will hide all content besides the delete screen.
+  // This will hide all content besides the new question screen.
   showNew() {
 
     // Creates blank question
