@@ -84,7 +84,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.refreshSubmissions();
   }
 
-  createQuestionList(questionSet, ans) {
+  createQuestionList(questionSet, ans, allowComm : boolean) {
     let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
@@ -101,7 +101,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments: allowComm
           })
         );
       } else if (q['type'] == 'text') {
@@ -113,7 +114,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments: allowComm
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -125,7 +127,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             required: true,
             order: q.order,
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments: allowComm
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -139,7 +142,8 @@ export class SubmissionsDashboardComponent implements OnInit {
             value: answers[i].answer,
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
-            form_name: q.formName
+            form_name: q.formName,
+            allowComments: allowComm
           })
         );
       }
@@ -172,7 +176,7 @@ export class SubmissionsDashboardComponent implements OnInit {
 
     this.submissionView = form;
 
-    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers']);
+    this.createQuestionList(this.submissionView.questionSet, this.submissionView['answers'], false);
     this.comments = this.submissionView.comments;
 
   }
@@ -240,7 +244,7 @@ export class SubmissionsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers']);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], false);
     this.comments = this.historicalSubmissionView['comments'];
   }
 

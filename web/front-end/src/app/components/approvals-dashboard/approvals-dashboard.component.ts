@@ -172,7 +172,7 @@ export class ApprovalsDashboardComponent implements OnInit {
     this.showHistory = false;
     this.showHistoricalSubmission = true;
     window.scrollTo(0, 0);
-    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], true);
+    this.createQuestionList(this.historicalSubmissionView['questionSet'], this.historicalSubmissionView['answers'], false);
     this.comments = this.historicalSubmissionView['comments'];
   }
 
