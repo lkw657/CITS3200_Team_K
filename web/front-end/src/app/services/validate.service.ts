@@ -33,9 +33,4 @@ export class ValidateService {
     return complex.test((password));
   }
 
-  //Ensure staff number is 8 numbers
-  staffNumber(number) {
-    return number.toString().length == 8;
-  }
-
 }
