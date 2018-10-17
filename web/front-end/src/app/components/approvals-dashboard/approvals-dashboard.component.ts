@@ -183,25 +183,6 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  //Finds which questions have comments
-  isCommented(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return true;
-      };
-    }
-    return false;
-  }
-
-  // Gets the correct comment for display
-  getComment(comments, order) {
-    for (let i in comments) {
-      if (comments[i].order === order) {
-        return comments[i].text;
-      };
-    }
-  }
-
   createQuestionList(questionSet, ans) {
     let answers = this.createAnswerList(ans);
 

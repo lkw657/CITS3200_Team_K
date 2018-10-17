@@ -34,11 +34,6 @@ export class HomeComponent implements OnInit {
     this.refreshApprovals();
   }
 
-  // DEVELOPMENT ONLY - REMOVE
-  changeIT() {
-    this.user.isIT = !this.user.isIT;
-  }
-
   refreshSubmissions() {
     // Get all forms submitted by user
     this.dashboardService.getUserSubmissions().subscribe(data => {
