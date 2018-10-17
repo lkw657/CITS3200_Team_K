@@ -53,6 +53,7 @@ export class EditUsersComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
+  //Hides all content except the delete user screen
   showDelete(user) {
     this.currentUser = user;
     this.displayAll = false;

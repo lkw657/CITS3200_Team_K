@@ -10,8 +10,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 
-//DOES BACKEND ENSURE NAMES ARE ONLY CHARS AND NUMBER IS ONLY DIGITS????
-
 export class RegisterComponent implements OnInit {
 
   fname: String;

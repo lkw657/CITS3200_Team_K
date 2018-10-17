@@ -22,9 +22,9 @@ export class NavbarComponent implements OnInit {
   ngOnInit() { 
   }
 
+  // LOGOUT BUTTON
   onLogoutClick() {
     this.loggingOut = true;
-    this.user = this.authService.getProfile();
     localStorage.clear();
     this.authService.logoutUser(this.user).subscribe(data => {  
       if (data.success) {

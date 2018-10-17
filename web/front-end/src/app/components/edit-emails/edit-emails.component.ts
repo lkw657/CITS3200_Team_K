@@ -62,6 +62,7 @@ export class EditEmailsComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
+  // This will hide all content besides the delete screen.
   showDelete(email) {
     this.currentEmail = email;
     this.displayAll = false;
@@ -69,7 +70,7 @@ export class EditEmailsComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  // This will hide all content besides the delete screen.
+  // This shows the new email entry screen
   showNew() {
 
     // Creates blank email
