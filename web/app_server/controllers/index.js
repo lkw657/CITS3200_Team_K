@@ -52,7 +52,8 @@ module.exports.authenticate = (req, res, next) => {
                     number: user.number,
                     isIT: user.isIT,
                     submissions: user.submissions,
-                    approvals: user.approvals
+                    approvals: user.approvals,
+                    email: user.email
                 }
             });
         });
