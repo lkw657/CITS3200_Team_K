@@ -2,23 +2,23 @@ mongoose = require('mongoose')
 
 var approvedBySchema = new mongoose.Schema(
     {
-        role: {type: String, required: true},	//Title of the question
-        id: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},	//Body text for the question
+        role: {type: String, required: true},	//Role of approver
+        id: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},	//Approver _id
     }
 );
 
 var commentSchema = new mongoose.Schema(
     {
-        order: {type: Number, required: true},	//Title of the question
-        text: {type: String, required: true},	//Body text for the question
-        commenter: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true}
+        order: {type: Number, required: true},	//Question number comment is for
+        text: {type: String, required: true},	//Comment text
+        commenter: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true} //_id of commenter
     }
 );
 
 var answerSchema = new mongoose.Schema(
     {
-        order: {type: Number, required: true},	//Title of the question
-        answer: {type: String, required: true},	//Body text for the question
+        order: {type: Number, required: true},	//Question number answer is for
+        answer: {type: String, required: true},	//Body text for the answer
     }
 );
 

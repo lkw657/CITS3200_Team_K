@@ -9,7 +9,7 @@
   <form (submit)="onLoginSubmit()">
     <div class="form-group">
       <label>Student/Staff Number</label>
-      <input type="text" class="form-control" [(ngModel)]="number" name="number">
+      <input type="number" class="form-control" [(ngModel)]="number" name="number" min=0>
     </div>
 
     <div class="form-group">

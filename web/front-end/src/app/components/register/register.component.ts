@@ -38,11 +38,18 @@ export class RegisterComponent implements OnInit {
       password: this.password,
       password2: this.password2
     }
-    
+
     //Required Fields
     if (!this.validateService.validateRegister(user)) {
       window.scrollTo(0, 0);
       this.flashMessage.show('Please fill in all fields', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
+      return false;
+    }
+
+    //8 numbers only in staff number
+    if (!this.validateService.staffNumber(user.number)) {
+      window.scrollTo(0, 0);
+      this.flashMessage.show('Staff number must be 8 digits', { cssClass: 'align-bottom alert alert-danger', timeout: 3000 });
       return false;
     }
 
