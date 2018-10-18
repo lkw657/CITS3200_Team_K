@@ -37,3 +37,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Config
+/src/app/config.ts
+/e2e/protractor.conf.js
