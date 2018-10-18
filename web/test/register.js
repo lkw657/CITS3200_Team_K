@@ -43,35 +43,33 @@ describe('Registration', function(){
     });
 
     test("Valid researcher",
-         {fname:'aaa', lname:'bbb', number:'11111111', password:'abcdefghijkl'},
+         {fname:'aaa', lname:'bbb', number:'11111111', password:'abcdefghijkl', email:'11111111@uwa.edu.au'},
          {success: true, msg: 'User Registered'},
          true);
 
     test("No firstname",
-         {lname:'bbb', number:'11111111', password:'abcdefghijkl'},
+         {lname:'bbb', number:'11111111', password:'abcdefghijkl', email:'11111111@uwa.edu.au'},
          {success: false, msg: 'Please enter your first name'},
          false);
 
     test("No lastname",
-         {fname:'aaa', number:'11111111', password:'abcdefghijkl'},
+         {fname:'aaa', number:'11111111', password:'abcdefghijkl', email:'11111111@uwa.edu.au'},
          {success: false, msg: 'Please enter your last name'},
          false);
 
     test("No number",
-         {fname:'aaa', lname:'bbb', password:'abcdefghijkl'},
+         {fname:'aaa', lname:'bbb', password:'abcdefghijkl', email:'11111111@uwa.edu.au'},
          {success: false, msg: 'Please enter a valid UWA staff number'},
          false);
 
     test("Invalid number",
-         {fname:'aaa', lname:'bbb', number:'123a', password:'abcdefghijkl'},
+         {fname:'aaa', lname:'bbb', number:'123a', password:'abcdefghijkl', email:'11111111@uwa.edu.au'},
          {success: false, msg: 'Please enter a valid UWA staff number'},
          false);
 
     test("Short password",
-         {fname:'aaa', lname:'bbb', number:'11111111', password:'abc'},
+         {fname:'aaa', lname:'bbb', number:'11111111', password:'abc', email:'11111111@uwa.edu.au'},
          {success: false, msg: 'Passwords must be at least 8 characters long'},
          false);
-
-    //TODO test existing account
 
 });

@@ -47,15 +47,21 @@ module.exports.addForm = (req, res, next) => {
                             req.body.answers[i] = req.body.answers[i].trim();
                         }
                     }
-                    if (req.body.answers[i] == "" || !req.body.answers[i]) {
+                    if (req.body.answers[i] === 0) {
+                        answersCpy.push(req.body.answers[i]);
+                        // ignore
+                    }
+                    else if (req.body.answers[i] === "" || !req.body.answers[i]) {
                         // ignore
                     }
                     else {
-                        answersCpy.push(req.body.answers[i])
+                        answersCpy.push(req.body.answers[i]);
                     }
                 })
             }
+
             req.body.answers = answersCpy;
+
             if (err) {
                 return res.json({
                     success: false,

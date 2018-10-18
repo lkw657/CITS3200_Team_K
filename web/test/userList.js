@@ -44,8 +44,8 @@ describe('User list', () => {
         });
 
         test("Not logged in",
-             {success: false, msg: 'Forbidden'}, 401);
+             {success: false, msg: 'You do not have permission to access this page'}, 401);
         test("Not IT",
-             {success: false, msg: 'Forbidden'}, 403, {number:'12345678', password:'foo'});
+             {success: false, msg: 'You do not have permission to access this page'}, 403, {number:'12345678', password:'foo'});
     });
 });

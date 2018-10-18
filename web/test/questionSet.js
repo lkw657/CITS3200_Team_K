@@ -152,7 +152,7 @@ describe('QuestionSet', () => {
 
     describe("list all", () => {
         test("Not logged in",
-            {success: false, msg: 'Forbidden'}, 401, {}, '/db/questionSet');
+            {success: false, msg: 'You do not have permission to access this page'}, 401, {}, '/db/questionSet');
 
         test("Logged in",
             {success: true, questionSets: [qset1]},
@@ -162,10 +162,10 @@ describe('QuestionSet', () => {
 
     describe("Update", () => {
         testUpdate("Not logged in", qlist2,
-            {success: false, msg: 'Forbidden'}, 401);
+            {success: false, msg: 'You do not have permission to access this page'}, 401);
 
         testUpdate("Not IT", qlist2,
-            {success: false, msg: 'Forbidden'},
+            {success: false, msg: 'You do not have permission to access this page'},
             403,
             {number:'12345678', password:'foo'});
 
@@ -178,7 +178,7 @@ describe('QuestionSet', () => {
 
     describe("Latest", () => {
         test("Not logged in",
-            {success: false, msg: 'Forbidden'}, 401, {}, '/db/questionSet/latest');
+            {success: false, msg: 'You do not have permission to access this page'}, 401, {}, '/db/questionSet/latest');
 
         test("Logged in",
             {success: true, questionSet: qset2},

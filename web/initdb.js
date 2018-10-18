@@ -53,7 +53,7 @@ async function run() {
         password = await readSync('Enter IT password (will not echo): ', slient=true);
         password2 = await readSync('Enter IT password again: ', slient=true);
     }*/
-    var user = User.create(fname, lname, number)
+    var user = User.create(fname, lname, number, process.env.IT_EMAIL)
     user.isIT = true;
     await User.register(user, password).catch((err) => console.log(err));
 
