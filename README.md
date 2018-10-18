@@ -69,7 +69,7 @@ And deleted with
 ```
 docker rm <container id>
 ```
-`init.db` can also be forced to delete the database using
+`initdb.js` can also be forced to delete the database using
 ```
 DESTROY=true node initdb.js
 ```
