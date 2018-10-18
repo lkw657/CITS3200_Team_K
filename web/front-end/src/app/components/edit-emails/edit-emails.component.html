@@ -22,7 +22,7 @@
         <div class="card-body">
           <p>Role: {{email.role}}</p>
           <p>Email Address: {{email.email}}</p>
-          <p>Email Address: {{email.subject}}</p>
+          <p>Email Subject Line: {{email.subject}}</p>
           <p>Mail Text: {{email.emailContent}}</p>
           <button class="btn btn-success mb-2 mr-2" (click)="showEdit(email)" title="Edit">
             <i class="fas fa-pencil-alt"></i>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="form-group">
-                <label>Subject:</label>
+                <label>Subject Line:</label>
                 <input type="text" class="form-control" name="subject" [(ngModel)]="currentEmail.subject">
               </div>  
 
@@ -85,7 +85,7 @@
             </div>
 
             <div class="form-group">
-              <label>Subject:</label>
+              <label>Subject Line:</label>
               <input type="text" class="form-control" name="subject" [(ngModel)]="currentEmail.subject">
             </div>  
 
@@ -95,7 +95,7 @@
               <input type="text" class="form-control" name="emailContent" [(ngModel)]="currentEmail.emailContent">
             </div>
 
-            <button type="submit" class="btn btn-success btn-block" [disabled]='!currentEmail.role || !currentEmail.email || !currentEmail.emailContent'>Save new email</button>
+            <button type="submit" class="btn btn-success btn-block" [disabled]='!currentEmail.role || !currentEmail.email || !currentEmail.subject || !currentEmail.emailContent'>Save new email</button>
             <button type="button" (click)="showAll()" class="btn btn-danger btn-block">Cancel</button>
           </form>
         </div>
@@ -116,7 +116,7 @@
           </div>
 
           <div class="form-group">
-            Email Address: {{currentEmail.subject}}
+            Email Subject Line: {{currentEmail.subject}}
           </div>
   
 
