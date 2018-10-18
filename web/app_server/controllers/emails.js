@@ -44,7 +44,8 @@ module.exports.addEmail = (req, res, next) => {
         });
     }
 
-    if (!req.body.email && !req.body.role && !req.body.emailContent) {
+    console.log(req.body);
+    if (!req.body.email && !req.body.role && !req.body.emailContent && !req.body.subject) {
         return res.status(400).json({ success: false, msg: 'Missing Data' });
     }
 
@@ -52,6 +53,7 @@ module.exports.addEmail = (req, res, next) => {
     email.role = req.body.role;
     email.email = req.body.email;
     email.emailContent = req.body.emailContent;
+    email.subject = req.body.subject;
 
     email.save((err, email) => {
         if (err) {
@@ -82,6 +84,7 @@ module.exports.updateEmail = (req, res, next) => {
         email.role = req.body.role;
         email.email = req.body.email;
         email.emailContent = req.body.emailContent;
+        email.subject = req.body.subject;
 
         email.save(function (err) {
             if (err) {

@@ -56,28 +56,23 @@ module.exports.addForm = (req, res, next) => {
                 })
             }
             req.body.answers = answersCpy;
-
             if (err) {
                 return res.json({
                     success: false,
                     msg: err
                 });
-            }
-
-            else if (!set) {
+            } else if (!set) {
                 return res.json({
                     success: false,
                     msg: "No matching question set found"
                 });
 
-            }
-            else if (set.questionList.length != req.body.answers.length) {
+            } else if (set.questionList.length != req.body.answers.length) {
                 return res.json({
                     success: false,
                     msg: "Number of questions does not match number of answers"
                 });
-            }
-            else {
+            } else {
                 User.findById(req.user._id, (err, owner) => {
 
                     if (err) {
@@ -96,7 +91,7 @@ module.exports.addForm = (req, res, next) => {
                     }
                     else {
                         var form = new Form();
-
+                        
                         if (req.body.submitter == 'HoS') {
                             form.status = 'Awaiting AD(R)';
                         }
@@ -118,8 +113,7 @@ module.exports.addForm = (req, res, next) => {
 
                         if (req.body.history) {
                             form.history = req.body.history;
-                        }
-                        else {
+                        } else {
                             form.history = [];
                         }
                         
@@ -134,6 +128,7 @@ module.exports.addForm = (req, res, next) => {
                                 owner.submissions.push(form._id);
                                 owner.save((err, owner) => {
                                     if (err) {
+                                        console.log("Error : " + err);
                                         return res.json({
                                             success: false,
                                             msg: err
