@@ -95,24 +95,37 @@
             border: 1px solid black ;
             
         }
+
+        .trim_reference_num{
+            float: right;
+            padding-bottom: 20px;
+            font-size: 10px;
+            width: 200px;
+        }
+
     </style>
 </head>
 
 <body>
-    <div class="bluebar"></div>
-    <div class="yellowbar"></div>
-    <img class="logo_image" src="<%= dir %>uwacrest-blue.svg" alt="" style="display: block;">
+    <div>
+        <div class="bluebar"></div>
+        <div class="yellowbar"></div>
+        <img class="logo_image" src="<%= dir %>uwacrest-blue.svg" alt="">
+        <input class="trim_reference_num" value="TRIM Reference Number: &#10;&#13;(Office Use)">
+    </div>
+    
+    <div>
+        <p style="text-align: center;" class="form_heading" id="heading">Request for Research Priorities Funds</p>
 
-    <h1 class="form_heading" id="heading">Request for Research Priorities Funds</h1>
-
-    <p class="main_intro">Allocations from the Research Priorities Fund (RPF) will normally be restricted to cases
-        where University co-investment will strengthen the University's case for obtaining access to external funds.
-        This is most likely to arise in situations where University contributions are a specific requirement of an
-        external funding scheme or in one-off circumstances where it can be demonstrated that a University cash
-        commitment will provide the leverage necessary to attract external funding.
-        <br><br>
-        Please complete the following:
-    </p>
+        <p class="main_intro">Allocations from the Research Priorities Fund (RPF) will normally be restricted to cases
+            where University co-investment will strengthen the University's case for obtaining access to external funds.
+            This is most likely to arise in situations where University contributions are a specific requirement of an
+            external funding scheme or in one-off circumstances where it can be demonstrated that a University cash
+            commitment will provide the leverage necessary to attract external funding.
+            <br><br>
+            Please complete the following:
+        </p>
+    </div>
 
 
     <% for(var i=0; i < QA.length; i++) {%>
@@ -126,10 +139,21 @@
         <%= QA[i].question %>:
     </p>
     <% if(QA[i].type == "money_array_8") {%>
-
         <table class="money">
-            <tr><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 4</th><th>Year 5</th><th>Year 6</th><th>Year 7</th><th>Year 8</th><th>Total</th> </tr>
-            <tr><td><%= QA[i].answer[0] %></td><td><%= QA[i].answer[1] %></td><td><%= QA[i].answer[2] %></td><td><%= QA[i].answer[3] %></td><td><%= QA[i].answer[4] %></td><td><%= QA[i].answer[5] %></td><td><%= QA[i].answer[6] %></td><td><%= QA[i].answer[7] %></td> <td><%= parseInt(QA[i].answer[0])+parseInt(QA[i].answer[1])+parseInt(QA[i].answer[2])+parseInt(QA[i].answer[3])+parseInt(QA[i].answer[4])+parseInt(QA[i].answer[5])+parseInt(QA[i].answer[6])+parseInt(QA[i].answer[7]) %></td></tr>
+        <tr>
+        <% for(var j = 1 ; j <= QA[i].type.split("_")[2] ; j++ ) {%>
+            <th>Year <%= j %></th>
+        <% } %>
+        <th>Total</th>
+        </tr>
+        <tr>
+        <% var sum=0; %>
+        <% for(var j = 0 ; j < QA[i].type.split("_")[2] ; j++ ) {%>
+            <td><%= QA[i].answer[j] %></td>
+            <% sum += Number(QA[i].answer[j]) %>
+        <% } %>
+        <td><%= sum %></td>
+        </tr>
         </table>
 
     <% } else { %>
@@ -148,10 +172,9 @@
     <br>
 
     <b>Name of Applicant:</b>
-    <br>
-    <%= owner.fname %>
+    <%= owner.fname + " " %>
     <%= owner.lname %> (
-    <%= owner.number %>)
+    <%= owner.number + " " %>)
     <br>
     <br>
     <b>Approvals:</b>
@@ -159,8 +182,8 @@
     <% for(var i=0; i < approvers.length; i++) {%>
     <%= approvers[i].role %> :
     <%= approvers[i].name %> (
-    <%= approvers[i].number %>) --
-    <%= approvers[i].date %><br><br>
+    <%= approvers[i].number + " " %>) -
+    <%= approvers[i].date.getDate() + "/" + (Number(approvers[i].date.getMonth()) + 1).toString() + "/" + approvers[i].date.getFullYear() + " at " + approvers[i].date.toLocaleTimeString('en-AU', {timeZone : 'Australia/Perth'}) %><br><br>
     <% } %>
     <br><br>
 
@@ -176,16 +199,23 @@
             display: inline-block;
             width: 400px;
         }
+
+        .center_block{
+            width: 600px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
     </style>
-    <div class="cn">
-        <div class="inner"><b>PLEASE FORWARD THE COMPLETED FORM TO<br>DIRECTOR, OFFICE OF RESEARCH ENTERPRISE, M459</b></div>
+    <div class="center_block" style="width: 100%;" >
+        <div ><b>PLEASE FORWARD THE COMPLETED FORM TO<br>DIRECTOR, OFFICE OF RESEARCH ENTERPRISE, M459</b></div>
     </div>
     <br>
 
-    <div class="cn">
-        <div class="inner" style="width: 433px;">
+    <div class="cn" style="width: 100%">
+        <div class="inner" style="width: 100%;">
 
-            <div class="boxed">
+            <div class="boxed" style="width: 100%;">
                 <div class="inner">
                     Office use only
                 </div>
