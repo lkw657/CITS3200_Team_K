@@ -180,6 +180,10 @@ export class SubmissionsDashboardComponent implements OnInit {
 
   }
 
+  convertDate(date){
+    return new Date(date).toLocaleString('en-AU');
+  }
+
   // Shows the questions that have comments relating to them on Provisional Approval
   resolve() {
     window.scrollTo(0, 0);

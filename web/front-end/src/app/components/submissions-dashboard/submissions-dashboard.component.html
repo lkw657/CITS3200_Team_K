@@ -34,9 +34,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let submission of userSubmissions">
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.sub_date}}</td>
+            <td *ngIf="submission.status!='Resubmitted'">{{convertDate(submission.sub_date)}}</td>
             <td *ngIf="submission.status!='Resubmitted'">{{submission.status}}</td>
-            <td *ngIf="submission.status!='Resubmitted'">{{submission.action_date}}</td>
+            <td *ngIf="submission.status!='Resubmitted'">{{convertDate(submission.action_date)}}</td>
             <td *ngIf="submission.status!='Resubmitted'">
               <button class="btn btn-primary float-right" (click)="showSubmission(submission)">View Form</button>
             </td>
@@ -70,7 +70,7 @@
         <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
       </div>
     </div>
-    <h3>History for form submitted on {{submissionView.sub_date}}</h3>
+    <h3>History for form submitted on {{convertDate(submissionView.sub_date)}}</h3>
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -83,9 +83,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let history of formHistory">
-            <td>{{history.sub_date}}</td>
+            <td>{{convertDate(history.sub_date)}}</td>
             <td>{{history.status}}</td>
-            <td>{{history.action_date}}</td>
+            <td>{{convertDate(history.action_date)}}</td>
             <td>
               <button class="btn btn-primary float-right" (click)="showHistoricSubmission(history)">View Historical Form</button>
             </td>
