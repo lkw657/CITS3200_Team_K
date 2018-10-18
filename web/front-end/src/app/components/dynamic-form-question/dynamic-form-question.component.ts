@@ -13,7 +13,6 @@ export class DynamicFormQuestionComponent {
 
   @Input() question: QuestionBase<any>;
   @Input() form: FormGroup;
-  valid : boolean = false;
 
   get isValid() { return this.form.controls[this.question.key].valid; }
   counter(i: number) {
@@ -34,17 +33,6 @@ export class DynamicFormQuestionComponent {
     }
   }
 
-  updateRequired(field: string){
-    const fieldc: FormControl = this.form.controls[field] as FormControl;
-    fieldc.statusChanges.subscribe((status) => {
-      if( status == 'VALID' ){
-        this.valid = true;
-      } else {
-        this.valid = false;
-      }
-    })
-  }
-
   calcTotal(field: string) {
     const array: FormArray = this.form.controls[field] as FormArray;
     let sum = 0;
@@ -52,13 +40,11 @@ export class DynamicFormQuestionComponent {
       let num  = parseInt(array.controls[i].value, 10);
       if ( !isNaN(num) && num > 0 ) {
         sum = sum + num;
-        this.valid = true;
       } else if ( num < 0 ){
         num = 0;
       }
       array.controls[i].patchValue(num);
     }
-    if(sum == 0){ this.valid = false; }
     array.controls[array.controls.length - 1].setValue(sum);
   }
 }
