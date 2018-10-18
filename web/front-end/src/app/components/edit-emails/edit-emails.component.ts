@@ -77,6 +77,7 @@ export class EditEmailsComponent implements OnInit {
     this.currentEmail = {
       role: '',
       email: '',
+      subject: '',
       emailContent: ''
     };
 
