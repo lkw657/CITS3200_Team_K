@@ -48,7 +48,7 @@
 
   <!-- DISPLAY SELECTED FORM FOR REVIEW -->
   <div *ngIf="showSingleSubmission && isLoaded">
-    <div class="row mb-5">
+    <div class="row mb-3">
       <div *ngIf="submissionView.comments && submissionView.status=='Provisionally Approved'" class="col-sm">
         <input type="button" class="btn btn-lg btn-warning float-left mb-2 mr-2" value="Click to resolve comments for resubmission"
           (click)="resolve()">
@@ -66,13 +66,11 @@
   <!-- SHOW FORM HISTORY -->
   <div *ngIf=showHistory>
     <div class="row">
-      <div class="col-lg">
-        <h1>History for form submitted on {{submissionView.sub_date}}</h1>
-      </div>
       <div class="col-sm">
         <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
       </div>
     </div>
+    <h3>History for form submitted on {{submissionView.sub_date}}</h3>
     <div class="table-responsive">
       <table class="table">
         <thead>
