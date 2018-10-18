@@ -90,7 +90,7 @@ module.exports.addForm = (req, res, next) => {
                     else if (!owner) {
                         return res.json({
                             success: false,
-                            msg: "User not found"
+                            msg: "Could not find user"
                         });
 
                     }
@@ -209,7 +209,7 @@ module.exports.resubmitForm = (req, res, next) => {
             return res.status(400).json({ success: false, msg: 'Form is not provisionally approved' });
         }
         else if (form.answers.length != req.body.answers.length) {
-            return res.status(400).json({ success: false, msg: 'Invalid no. of questions' });
+            return res.status(400).json({ success: false, msg: 'Invalid number of questions' });
         }
 
         //Valid form
@@ -265,7 +265,7 @@ module.exports.resubmitForm = (req, res, next) => {
 
                     user.save((err, user) => {
                         if (err) {
-                            return res.status(400).json({ success: false, msg: 'Could not update user array' });
+                            return res.status(400).json({ success: false, msg: 'Could not update user' });
                         }
                         else {
                             //Send email
@@ -310,14 +310,14 @@ module.exports.formResponse = (req, res, next) => {
 
     Form.findById(req.body.form_id, (err, form) => {
         if (err) {
-            return res.status(400).json({ success: false, msg: 'Something went wrong' });
+            return res.status(400).json({ success: false, msg: 'Error retrieving form' });
         }
         if (!form) {
             return res.status(400).json({ success: false, msg: 'No such form' });
         }
 
         if (JSON.stringify(req.user._id) != JSON.stringify(form.allocatedStaff)) {
-            return res.status(400).json({ success: false, msg: 'Bad user' });
+            return res.status(400).json({ success: false, msg: 'This form is not allocated for your approval' });
         }
         else {
 
@@ -430,7 +430,7 @@ module.exports.formResponse = (req, res, next) => {
             else if (req.body.response == 'Provisionally Approved') {
 
                 if (!req.body.comments) {
-                    return res.status(400).json({ success: false, msg: 'No comments' });
+                    return res.status(400).json({ success: false, msg: 'You must enter at least one comment to provisionally approve' });
                 }
                 else if (req.body.comments.length != 0) {
 
@@ -445,7 +445,7 @@ module.exports.formResponse = (req, res, next) => {
                     }
                     else {
                         //Something is broken
-                        return res.status(400).json({ success: false, msg: 'Bad form status' });
+                        return res.status(400).json({ success: false, msg: 'Form has bad status' });
                     }
 
                     form.status = 'Provisionally Approved';
@@ -481,13 +481,13 @@ module.exports.formResponse = (req, res, next) => {
                     });
                 }
                 else {
-                    return res.status(400).json({ success: false, msg: 'No comments' });
+                    return res.status(400).json({ success: false, msg: 'You must enter at least one comment to provisionally approve' });
                 }
             }
             else if (req.body.response == 'Rejected') {
 
                 if (!req.body.comments) {
-                    return res.status(400).json({ success: false, msg: 'No comments' });
+                    return res.status(400).json({ success: false, msg: 'You must enter at least one comment to reject' });
                 }
                 if (req.body.comments.length != 0) {
 
@@ -502,7 +502,7 @@ module.exports.formResponse = (req, res, next) => {
                     }
                     else {
                         //Something is broken
-                        return res.status(400).json({ success: false, msg: 'Bad form status' });
+                        return res.status(400).json({ success: false, msg: 'Form has bad status' });
                     }
                     form.status = 'Rejected'
 
@@ -537,11 +537,11 @@ module.exports.formResponse = (req, res, next) => {
 
                 }
                 else {
-                    return res.status(400).json({ success: false, msg: 'No comments' });
+                    return res.status(400).json({ success: false, msg: 'You must enter at least one comment to reject' });
                 }
             }
             else {
-                return res.status(400).json({ success: false, msg: 'Bad Form Status' });
+                return res.status(400).json({ success: false, msg: 'Form has bad status' });
             }
         }
 

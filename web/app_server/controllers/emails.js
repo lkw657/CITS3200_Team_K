@@ -7,10 +7,10 @@ var Mail = mailModel.mailSchema;
 
 //Lists all emails
 module.exports.listAllEmails = (req, res, next) => {
-    if (req.user == undefined) {
+    if (req.user == undefined || !req.user.isIT) {
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
     Email.find({}, (err, mails) => {
@@ -40,7 +40,7 @@ module.exports.addEmail = (req, res, next) => {
         var stat = req.user == undefined ? 401 : 403
         return res.status(stat).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
 
@@ -70,7 +70,7 @@ module.exports.updateEmail = (req, res, next) => {
         var stat = req.user == undefined ? 401 : 403
         return res.status(stat).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
 
@@ -99,7 +99,7 @@ module.exports.removeEmail = (req, res, next) => {
         var stat = req.user == undefined ? 401 : 403
         return res.status(stat).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
 

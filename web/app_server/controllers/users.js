@@ -7,10 +7,10 @@ module.exports.listAll = (req, res, next) => {
     var stat = req.user == undefined ? 401 : 403
     return sendJsonResponse(res, stat, {
       success: false,
-      msg: "Forbidden"
+      msg: "You do not have permission to access this page"
     });
   }
-  User.find({}, 'fname lname number isIT', (err, users) => {
+  User.find({}, 'fname lname number email isIT', (err, users) => {
     if (err)
       return res.json({
 	success: false,
@@ -27,7 +27,7 @@ module.exports.updateUser = (req, res, next) => {
     stat = req.user == undefined ? 401 : 403
     return sendJsonResponse(res, stat, {
       success: false,
-      msg: "Forbidden"
+      msg: "You do not have permission to access this page"
     });
   }
 
@@ -57,7 +57,7 @@ module.exports.removeUser = (req, res, next) => {
     stat = req.user == undefined ? 401 : 403
     return sendJsonResponse(res, stat, {
       success: false,
-      msg: "Forbidden"
+      msg: "You do not have permission to access this page"
     });
   }
   
@@ -90,7 +90,7 @@ module.exports.addFormToUser = (userID, formID) => {
       console.log(err);
     }
     else if (!usr) {
-      console.log("no user found");
+      console.log("Could not find user");
     }
     else {
       //Check if form exists

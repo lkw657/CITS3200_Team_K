@@ -6,7 +6,7 @@ module.exports.addQuestionSet = (req, res, next) => {
         var stat = req.user == undefined ? 401 : 403
         return res.status(stat).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
     //Check if a questionlist is included.
@@ -18,7 +18,7 @@ module.exports.addQuestionSet = (req, res, next) => {
         var qset = qsets[0];
         if (err) {
             console.log(err);
-            return res.json({success:false, msg:""});
+            return res.json({success:false, msg:"Error getting question list"});
         }
         var questionSet = new QuestionSet(); //The question set to be saved.
         //If no questionSet was returned earlier then set the version to 1. Otherwise the version is 1 greater than the latest.
@@ -78,14 +78,14 @@ module.exports.listAll = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
     QuestionSet.find({}, (err, qsets) => {
         if (err) {
             return res.json({
                 success: false,
-                msg: "Error getting all question lists"
+                msg: "Error getting question list"
             });
             console.log(err);
         }
@@ -103,14 +103,14 @@ module.exports.questionSetId = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
     QuestionSet.findById(req.params.id).then(function (qset, err) {
         if (err) {
             return res.json({
                 success: false,
-                msg: "Error getting question set by ID"
+                msg: "Error getting question list"
             });
             console.log(err);
         }
@@ -127,14 +127,14 @@ module.exports.latestQuestionSet = (req, res, next) => {
     if (!req.user) {
         return res.status(401).json({
             success: false,
-            msg: "Forbidden"
+            msg: "You do not have permission to access this page"
         });
     }
     QuestionSet.findOne({}, { 'questionList._id': 0 }).sort({ version: -1 }).exec(function (err, qset) {
         if (err) {
             return res.json({
                 success: false,
-                msg: "Error getting latest question list"
+                msg: "Error getting question list"
             });
             console.log(err);
         }
