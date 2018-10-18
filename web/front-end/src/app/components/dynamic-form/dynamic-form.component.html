@@ -9,11 +9,15 @@
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <!-- School selector -->
       <div class="form-row">
-        <div *ngIf=!school>
+        <div class="w-100" *ngIf=!school>
           <p class="mr-2 top-text">I am from the:</p>
-          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Engineering" (click)="selectSchool('School of Engineering')">
-          <input type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')">
-          <input type="button" class="btn btn-lg btn-primary mb-2" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')">
+          <div class="row no-gutters">
+            <div class="col mb-sm-2 mb-2 mr-sm-2 mr-lg-2"><input type="button" class="btn btn-lg btn-primary school-field" value="School of Engineering" (click)="selectSchool('School of Engineering')"></div>
+            <div class="col mb-sm-2 mb-2 mr-lg-2"><input type="button" class="btn btn-lg btn-primary school-field" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')"></div>
+            <div class="col"><input type="button" class="btn btn-lg btn-primary school-field" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')"></div>
+          </div>
+          
+          
         </div>
       </div>
 
@@ -29,16 +33,14 @@
         </div>
 
         <!-- School/Role display -->
-        <div *ngIf="submitter && school">
-          <div>
-            <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{school}}</p>
-            <span class="mr-2">:</span>
-            <input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2" value="Change School" (click)="school=undefined">
+        <div class="w-100" *ngIf="submitter && school">
+          <div class="row w-100 no-gutters"> 
+            <div class="col mr-2"><p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2 w-100">{{school}}</p></div>
+            <div class="col"><input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2 w-100" value="Change School" (click)="school=undefined"></div>
           </div>
-          <div>
-            <p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2">{{submitter}}</p>
-            <span class="mr-2">:</span>
-            <input type="button" class="btn btn-w btn-lg btn-danger mb-2" value="Change Role" (click)="submitter=undefined">
+          <div class="row w-100 no-gutters">
+            <div class="col mr-2"><p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2 w-100">{{submitter}}</p></div>
+            <div class="col"><input type="button" class="btn btn-w btn-lg btn-danger mb-2 w-100" value="Change Role" (click)="submitter=undefined"></div>
           </div>
         </div>
       </div>

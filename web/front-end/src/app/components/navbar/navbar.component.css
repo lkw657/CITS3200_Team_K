@@ -1,4 +1,41 @@
 #nav_logo{
-    width: 200px !important;
-  }
-  
+  max-width: 200px;
+  height: auto;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+}
+
+.navbar{
+  background : url("../../../assets/main-strokes.jpg") top center no-repeat #364989;
+  background-size: cover;
+  border-bottom: 5px solid #e2b600;
+}
+
+.navbar-brand{
+  line-height: 1.1em;
+}
+
+.nav-item a{
+  font-size: 1.2667em;
+  border: none;
+  transition: .3s all cubic-bezier(.26,.85,.46,.99);
+  font-family: Rockwell,serif;
+}
+
+.nav-item:hover a, .nav-item:focus a {
+  color: #e1b600;
+  text-decoration: underline;
+}
+
+#welcome-text{
+  font-size: 0.8em;
+  font-family: Rockwell,serif;
+  font-weight: 200;
+}
+
+.nav-text{
+  font-size: 1.26667em;
+  font-family: Rockwell,serif;
+  font-weight: bold;
+}

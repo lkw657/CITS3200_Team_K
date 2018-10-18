@@ -52,7 +52,7 @@
     <div *ngIf="showSingleApproval">
       <div class="row">
         <div class="col-sm">
-          <input *ngIf="approvalView.history.length>0" type="button" class="btn btn-lg btn-warning mb-2 mr-2" value="View Previously submitted forms"
+          <input *ngIf="approvalView.history.length>0" type="button" class="btn btn-lg btn-primary mb-2 mr-2" value="View Previously submitted forms"
             (click)="showFormHistory(approvalView.history)">
           <input type="button" class="btn btn-w btn-lg btn-danger float-right mb-2 mr-2" value="Go Back" (click)="showApprovals()">
         </div>
@@ -102,13 +102,11 @@
   <!-- SHOW FORM HISTORY -->
   <div [hidden]=!historyLoaded *ngIf=showHistory>
     <div class="row">
-      <div class="col-lg">
-        <h1>History for form submitted on {{approvalView.sub_date}}</h1>
-      </div>
       <div class="col-sm">
         <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
       </div>
     </div>
+    <h3>History for form submitted on {{approvalView.sub_date}}</h3>
     <div class="table-responsive">
       <table class="table">
         <thead>
