@@ -15,7 +15,9 @@ IT_EMAIL=<administration email address>
 ```
 If DB\_URI is omitted a database started from docker will be used.
 It should be omited when using docker
+
 **Both `FRONTEND_URL` and `BACKEND_URL` should end with a slash**
+
 The backend runs on port 3000 this should be included in `BACKEND_URL`
 
 Example `.env`
