@@ -120,7 +120,11 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                                 return res.status(400).json({ success: false, msg: "Could not find user" });
                         }
                         else {
-                            var subject = `Access for RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
+                            var subject = email.subject.replace("[first_name]", user.fname)
+                                                        .replace("[last_name]", user.lname)
+                                                        .replace("[user_number]", user.number)
+                                                        .replace("[created_date]", form.dates[0]);
+                            //var subject = `Access for RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
                             var html = email.emailContent + '<br>';
                             if (previouslyrejected) {
                                 html += "The person this was sent to previously rejected responsibility for this form.<br>"
