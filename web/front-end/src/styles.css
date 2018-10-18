@@ -19,6 +19,10 @@
   border-color: #e1b600 !important;
 }
 
+.border-primary{
+  border-color: #27348B !important;
+}
+
 body{
   font-family: "Source Sans Pro",sans-serif;
 }
