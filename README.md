@@ -8,7 +8,10 @@ SMTP_PASSWORD=<password for email account>
 SMPT_HOST=<smtp server>
 DB_URI=<URI for a mongo database connection (of the form mongo://...)
 URI=<URI the front-end server is hosted at>
+FRONTEND_URL=<URI the front-end server is hosted at>
+BACKEND_URL=<URI the back-end server is hosted at>
 IT_PASSWORD=<administration password>
+IT_EMAIL=<administration email address>
 ```
 If DB\_URI is omitted a database started from docker will be used.
 It should be omited when using docker

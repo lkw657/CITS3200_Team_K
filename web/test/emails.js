@@ -92,7 +92,6 @@ describe('Email', () => {
     // Don't use beforeEach
     // want to keep questionSet changes between tests
     before(function (done) {
-            this.timeout(4000);
             User.deleteMany({}, (err) => {
                 if (err) done(err);
                 else
@@ -114,20 +113,29 @@ describe('Email', () => {
 
     describe("list all", () => {
         test("Not logged in",
-            {success: false, msg: 'Forbidden'}, 401, {}, '/email/list');
+            {success: false, msg: 'You do not have permission to access this page'}, 
+            401, 
+            {},
+            '/email/list');
 
-        test("Logged in",
+        test("Not IT",
+            {success: false, msg: 'You do not have permission to access this page'}, 
+            403, 
+            {number:'12345678', password:'foo'}, 
+            '/email/list');
+
+        test("IT",
             [email1],
             200,
-            {number:'12345678', password:'foo'}, '/email/list');
+            {number:'00000000', password:'foo'}, '/email/list');
     });
 
     describe("Update", () => {
         testUpdate("Not logged in", email2,
-            {success: false, msg: 'Forbidden'}, 401);
+            {success: false, msg: 'You do not have permission to access this page'}, 401);
 
         testUpdate("Not IT", email2,
-            {success: false, msg: 'Forbidden'},
+            {success: false, msg: 'You do not have permission to access this page'},
             403,
             {number:'12345678', password:'foo'});
 

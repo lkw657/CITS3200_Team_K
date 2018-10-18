@@ -35,9 +35,8 @@ function test(name, send, shouldReceive) {
 describe('Login', () => {
     beforeEach(function (done) {
         /* Delete the collection and add a researcher and staff user for testing */
-        this.timeout(4000);
         User.deleteMany({}, (err) => {
-            User.register(User.create('researcher', 'user','12345678'),
+            User.register(User.create('researcher', 'user','12345678', '12345678@uwa.edu.au'),
                           'abcdefghijkl', (err) => done(err));
         });
     });
@@ -48,6 +47,7 @@ describe('Login', () => {
              fname:'researcher',
              lname:'user',
              number:'12345678',
+             email: '12345678@uwa.edu.au',
              isIT: false,
              approvals: [],
              submissions:[]}});

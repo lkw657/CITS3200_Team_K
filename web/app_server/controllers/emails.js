@@ -8,7 +8,8 @@ var Mail = mailModel.mailSchema;
 //Lists all emails
 module.exports.listAllEmails = (req, res, next) => {
     if (req.user == undefined || !req.user.isIT) {
-        return res.status(401).json({
+        var stat = req.user == undefined ? 401 : 403
+        return res.status(stat).json({
             success: false,
             msg: "You do not have permission to access this page"
         });
