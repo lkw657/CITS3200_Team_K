@@ -13,7 +13,7 @@
 }
 
 .navbar-brand{
-  line-height: 1.26em;
+  line-height: 1.1em;
 }
 
 .nav-item a{
@@ -29,14 +29,13 @@
 }
 
 #welcome-text{
-  font-size: 1.1em;
+  font-size: 0.8em;
   font-family: Rockwell,serif;
-  font-weight: normal;
+  font-weight: 200;
 }
 
-#name{
+.nav-text{
   font-size: 1.26667em;
   font-family: Rockwell,serif;
   font-weight: bold;
 }
-

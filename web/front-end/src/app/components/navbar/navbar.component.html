@@ -3,8 +3,8 @@
   <!-- Always visible -->
   <div class="container">
     <a class="navbar-brand" [routerLink]="['/']"><img id="nav_logo" src="assets/uwacrest-white.svg"></a>
-    <a *ngIf="!authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/']">EMS Research Priorities Fund Requests</a>
-    <a *ngIf="authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/home']"><span id="welcome-text">Welcome</span><br> <span id="name">{{authService.getProfile().fname}} {{authService.getProfile().lname}}</span></a>
+    <a *ngIf="!authService.getProfile().loggedIn" class="navbar-brand nav-text" [routerLink]="['/']">EMS Research Priorities Fund Requests</a>
+    <a *ngIf="authService.getProfile().loggedIn" class="navbar-brand" [routerLink]="['/home']"><span id="welcome-text">Welcome</span><br> <span class="nav-text">{{authService.getProfile().fname}} {{authService.getProfile().lname}}</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

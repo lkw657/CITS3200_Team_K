@@ -7,29 +7,55 @@
   background-color : #27348B !important;
 }
 
+.btn-primary{
+  background-color : #27348B !important;
+  transition: .3s all cubic-bezier(.26,.85,.46,.99);
+}
+
+.btn-primary:hover , .btn-primary:active {
+  background-color : #e1b600 !important;
+  color: #27348B !important;
+  border-color: #e1b600 !important;
+}
+
+body{
+  font-family: "Source Sans Pro",sans-serif;
+}
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.no-gutters > .col > [class*="col-"] {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+  
+
 .gu-mirror {
-    position: fixed !important;
-    margin: 0 !important;
-    z-index: 9999 !important;
-    opacity: 0.8;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-    filter: alpha(opacity=80);
-    pointer-events: none;
-  }
-  /* high-performance display:none; helper */
-  .gu-hide {
-    left: -9999px !important;
-  }
-  /* added to mirrorContainer (default = body) while dragging */
-  .gu-unselectable {
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
-  }
-  /* added to the source element while its mirror is dragged */
-  .gu-transit {
-    opacity: 0.2;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-    filter: alpha(opacity=20);
-  }
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
