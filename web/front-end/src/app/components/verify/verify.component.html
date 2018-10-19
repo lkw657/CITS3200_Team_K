@@ -1,0 +1,36 @@
+<!-- LOADING SCREEN -->
+<div [hidden]="!verifying">
+    <h2>Submitting your verification...</h2>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="!rejecting">
+    <h2>Rejecting...</h2>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]="verifying || rejecting" class="mb-5">
+    <h3 class="permission mb-5 mt-5">
+        You are currently logged in as {{user.fname}} {{user.lname}}
+    </h3>
+    <h5>
+        By selecting 'Yes' you are confirming that
+    </h5>
+    <ol>
+        <li>You are the person logged in above</li>
+        <li>You have authority to approve RPF forms</li>
+        <li>You are taking responsibility for approving one step (not full form approval) in RPF process for the form in the
+            email you clicked to arrive here</li>
+    </ol>
+
+    <h5 class="mb-5 mt-5">If you are unsure of any of the above the select 'No' and the email link will be returned to sender</h5>
+
+    <div class="row">
+        <div class="col">
+            <button (click)="onAccept()" class="btn btn-block btn-success p-3">Yes</button>
+        </div>
+        <div class="col">
+            <button (click)="onReject()" class="btn btn-block btn-danger p-3">No</button>
+        </div>
+    </div>
+</div>

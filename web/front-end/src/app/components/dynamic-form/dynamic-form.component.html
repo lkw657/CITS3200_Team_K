@@ -1,0 +1,122 @@
+<div [hidden]="!submitting">
+  <h2>Submitting your form...</h2>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+
+<div [hidden]=submitting>
+  <!-- SUBMITTING A NEW FORM -->
+  <div *ngIf="!display_only && !resubmit && !allow_comments">
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <!-- School selector -->
+      <div class="form-row">
+        <div class="w-100" *ngIf=!school>
+          <p class="mr-2 top-text">I am from the:</p>
+          <div class="row no-gutters">
+            <div class="col mb-sm-2 mb-2 mr-sm-2 mr-lg-2"><input type="button" class="btn btn-lg btn-primary school-field" value="School of Engineering" (click)="selectSchool('School of Engineering')"></div>
+            <div class="col mb-sm-2 mb-2 mr-lg-2"><input type="button" class="btn btn-lg btn-primary school-field" value="School of Physics, Mathematics and Computing" (click)="selectSchool('School of Physics, Mathematics and Computing')"></div>
+            <div class="col"><input type="button" class="btn btn-lg btn-primary school-field" value="Ocean Graduate School" (click)="selectSchool('Ocean Graduate School')"></div>
+          </div>
+          
+          
+        </div>
+      </div>
+
+      <!-- Role selector -->
+      <div class="form-row">
+        <div *ngIf="school && !submitter">
+          <p class="mr-2 top-text">I am filling this form in as a:</p>
+          <p class="btn btn-lg btn-secondary disabled mb-2 mr-2">{{school}}</p>
+          <span class="mr-2">:</span>
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="AD(R)" (click)="selectRole('AD(R)')">
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2 mr-2" value="HoS" (click)="selectRole('HoS')">
+          <input type="button" class="btn btn-w2 btn-lg btn-primary mb-2" value="Researcher" (click)="selectRole('Researcher')">
+        </div>
+
+        <!-- School/Role display -->
+        <div class="w-100 mt-3" *ngIf="submitter && school">
+          <div class="row w-100 no-gutters"> 
+            <div class="col mr-2"><p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2 w-100">{{school}}</p></div>
+            <div class="col"><input type="button" class="btn btn-w btn-lg btn-danger mb-2 mr-2 w-100" value="Change School" (click)="school=undefined"></div>
+          </div>
+          <div class="row w-100 no-gutters">
+            <div class="col mr-2"><p class="btn btn-lg btn-w btn-secondary disabled mb-2 mr-2 w-100">{{submitter}}</p></div>
+            <div class="col"><input type="button" class="btn btn-w btn-lg btn-danger mb-2 w-100" value="Change Role" (click)="submitter=undefined"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Displays all question and relevant answer fields -->
+      <div *ngIf="submitter && school">
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
+        <div *ngFor="let question of questions" class="form-row">
+          <app-question [hidden]="question.form_name=='central'" class="w-100" [question]="question" [form]="form"></app-question>
+        </div>
+
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
+        <div *ngFor="let question of questions" class="form-row">
+          <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form"></app-question>
+        </div>
+        <div class="form-row mt-3 border-top border-primary pt-3">
+          <button type="submit" class="btn btn-primary mb-5 btn-lg" [disabled]="!form.valid || !school || !submitter">Submit</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- DISPLAY FORM BUT DON'T ALLOW COMMENTS - SUBMITTER -->
+  <div class="display_only" *ngIf="display_only && !resubmit && !allow_comments">
+    <form [formGroup]="form">
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
+      <div *ngFor="let question of questions; index as i" class="form-row">
+        <app-question [hidden]="question.form_name=='central'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i) && question.form_name=='faculty'" class="w-100 comment">{{ findspecificComment(i) }}</p>
+      </div>
+
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
+      <div *ngFor="let question of questions; index as i" class="form-row">
+        <app-question [hidden]="question.form_name=='faculty'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i) && question.form_name=='central'" class="w-100 comment">{{ findspecificComment(i) }}</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- USER RESUBMISSION -->
+  <div class="resubmit" *ngIf="!display_only && resubmit && !allow_comments">
+    <form [formGroup]="form">
+
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
+      <div *ngFor="let question of questions; index as i" class="form-row">
+        <app-question [hidden]="question.form_name=='central'" class="w-100" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i) && question.form_name=='faculty'" class="w-100 comment">{{ findspecificComment(i) }}</p>
+      </div>
+
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
+      <div *ngFor="let question of questions; index as i" class="form-row">
+        <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form" disabled></app-question>
+        <p *ngIf="findspecificComment(i) && question.form_name=='central'" class="w-100 comment">{{ findspecificComment(i) }}</p>
+      </div>
+    </form>
+  </div>
+
+  <!-- DISPLAY FORM AND ALLOW COMMENTS - APPROVER -->
+  <div class="allow_comments" *ngIf="!display_only && !resubmit && allow_comments">
+    <div class="border-primary pt-3">
+      <h4 class='form-row'>Form submitted as a {{submitter}} from the {{school}}</h4>
+    </div>
+
+    <form [formGroup]="form">
+
+      <div [hidden]="approver=='PVC-ED'">
+        <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - EMS questions</h2>
+        <div *ngFor="let question of questions; index as i" class="form-row">
+          <app-question [hidden]="question.form_name=='central'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
+        </div>
+      </div>
+
+      <h2 class="mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">Research Priorities Fund - UWA questions</h2>
+      <div *ngFor="let question of questions; index as i" class="form-row">
+        <app-question [hidden]="question.form_name=='faculty'" class="w-100 mt-3" [question]="question" [form]="form" disabled></app-question>
+      </div>
+    </form>
+  </div>

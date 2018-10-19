@@ -1,0 +1,19 @@
+version: "2.0"
+
+services:
+    web:
+        command: ""
+        restart: on-failure
+
+    mocha:
+        build:
+            context: ./web
+            dockerfile: ./Dockerfile.test
+        tty: true
+        command: "test"
+        depends_on:
+            - web
+            - db
+        links:
+            - web
+            - db

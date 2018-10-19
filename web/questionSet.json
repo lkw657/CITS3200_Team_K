@@ -1,0 +1,96 @@
+{
+    "version": 0,
+    "latest": true,
+    "questionList": [
+        {
+            "title": "ALIGNMENT WITH FACULTY STRATEGIC VISION",
+            "text": "Provide a brief statement outlining how your proposal aligns with the Faculty’s Strategic Vision",
+            "type": "textarea",
+            "formName": "faculty"
+        },
+        {
+            "title": "ALIGNMENT WITH FACULTY STRATEGIC RESEARCH PRIORITIES",
+            "text": "Provide a brief statement outlining how your proposal aligns with the Faculty’s strategic research priorities (Engineering for Remote Operations, Science of Discovery or Technologies for Better Health) or an emerging strategic research priority",
+            "type": "textarea",
+            "formName": "faculty"
+        },
+        {
+            "title": "RETURN ON INVESTMENT",
+            "text": "Please provide a brief statement as to how this investment will return value to the Faculty",
+            "type": "textarea",
+            "formName": "faculty"
+        },
+        {
+            "title": "ADDITIONAL INFORMATION",
+            "text": "Please use this space to provide pertinent information that cannot fit elsewhere",
+            "type": "textarea",
+            "formName": "faculty"
+        },
+        {
+            "title": "",
+            "text": "Purpose of funding",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Total cost of the project",
+            "type": "money_single",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Total Amount of RPF Requested",
+            "type": "money_single",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Details of recurrent or operating costs of any equipment or facility",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Details of how the operating costs of any equipment or facility will be funded in future years",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Research Excellence",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Alignment with Faculty and University Priorities",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Leverage (at least 1:4)",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Please address selection criteria: Impact and Collaboration",
+            "type": "textarea",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Amount of Research Priorities Funding requested",
+            "type": "money_array_8",
+            "formName": "central"
+        },
+        {
+            "title": "",
+            "text": "Return on Investment (External funds to UWA)",
+            "type": "money_array_8",
+            "formName": "central"
+        }
+    ]
+}

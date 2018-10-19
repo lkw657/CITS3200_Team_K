@@ -1,10 +1,16 @@
-FROM node
+FROM ubuntu
 
-RUN npm install
-RUN npm install -g nodemon
+COPY . /www
 
-EXPOSE 80
+RUN apt-get update && apt-get install -y gdebi wget nodejs npm
+
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb && \
+gdebi -n wkhtmltox_0.12.5-1.bionic_amd64.deb
+
 WORKDIR /www
+RUN npm install
 
-ENV PORT 80
+EXPOSE 3000
+ENV PORT 3000
+
 ENTRYPOINT ["./entrypoint.sh"]
