@@ -56,9 +56,8 @@
         <div *ngFor="let question of questions" class="form-row">
           <app-question [hidden]="question.form_name=='faculty'" class="w-100" [question]="question" [form]="form"></app-question>
         </div>
-        <h3 class="text-danger mt-3 form-row border-bottom border-top border-primary pt-3 pb-3">If you have any extra files for your submission please email to your Head of School</h3>
-        <div class="form-row mt-3">
-          <button type="submit" class="btn btn-primary mb-5" [disabled]="!form.valid || !school || !submitter">Submit</button>
+        <div class="form-row mt-3 border-top border-primary pt-3">
+          <button type="submit" class="btn btn-primary mb-5 btn-lg" [disabled]="!form.valid || !school || !submitter">Submit</button>
         </div>
       </div>
 
