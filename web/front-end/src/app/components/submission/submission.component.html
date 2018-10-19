@@ -7,19 +7,24 @@
 <div [hidden]="!isLoaded" class="col">
   <div class="form-row border-bottom border-primary">
     <h1>Questions</h1>
-    <h5 class="mb-0">Please answer the questions below. All questions are required to be completed before form can be submitted.</h5>
-    <h5 class="mb-0">If you have any issues or queries please contact the Research Development Team for any help at the below email:</h5>
-    <h5 class="mb-3"><a href="mailto:research-ems@uwa.edu.au">research-ems@uwa.edu.au</a></h5>
-    <h6 style="text-align:justify">The Research Priorities Fund (RPF) is intended to provide a source of cash 
-      support to applicants normally seeking external funds on a competitive basis, or for support of other 
-      research priorities including fixed term strategic appointments. This will normally be restricted to cases
-      where University contributions are a specific requirement of an external funding scheme or in one-off
-      circumstances where it can be demonstrated that a University cash commitment will provide the leverage
-      necessary to attract external funding.
-    </h6>
-    <h6 style="text-align:justify" class="mt-3">RPF allocations will only be made with the approval of the relevant Pro Vice-Chancellor 
-      Executive Dean(s), Head of School(s) and Associate Dean (Research).
-    </h6>
+    <br>
+    <div class="row">
+      <div class="col">
+          <h5 class="mb-0">Please answer the questions below. All questions are required to be completed before form can be submitted.</h5>
+          <h5 class="mb-0">If you have any issues or queries please contact the Research Development Team for any help at the below email:</h5>
+          <h5 class="mb-3"><a href="mailto:research-ems@uwa.edu.au">research-ems@uwa.edu.au</a></h5>
+          <h6 style="text-align:justify">The Research Priorities Fund (RPF) is intended to provide a source of cash 
+            support to applicants normally seeking external funds on a competitive basis, or for support of other 
+            research priorities including fixed term strategic appointments. This will normally be restricted to cases
+            where University contributions are a specific requirement of an external funding scheme or in one-off
+            circumstances where it can be demonstrated that a University cash commitment will provide the leverage
+            necessary to attract external funding.
+          </h6>
+          <h6 style="text-align:justify" class="mt-3">RPF allocations will only be made with the approval of the relevant Pro Vice-Chancellor 
+            Executive Dean(s), Head of School(s) and Associate Dean (Research).
+          </h6>
+      </div>
+    </div>
   </div>
   <div class="w-100 pt-2" id="main_submission_form">
     <div *ngIf=isLoaded>
