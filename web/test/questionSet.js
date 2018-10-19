@@ -101,7 +101,6 @@ function test(name, shouldReceive, statusCode, login, route) {
 function testUpdate(name, toAdd, shouldReceive, statusCode, login) {
     it(name, function(done) {
         var j = request.jar();
-        this.timeout(4000);
         QuestionSet.countDocuments((err, numQsetsBefore) => {
             request.post(endpointPrefix+'/authenticate', {form: login, json:true, jar:j}, function () {
                 request.post(endpointPrefix + '/db/questionSet', {body:toAdd, json:true, jar:j}, function (err, res, body) {
@@ -124,7 +123,6 @@ describe('QuestionSet', () => {
     // Don't use beforeEach
     // want to keep questionSet changes between tests
     before(function (done) {
-            this.timeout(4000);
             User.deleteMany({}, (err) => {
                 if (err) done(err);
                 else
