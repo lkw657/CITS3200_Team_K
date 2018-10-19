@@ -2,6 +2,10 @@
 
 <head>
     <style>
+        *{
+            font-family: Calibri, 'Trebuchet MS', sans-serif
+        }
+
         body {
             /* padding: 50px; */
             padding: 0px;
@@ -96,29 +100,20 @@
             
         }
 
-        .trim_reference_num{
-            float: right;
-            padding-bottom: 20px;
-            font-size: 10px;
-            width: 200px;
-        }
-
         .avoid_break{
             page-break-inside: avoid;
+        }
+
+        #top-content{
+            padding-top: 20px;
         }
 
     </style>
 </head>
 
 <body>
-    <div>
-        <div class="bluebar"></div>
-        <div class="yellowbar"></div>
-        <img class="logo_image" src="<%= dir %>uwacrest-blue.svg" alt="">
-        <input class="trim_reference_num" value="TRIM Reference Number: &#10;&#13;(Office Use)">
-    </div>
     
-    <div>
+    <div id="top-content">
         <p style="text-align: center;" class="form_heading" id="heading">Request for Research Priorities Funds</p>
 
         <p class="main_intro">Allocations from the Research Priorities Fund (RPF) will normally be restricted to cases
@@ -154,6 +149,9 @@
         <tr>
         <% var sum=0; %>
         <% for(var j = 0 ; j < QA[i].type.split("_")[2] ; j++ ) {%>
+            <% if(QA[i].answer[j] == '') { %>
+                <% QA[i].answer[j] = 0; %>
+            <% } %>
             <td><%= QA[i].answer[j] %></td>
             <% sum += Number(QA[i].answer[j]) %>
         <% } %>
