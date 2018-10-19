@@ -35,7 +35,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let approval of userApprovals">
-            <td>{{approval.sub_date}}</td>
+            <td>{{convertDate(approval.sub_date)}}</td>
             <td>{{approval.owner.fname}} {{approval.owner.lname}}</td>
             <td>{{approval.status}}</td>
             <td>
@@ -106,7 +106,7 @@
         <input type="button" class="btn btn-w btn-lg btn-danger float-right mr-2" value="Go Back to Form" (click)="backToForm()">
       </div>
     </div>
-    <h3>History for form submitted on {{approvalView.sub_date}}</h3>
+    <h3>History for form submitted on {{convertDate(approvalView.sub_date)}}</h3>
     <div class="table-responsive">
       <table class="table">
         <thead>
@@ -119,9 +119,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let history of formHistory">
-            <td>{{history.sub_date}}</td>
+            <td>{{convertDate(history.sub_date)}}</td>
             <td>{{history.status}}</td>
-            <td>{{history.action_date}}</td>
+            <td>{{convertDate(history.action_date)}}</td>
             <td>
               <button class="btn btn-primary float-right" (click)="showHistoricSubmission(history)">View Historical Form</button>
             </td>

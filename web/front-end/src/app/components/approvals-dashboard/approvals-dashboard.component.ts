@@ -106,8 +106,8 @@ export class ApprovalsDashboardComponent implements OnInit {
     let commentArray = [];
     // Create approval object with new comments and response
     let numFormControls = this.dform.form.controls[Object.keys(this.dform.form.controls).length].value.length;
-    for ( var i = 0 ; i < numFormControls ; i++ ){
-      if( this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] != null ){
+    for (var i = 0; i < numFormControls; i++) {
+      if (this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] != null) {
         commentArray.push({ order: i, text: this.dform.form.controls[Object.keys(this.dform.form.controls).length].value[i] });
       }
     }
@@ -184,7 +184,11 @@ export class ApprovalsDashboardComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  createQuestionList(questionSet, ans, allowComm : boolean) {
+  convertDate(date) {
+    return new Date(date).toLocaleString('en-AU');
+  }
+
+  createQuestionList(questionSet, ans, allowComm: boolean) {
     let answers = this.createAnswerList(ans);
 
     this.questions = questionSet['questionList'];
@@ -202,7 +206,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             order: q.order,
             disabled: true,
             form_name: q.formName,
-            allowComments : allowComm
+            allowComments: allowComm
           })
         );
       } else if (q['type'] == 'text') {
@@ -215,7 +219,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             order: q.order,
             disabled: true,
             form_name: q.formName,
-            allowComments : allowComm
+            allowComments: allowComm
           })
         );
       } else if (q['type'] == 'money_single') {
@@ -228,7 +232,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             order: q.order,
             disabled: true,
             form_name: q.formName,
-            allowComments : allowComm
+            allowComments: allowComm
           })
         );
       } else if (q['type'].indexOf("money_array") == 0) {
@@ -242,7 +246,7 @@ export class ApprovalsDashboardComponent implements OnInit {
             number: parseInt(q['type'].substring(q['type'].length - 1)),
             disabled: true,
             form_name: q.formName,
-            allowComments : allowComm
+            allowComments: allowComm
           })
         );
       }
