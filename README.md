@@ -16,7 +16,24 @@ IT_EMAIL=<administration email address>
 If DB\_URI is omitted a database started from docker will be used.
 It should be omited when using docker
 
+**Both `FRONTEND_URL` and `BACKEND_URL` should end with a slash**
+
+The backend runs on port 3000 this should be included in `BACKEND_URL`
+
+Example `.env`
+```
+SMTP_EMAIL=sender@mydomain.com
+SMTP_PASSWORD=mySmtpPassword
+SMPT_HOST=mydomain.com
+URI=mydomain.com
+FRONTEND_URL=mydomain.com/
+BACKEND_URL=mydomain.com:3000/
+IT_PASSWORD=myAdminPassword
+IT_EMAIL=admin@mydomain.com
+```
 The location of the backend server (and port) also needs to be put in `web/front-end/src/app/config.ts`. This should be the same host as the front end.
+
+As the site uses both ports `80` and `3000` they should both be allowed through the firewall
 
 ## Running
 
@@ -52,7 +69,7 @@ And deleted with
 ```
 docker rm <container id>
 ```
-`init.db` can also be forced to delete the database using
+`initdb.js` can also be forced to delete the database using
 ```
 DESTROY=true node initdb.js
 ```
