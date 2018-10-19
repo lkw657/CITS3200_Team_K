@@ -6,7 +6,7 @@
             /* padding: 50px; */
             padding: 0px;
             margin: 0px;
-            font: 12pt "Lucida Grande", Helvetica, Arial, sans-serif;
+            font: 12pt 'Calibri', 'Trebuchet MS', sans-serif;
         }
 
         a {
@@ -103,6 +103,10 @@
             width: 200px;
         }
 
+        .avoid_break{
+            page-break-inside: avoid;
+        }
+
     </style>
 </head>
 
@@ -134,6 +138,7 @@
         <%= QA[i].title %>
     </h3>
     <% } %>
+    <div class="avoid_break">
     <p class="question">
 
         <%= QA[i].question %>:
@@ -164,13 +169,14 @@
 
     <% } %>
 
+    </div>
     <br>
 
     <% } %>
     <br>
     <br>
     <br>
-
+    <div class="avoid_break">
     <b>Name of Applicant:</b>
     <%= owner.fname + " " %>
     <%= owner.lname %> (
@@ -185,6 +191,7 @@
     <%= approvers[i].number + " " %>) -
     <%= approvers[i].date.getDate() + "/" + (Number(approvers[i].date.getMonth()) + 1).toString() + "/" + approvers[i].date.getFullYear() + " at " + approvers[i].date.toLocaleTimeString('en-AU', {timeZone : 'Australia/Perth'}) %><br><br>
     <% } %>
+    </div>
     <br><br>
 
     <style>
@@ -197,7 +204,7 @@
 
         .inner {
             display: inline-block;
-            width: 400px;
+            width: 590px;
         }
 
         .center_block{
@@ -207,13 +214,14 @@
         }
 
     </style>
+    <div class="avoid_break">
     <div class="center_block" style="width: 100%;" >
         <div ><b>PLEASE FORWARD THE COMPLETED FORM TO<br>DIRECTOR, OFFICE OF RESEARCH ENTERPRISE, M459</b></div>
     </div>
     <br>
 
-    <div class="cn" style="width: 100%">
-        <div class="inner" style="width: 100%;">
+    <div class="cn">
+        <div class="inner">
 
             <div class="boxed" style="width: 100%;">
                 <div class="inner">
@@ -223,15 +231,16 @@
                 <br>
                 <div style="text-align: left">
                     <input type="checkbox" name="option" value="immediate"> Approved for immediate allocation:
-                    ______________________ Date: ____________
+                    ______________________ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: ____________
                     <br><br>
                     <input type="checkbox" name="option" value="external">Approved for pending external allocation:
-                    _______________ Date: ____________
+                    _______________ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: ____________
                 </div>
                 <br><br>
-                Robyn Owens (DVC Research) / Campbell Thomson (Director, Office of Research Enterprise)
+                Robyn Owens (DVC Research) / <br>Campbell Thomson (Director, Office of Research Enterprise)
             </div>
         </div>
+    </div>
     </div>
 
 
