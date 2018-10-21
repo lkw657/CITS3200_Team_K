@@ -11,6 +11,6 @@ export class AppComponent {
   title = 'app';
 
   @ViewChild(NavbarComponent)
-  private status: NavbarComponent;
+  public status: NavbarComponent;
 
 }
