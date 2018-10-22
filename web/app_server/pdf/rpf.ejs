@@ -2,11 +2,15 @@
 
 <head>
     <style>
+        *{
+            font-family: Calibri, 'Trebuchet MS', sans-serif
+        }
+
         body {
             /* padding: 50px; */
             padding: 0px;
             margin: 0px;
-            font: 12pt "Lucida Grande", Helvetica, Arial, sans-serif;
+            font: 12pt 'Calibri', 'Trebuchet MS', sans-serif;
         }
 
         a {
@@ -96,25 +100,20 @@
             
         }
 
-        .trim_reference_num{
-            float: right;
-            padding-bottom: 20px;
-            font-size: 10px;
-            width: 200px;
+        .avoid_break{
+            page-break-inside: avoid;
+        }
+
+        #top-content{
+            padding-top: 20px;
         }
 
     </style>
 </head>
 
 <body>
-    <div>
-        <div class="bluebar"></div>
-        <div class="yellowbar"></div>
-        <img class="logo_image" src="<%= dir %>uwacrest-blue.svg" alt="">
-        <input class="trim_reference_num" value="TRIM Reference Number: &#10;&#13;(Office Use)">
-    </div>
     
-    <div>
+    <div id="top-content">
         <p style="text-align: center;" class="form_heading" id="heading">Request for Research Priorities Funds</p>
 
         <p class="main_intro">Allocations from the Research Priorities Fund (RPF) will normally be restricted to cases
@@ -134,6 +133,7 @@
         <%= QA[i].title %>
     </h3>
     <% } %>
+    <div class="avoid_break">
     <p class="question">
 
         <%= QA[i].question %>:
@@ -149,6 +149,9 @@
         <tr>
         <% var sum=0; %>
         <% for(var j = 0 ; j < QA[i].type.split("_")[2] ; j++ ) {%>
+            <% if(QA[i].answer[j] == '') { %>
+                <% QA[i].answer[j] = 0; %>
+            <% } %>
             <td><%= QA[i].answer[j] %></td>
             <% sum += Number(QA[i].answer[j]) %>
         <% } %>
@@ -164,13 +167,14 @@
 
     <% } %>
 
+    </div>
     <br>
 
     <% } %>
     <br>
     <br>
     <br>
-
+    <div class="avoid_break">
     <b>Name of Applicant:</b>
     <%= owner.fname + " " %>
     <%= owner.lname %> (
@@ -185,6 +189,7 @@
     <%= approvers[i].number + " " %>) -
     <%= approvers[i].date.getDate() + "/" + (Number(approvers[i].date.getMonth()) + 1).toString() + "/" + approvers[i].date.getFullYear() + " at " + approvers[i].date.toLocaleTimeString('en-AU', {timeZone : 'Australia/Perth'}) %><br><br>
     <% } %>
+    </div>
     <br><br>
 
     <style>
@@ -197,7 +202,7 @@
 
         .inner {
             display: inline-block;
-            width: 400px;
+            width: 590px;
         }
 
         .center_block{
@@ -207,13 +212,14 @@
         }
 
     </style>
+    <div class="avoid_break">
     <div class="center_block" style="width: 100%;" >
         <div ><b>PLEASE FORWARD THE COMPLETED FORM TO<br>DIRECTOR, OFFICE OF RESEARCH ENTERPRISE, M459</b></div>
     </div>
     <br>
 
-    <div class="cn" style="width: 100%">
-        <div class="inner" style="width: 100%;">
+    <div class="cn">
+        <div class="inner">
 
             <div class="boxed" style="width: 100%;">
                 <div class="inner">
@@ -223,15 +229,16 @@
                 <br>
                 <div style="text-align: left">
                     <input type="checkbox" name="option" value="immediate"> Approved for immediate allocation:
-                    ______________________ Date: ____________
+                    ______________________ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: ____________
                     <br><br>
                     <input type="checkbox" name="option" value="external">Approved for pending external allocation:
-                    _______________ Date: ____________
+                    _______________ <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: ____________
                 </div>
                 <br><br>
-                Robyn Owens (DVC Research) / Campbell Thomson (Director, Office of Research Enterprise)
+                Robyn Owens (DVC Research) / <br>Campbell Thomson (Director, Office of Research Enterprise)
             </div>
         </div>
+    </div>
     </div>
 
 

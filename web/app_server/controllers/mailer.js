@@ -129,7 +129,7 @@ module.exports.sendFormAccessEmail = (form, roleToSend, res, successMessage, bac
                             if (previouslyrejected) {
                                 html += "The person this was sent to previously rejected responsibility for this form.<br>"
                             }
-                            html += `Here is your access link: ${process.env.FRONTEND_URL}verify/${mail._id}/${secret}`;
+                            html += `Here is your access link: ${process.env.URL}verify/${mail._id}/${secret}`;
 
                             module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
 
@@ -387,7 +387,7 @@ module.exports.sendPDFAccessEmail = (form, res, successMessage, backupForm) => {
                         else {
                             var subject = `PDF of RPF form by ${user.fname} ${user.lname} (${user.number}) created on ${form.dates[0]}`;
                             var html = email.emailContent + '<br>';
-                            html += `Here is your access link: ${process.env.BACKEND_URL}mail/pdf/${mail._id}/${secret}`;
+                            html += `Here is your access link: ${process.env.URL}mail/pdf/${mail._id}/${secret}`;
 
                             module.exports.sendEmail(email.email, subject, html, res, successMessage, backupForm);
 
@@ -529,8 +529,16 @@ module.exports.pdfForm = (req, res, next) => {
 
                                         var wkhtmltopdf = require('wkhtmltopdf');
 
-                                        wkhtmltopdf(html, {marginBottom: "25mm", marginLeft: "25mm",marginRight: "25mm",  disableSmartShrinking: true, pageSize:'A4', orientation:'Portrait', 'headerHtml':__dirname+'/../pdf/header.html', 'footerHtml':__dirname+'/../pdf/footer.html'})
-                                            .pipe(res);
+                                        wkhtmltopdf(html, {
+                                            marginBottom: "25mm", 
+                                            marginLeft: "25mm",
+                                            marginRight: "25mm",  
+                                            disableSmartShrinking: true, 
+                                            pageSize:'A4', 
+                                            orientation:'Portrait', 
+                                            'headerHtml':__dirname+'/../pdf/header.html', 
+                                            'footerHtml':__dirname+'/../pdf/footer.html'
+                                        }).pipe(res);
                                     }
                                 }
                             );

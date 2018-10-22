@@ -10,7 +10,7 @@ gdebi -n wkhtmltox_0.12.5-1.bionic_amd64.deb
 WORKDIR /www
 RUN npm install
 
-EXPOSE 3000
-ENV PORT 3000
+EXPOSE 80
+ENV PORT 80
 
 ENTRYPOINT ["./entrypoint.sh"]
