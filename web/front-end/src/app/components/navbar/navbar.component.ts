@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   loggingOut = false;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private flashMessage: FlashMessagesService
   ) { }

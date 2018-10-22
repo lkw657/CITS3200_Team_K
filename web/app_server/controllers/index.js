@@ -100,8 +100,8 @@ module.exports.submissions = (req, res, next) => {
                 answers: req.user.submissions[i].answers,
                 history: req.user.submissions[i].history,
                 comments: req.user.submissions[i].comments,
-                sub_date: req.user.submissions[i].dates[0].toLocaleString('en-AU'),
-                action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length - 1].toLocaleString('en-AU')
+                sub_date: req.user.submissions[i].dates[0],
+                action_date: req.user.submissions[i].dates[req.user.submissions[i].dates.length - 1]
             });
         }
         res.json({
@@ -143,8 +143,8 @@ module.exports.approvals = (req, res, next) => {
                 answers: req.user.approvals[i].answers,
                 history: req.user.approvals[i].history,
                 comments: req.user.approvals[i].comments,
-                sub_date: req.user.approvals[i].dates[0].toLocaleString('en-AU'),
-                action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length - 1].toLocaleString('en-AU')
+                sub_date: req.user.approvals[i].dates[0],
+                action_date: req.user.approvals[i].dates[req.user.approvals[i].dates.length - 1]
             });
         }
         res.json({
@@ -185,8 +185,8 @@ module.exports.formHistory = (req, res, next) => {
                                 answers: form.answers,
                                 history: form.history,
                                 comments: form.comments,
-                                sub_date: form.dates[0].toLocaleString('en-AU'),
-                                action_date: form.dates[form.dates.length - 1].toLocaleString('en-AU')
+                                sub_date: form.dates[0],
+                                action_date: form.dates[form.dates.length - 1]
                             });
                             if (i == req.body.length-1) {
                                 return res.status(200).json({

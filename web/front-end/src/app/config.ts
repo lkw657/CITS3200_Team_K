@@ -1,2 +1,2 @@
-let baseURI = 'http://localhost:3000';
+let baseURI = '';
 export { baseURI };
