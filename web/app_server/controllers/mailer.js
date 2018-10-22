@@ -529,8 +529,16 @@ module.exports.pdfForm = (req, res, next) => {
 
                                         var wkhtmltopdf = require('wkhtmltopdf');
 
-                                        wkhtmltopdf(html, {marginBottom: "25mm", marginLeft: "25mm",marginRight: "25mm",  disableSmartShrinking: true, pageSize:'A4', orientation:'Portrait', 'headerHtml':__dirname+'/../pdf/header.html', 'footerHtml':__dirname+'/../pdf/footer.html'})
-                                            .pipe(res);
+                                        wkhtmltopdf(html, {
+                                            marginBottom: "25mm", 
+                                            marginLeft: "25mm",
+                                            marginRight: "25mm",  
+                                            disableSmartShrinking: true, 
+                                            pageSize:'A4', 
+                                            orientation:'Portrait', 
+                                            'headerHtml':__dirname+'/../pdf/header.html', 
+                                            'footerHtml':__dirname+'/../pdf/footer.html'
+                                        }).pipe(res);
                                     }
                                 }
                             );
