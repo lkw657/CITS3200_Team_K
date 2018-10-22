@@ -7,8 +7,7 @@ SMTP_EMAIL=<email address to send mail from>
 SMTP_PASSWORD=<password for email account>
 SMPT_HOST=<smtp server>
 DB_URI=<URI for a mongo database connection (of the form mongo://...)
-URI=<URI the front-end server is hosted at>
-FRONTEND_URL=<URI the front-end server is hosted at>
+URL=<URL the front-end server is hosted at>
 BACKEND_URL=<URI the back-end server is hosted at>
 IT_PASSWORD=<administration password>
 IT_EMAIL=<administration email address>
@@ -16,24 +15,17 @@ IT_EMAIL=<administration email address>
 If DB\_URI is omitted a database started from docker will be used.
 It should be omited when using docker
 
-**Both `FRONTEND_URL` and `BACKEND_URL` should end with a slash**
-
-The backend runs on port 3000 this should be included in `BACKEND_URL`
+**URL should end with a /**
 
 Example `.env`
 ```
 SMTP_EMAIL=sender@mydomain.com
 SMTP_PASSWORD=mySmtpPassword
 SMPT_HOST=mydomain.com
-URI=mydomain.com
-FRONTEND_URL=mydomain.com/
-BACKEND_URL=mydomain.com:3000/
+URL=mydomain.com/
 IT_PASSWORD=myAdminPassword
 IT_EMAIL=admin@mydomain.com
 ```
-The location of the backend server (and port) also needs to be put in `web/front-end/src/app/config.ts`. This should be the same host as the front end.
-
-As the site uses both ports `80` and `3000` they should both be allowed through the firewall
 
 ## Running
 
