@@ -3,36 +3,36 @@
         "role": "School of Engineering HoS",
         "email": "admin-cmce@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the HoS from the School of Engineering - Created At : [created_date]",
-        "emailContent":"RPF pending for approval from the HoS from the School of Engineering "
+        "emailContent":"RPF pending for approval from the HoS from the School of Engineering. If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     },
     {
         "role": "School of Physics, Mathematics and Computing HoS",
         "email": "admin-csse@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the HoS from the School of Physics, Mathematics and Computing - Created At : [created_date]",
-        "emailContent":"RPF pending for approval from the HoS from the School of Physics, Mathematics and Computing"
+        "emailContent":"RPF pending for approval from the HoS from the School of Physics, Mathematics and Computing.  If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     },
     {
         "role": "Ocean Graduate School HoS",
         "email": "admin-ogs@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the HoS from the Ocean Graduate School - Created At : [created_date]",
-        "emailContent":"RPF pending for approval from the HoS from the Ocean Graduate School"
+        "emailContent":"RPF pending for approval from the HoS from the Ocean Graduate School.  If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     },
     {
         "role": "AD(R)",
         "email": "research-ems@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the AD(R) - Created At : [created_date]",
-        "emailContent": "RPF pending for approval from the AD(R)"
+        "emailContent": "RPF pending for approval from the AD(R).  If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     },
     {
         "role": "PVC-ED",
         "email": "research-ems@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the PVC-ED - Created At : [created_date]",
-        "emailContent": "RPF pending for approval from the PVC-ED"
+        "emailContent": "RPF pending for approval from the PVC-ED.  If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     },
     {
         "role": "final",
         "email": "research-ems@uwa.edu.au",
         "subject": "RPF by [first_name] [last_name] pending for approval from the ORE Director - Created At : [created_date]",
-        "emailContent": "RPF pending for approval from the ORE Director"
+        "emailContent": "RPF pending for approval from the ORE Director.  If you require additional information and/or documents to be supplied with the RPF form, please contact the applicant."
     }
 ]

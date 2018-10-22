@@ -5,7 +5,6 @@
     <input type="number" class="form-control" *ngSwitchCase="'money'" placeholder="$" [formControlName]="question.key" [id]="question.key" 
            (keyup)="removeLeadingZeroes(question.key); "
            (blur)="removeLeadingZeroes(question.key);" >
-    <input type="date" class="form-control" *ngSwitchCase="'date'" [formControlName]="question.key" [id]="question.key">
     <input type="text" class="form-control" *ngSwitchCase="'text'" [formControlName]="question.key" [id]="question.key">
     <div *ngIf="question.controlType=='money_array'">
       <div class="row no-gutters" [formArrayName]="question.key">
